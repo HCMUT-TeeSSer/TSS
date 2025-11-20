@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "configurations": [
+    {
+      "name": "debug-chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMaps": true
+    }
+  ]
+}

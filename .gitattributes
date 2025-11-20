@@ -1,0 +1,13 @@
+* text=auto eol=lf
+
+# Binary files
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.zip binary
+*.pdf binary
+
+# Custom diff for Microsoft Office files
+*.docx diff=word
+*.xlsx diff=excel

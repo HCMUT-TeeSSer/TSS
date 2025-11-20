@@ -1,0 +1,7 @@
+echo "🔍 Running lint-staged..."
+pnpm exec lint-staged
+echo "✅ lint-staged completed."
+
+echo "🔍 Checking for invalid lockfiles..."
+bash ./scripts/check-lockfile.sh
+echo "✅ Lockfile check completed."
