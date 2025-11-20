@@ -159,5 +159,5 @@ export async function runAllExamples() {
 }
 
 // Uncomment to run examples
-// tsx ./src/utils/mockApi.example.ts
+// pnpm exec tsx ./src/utils/mockApi.example.ts
 await runAllExamples();
