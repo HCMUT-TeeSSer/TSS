@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Nguyen Van A",
+    "email": "nguyenvana@example.com",
+    "role": "admin",
+    "avatar": "https://i.pravatar.cc/150?img=1"
+  },
+  {
+    "id": 2,
+    "name": "Tran Thi B",
+    "email": "tranthib@example.com",
+    "role": "user",
+    "avatar": "https://i.pravatar.cc/150?img=2"
+  },
+  {
+    "id": 3,
+    "name": "Le Van C",
+    "email": "levanc@example.com",
+    "role": "moderator",
+    "avatar": "https://i.pravatar.cc/150?img=3"
+  }
+]
