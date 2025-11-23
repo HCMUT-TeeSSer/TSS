@@ -5,6 +5,8 @@ import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
+const StudentsCompetencies = lazy(() => import("@/pages/StudentsCompetencies"));
+const TutorCompetencies = lazy(() => import("@/pages/TutorCompetencies"));
 
 // function ProtectedRoute() {
 //   const { isAuthenticated } = useContext(AppContext);
@@ -92,6 +94,22 @@ export default function useRouteElements() {
       path: "",
       element: <MainLayout />,
       children: [
+        {
+          path: "/StudentsCompetencies",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <StudentsCompetencies />
+            </Suspense>
+          ),
+        },
+        {
+          path: "/TutorCompetencies",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <TutorCompetencies />
+            </Suspense>
+          ),
+        },
         {
           path: "*",
           element: (
