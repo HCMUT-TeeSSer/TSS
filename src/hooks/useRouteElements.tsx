@@ -5,6 +5,7 @@ import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
+const Program = lazy(() => import("@/pages/mentee/Program"));
 
 // function ProtectedRoute() {
 //   const { isAuthenticated } = useContext(AppContext);
@@ -83,6 +84,35 @@ export default function useRouteElements() {
                 //   ),
                 // },
               ],
+            },
+            {
+              path: path.menteePrograms, // Route /mentee/programs
+              children: [
+                {
+                  // Thêm route chi tiết: /mentee/programs/:programId
+                  path: path.menteeProgramDetail,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <Program />
+                    </Suspense>
+                  ),
+                },
+              ],
+            },
+            {
+              path: "",
+              element: (
+                <div className='p-4'>
+                  <h1 className='text-2xl font-bold'>Trang chủ Mentee (Demo)</h1>
+                  <p>Vui lòng truy cập đường dẫn demo chi tiết chương trình để xem Lịch hẹn.</p>
+                  <p>
+                    Demo Link:{" "}
+                    <a href='/mentee/programs/123' className='text-blue-600 hover:underline'>
+                      /mentee/programs/123
+                    </a>
+                  </p>
+                </div>
+              ),
             },
           ],
         },
