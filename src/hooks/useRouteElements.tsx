@@ -5,6 +5,7 @@ import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
+const Program = lazy(() => import("@/pages/mentee/Program"));
 
 // function ProtectedRoute() {
 //   const { isAuthenticated } = useContext(AppContext);
@@ -55,7 +56,14 @@ export default function useRouteElements() {
           element: <MainLayout />,
           children: [
             {
-              path: "",
+              path: "programs",
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <Program />
+                </Suspense>
+              ),
+            },
+            {
               // element: <ProgramLayout />,
               children: [
                 // {
