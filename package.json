@@ -21,7 +21,6 @@
     "pnpm": "10.21.0"
   },
   "dependencies": {
-    "@heroicons/react": "2.2.0",
     "@supabase/supabase-js": "2.81.1",
     "@tailwindcss/vite": "^4.1.17",
     "axios": "^1.13.2",

@@ -1,7 +1,6 @@
 import Loading from "@/components/Loading";
 import path from "@/constants/path";
 import MainLayout from "@/layouts/MainLayout";
-import Sessions from "@/pages/mentee/Sessions";
 import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 
@@ -67,17 +66,6 @@ export default function useRouteElements() {
             {
               // element: <ProgramLayout />,
               children: [
-                {
-  path: "test-program",
-  element: (
-    <Suspense fallback={<Loading />}>
-      <Program />
-    </Suspense>
-  ),
-},
-  { path: "sessions", element: <Sessions/> }
-
-
                 // {
                 //   path: path.profile,
                 //   element: (
