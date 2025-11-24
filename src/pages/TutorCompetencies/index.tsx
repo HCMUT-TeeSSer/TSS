@@ -5,8 +5,62 @@ const TutorCompetencies = () => {
   const onDivContainerClick = useCallback(() => {
     // Add your code here
   }, []);
+
   return (
     <div className={styles.trangNhGiNngLcCaTu}>
+      <div className={styles.headerComponentForMentee}>
+        <div className={styles.div186}>
+          <div className={styles.div187}>
+            <div className={styles.div188}>
+              <div className={styles.div189} onClick={onDivContainerClick}>
+                <b className={styles.tutorSupportSystem3}>Tutor Support System</b>
+                <img className={styles.appLogoIcon} alt='' />
+              </div>
+              <div className={styles.nav3}>
+                <div className={styles.div190} onClick={onDivContainerClick}>
+                  <div className={styles.trangCh}>Trang chủ</div>
+                </div>
+                <div className={styles.div191} onClick={onDivContainerClick}>
+                  <div className={styles.chngTrnh}>Chương trình</div>
+                </div>
+                <div className={styles.div192} onClick={onDivContainerClick}>
+                  <div className={styles.chngTrnhCa2}>Chương trình của tôi</div>
+                </div>
+                <div className={styles.div193} onClick={onDivContainerClick}>
+                  <div className={styles.tiLiu}>Tài liệu</div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.div194}>
+              <div className={styles.button15}>
+                <img className={styles.iIcon17} alt='' />
+                <div className={styles.span3}>
+                  <div className={styles.div195}>3</div>
+                </div>
+              </div>
+              <div className={styles.button16}>
+                <img className={styles.iIcon18} alt='' />
+                <div className={styles.span4}>
+                  <div className={styles.div196}>7</div>
+                </div>
+              </div>
+              <div className={styles.div197} onClick={onDivContainerClick}>
+                <img className={styles.imgIcon5} alt='' />
+                <div className={styles.div198}>
+                  <div className={styles.div199}>
+                    <div className={styles.sarahJohnson3}>John Doe</div>
+                  </div>
+                  <div className={styles.div200}>
+                    <div className={styles.khoaKhoaHc}>Khoa Khoa học Máy tính</div>
+                  </div>
+                </div>
+                <img className={styles.iIcon19} alt='' />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className={styles.body}>
         <div className={styles.section}>
           <div className={styles.div}>
@@ -25,120 +79,7 @@ const TutorCompetencies = () => {
             </div>
           </div>
         </div>
-        <div className={styles.footerComponent}>
-          <div className={styles.div3}>
-            <div className={styles.div4}>
-              <div className={styles.div5}>
-                <div className={styles.div6}>
-                  <b className={styles.tutorSupportSystem}>Tutor Support System</b>
-                </div>
-                <div className={styles.connectWithExpert}>
-                  Connect with expert tutors and accelerate your learning journey with personalized education.
-                </div>
-                <div className={styles.div7}>
-                  <img className={styles.divIcon} alt='' />
-                  <img className={styles.divIcon2} alt='' />
-                  <img className={styles.divIcon3} alt='' />
-                  <img className={styles.divIcon4} alt='' />
-                </div>
-                <img className={styles.logobk1Icon} alt='' />
-              </div>
-              <div className={styles.div8}>
-                <div className={styles.forStudents}>For Students</div>
-                <div className={styles.ul}>
-                  <div className={styles.li3}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Find a Tutor</div>
-                    </div>
-                  </div>
-                  <div className={styles.li4}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Subject Categories</div>
-                    </div>
-                  </div>
-                  <div className={styles.li5}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Meeting with tutor</div>
-                    </div>
-                  </div>
-                  <div className={styles.li6}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Success Stories</div>
-                    </div>
-                  </div>
-                  <div className={styles.li7}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Study Resources</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className={styles.div14}>
-                <div className={styles.forStudents}>For Tutors</div>
-                <div className={styles.ul}>
-                  <div className={styles.li3}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Become a Tutor</div>
-                    </div>
-                  </div>
-                  <div className={styles.li4}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Tutor Dashboard</div>
-                    </div>
-                  </div>
-                  <div className={styles.li5}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Resources</div>
-                    </div>
-                  </div>
-                  <div className={styles.li6}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Community</div>
-                    </div>
-                  </div>
-                  <div className={styles.li7}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Support</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className={styles.div20}>
-                <div className={styles.forStudents}>Support</div>
-                <div className={styles.ul}>
-                  <div className={styles.li3}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Help Center</div>
-                    </div>
-                  </div>
-                  <div className={styles.li4}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Contact Us</div>
-                    </div>
-                  </div>
-                  <div className={styles.li5}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Privacy Policy</div>
-                    </div>
-                  </div>
-                  <div className={styles.li6}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Terms of Service</div>
-                    </div>
-                  </div>
-                  <div className={styles.li7}>
-                    <div className={styles.li3}>
-                      <div className={styles.findATutor}>Safety</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className={styles.div26}>
-              <div className={styles.tutorSupportSystem2}>© 2025 Tutor Support System. All rights reserved.</div>
-            </div>
-          </div>
-        </div>
+
         <div className={styles.section2}>
           <div className={styles.div27}>
             <div className={styles.div28}>
@@ -177,6 +118,7 @@ const TutorCompetencies = () => {
             </div>
           </div>
         </div>
+
         <div className={styles.section3}>
           <div className={styles.div36}>
             <div className={styles.nav2}>
@@ -199,6 +141,7 @@ const TutorCompetencies = () => {
             </div>
           </div>
         </div>
+
         <div className={styles.section4}>
           <div className={styles.div37}>
             <div className={styles.div38}>
@@ -598,56 +541,119 @@ const TutorCompetencies = () => {
             </div>
           </div>
         </div>
-        <div className={styles.headerComponentForMentee}>
-          <div className={styles.div186}>
-            <div className={styles.div187}>
-              <div className={styles.div188}>
-                <div className={styles.div189} onClick={onDivContainerClick}>
-                  <b className={styles.tutorSupportSystem3}>Tutor Support System</b>
-                  <img className={styles.appLogoIcon} alt='' />
-                </div>
-                <div className={styles.nav3}>
-                  <div className={styles.div190} onClick={onDivContainerClick}>
-                    <div className={styles.trangCh}>Trang chủ</div>
-                  </div>
-                  <div className={styles.div191} onClick={onDivContainerClick}>
-                    <div className={styles.chngTrnh}>Chương trình</div>
-                  </div>
-                  <div className={styles.div192} onClick={onDivContainerClick}>
-                    <div className={styles.chngTrnhCa2}>Chương trình của tôi</div>
-                  </div>
-                  <div className={styles.div193} onClick={onDivContainerClick}>
-                    <div className={styles.tiLiu}>Tài liệu</div>
-                  </div>
-                </div>
+      </div>
+
+      <div className={styles.footerComponent}>
+        <div className={styles.div3}>
+          <div className={styles.div4}>
+            <div className={styles.div5}>
+              <div className={styles.div6}>
+                <b className={styles.tutorSupportSystem}>Tutor Support System</b>
               </div>
-              <div className={styles.div194}>
-                <div className={styles.button15}>
-                  <img className={styles.iIcon17} alt='' />
-                  <div className={styles.span3}>
-                    <div className={styles.div195}>3</div>
+              <div className={styles.connectWithExpert}>
+                Connect with expert tutors and accelerate your learning journey with personalized education.
+              </div>
+              <div className={styles.div7}>
+                <img className={styles.divIcon} alt='' />
+                <img className={styles.divIcon2} alt='' />
+                <img className={styles.divIcon3} alt='' />
+                <img className={styles.divIcon4} alt='' />
+              </div>
+              <img className={styles.logobk1Icon} alt='' />
+            </div>
+            <div className={styles.div8}>
+              <div className={styles.forStudents}>For Students</div>
+              <div className={styles.ul}>
+                <div className={styles.li3}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Find a Tutor</div>
                   </div>
                 </div>
-                <div className={styles.button16}>
-                  <img className={styles.iIcon18} alt='' />
-                  <div className={styles.span4}>
-                    <div className={styles.div196}>7</div>
+                <div className={styles.li4}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Subject Categories</div>
                   </div>
                 </div>
-                <div className={styles.div197} onClick={onDivContainerClick}>
-                  <img className={styles.imgIcon5} alt='' />
-                  <div className={styles.div198}>
-                    <div className={styles.div199}>
-                      <div className={styles.sarahJohnson3}>John Doe</div>
-                    </div>
-                    <div className={styles.div200}>
-                      <div className={styles.khoaKhoaHc}>Khoa Khoa học Máy tính</div>
-                    </div>
+                <div className={styles.li5}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Meeting with tutor</div>
                   </div>
-                  <img className={styles.iIcon19} alt='' />
+                </div>
+                <div className={styles.li6}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Success Stories</div>
+                  </div>
+                </div>
+                <div className={styles.li7}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Study Resources</div>
+                  </div>
                 </div>
               </div>
             </div>
+            <div className={styles.div14}>
+              <div className={styles.forStudents}>For Tutors</div>
+              <div className={styles.ul}>
+                <div className={styles.li3}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Become a Tutor</div>
+                  </div>
+                </div>
+                <div className={styles.li4}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Tutor Dashboard</div>
+                  </div>
+                </div>
+                <div className={styles.li5}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Resources</div>
+                  </div>
+                </div>
+                <div className={styles.li6}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Community</div>
+                  </div>
+                </div>
+                <div className={styles.li7}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Support</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.div20}>
+              <div className={styles.forStudents}>Support</div>
+              <div className={styles.ul}>
+                <div className={styles.li3}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Help Center</div>
+                  </div>
+                </div>
+                <div className={styles.li4}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Contact Us</div>
+                  </div>
+                </div>
+                <div className={styles.li5}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Privacy Policy</div>
+                  </div>
+                </div>
+                <div className={styles.li6}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Terms of Service</div>
+                  </div>
+                </div>
+                <div className={styles.li7}>
+                  <div className={styles.li3}>
+                    <div className={styles.findATutor}>Safety</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={styles.div26}>
+            <div className={styles.tutorSupportSystem2}>© 2025 Tutor Support System. All rights reserved.</div>
           </div>
         </div>
       </div>
