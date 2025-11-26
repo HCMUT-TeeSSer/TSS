@@ -56,6 +56,13 @@ export default function useRouteElements() {
           path: path.mentee,
           element: <MainLayout />,
           children: [
+            {path: "programs",
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <Program />
+                </Suspense>
+              ),
+            },
             {
               path: "",
               // element: <ProgramLayout />,
