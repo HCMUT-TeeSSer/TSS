@@ -68,19 +68,42 @@ export default function useRouteElements() {
               ),
             },
             {
-              path: "",
-              // element: <ProgramLayout />,
-              children: [
-                { path: "sessions", element: <Sessions /> },
-                {
-                  path: "program-detail",
-                  element: (
-                    <Suspense fallback={<Loading />}>
-                      <ProgramDetail />
-                    </Suspense>
-                  ),
-                },
-              ],
+              path: "competencies",
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <StudentsCompetencies />
+                </Suspense>
+              ),
+            },
+            {
+              path: "sessions",
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <Sessions />
+                </Suspense>
+              ),
+            },
+            {
+              path: "program-detail",
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <ProgramDetail />
+                </Suspense>
+              ),
+            },
+          ],
+        },
+        {
+          path: path.tutor,
+          element: <MainLayout />,
+          children: [
+            {
+              path: "competencies",
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <TutorCompetencies />
+                </Suspense>
+              ),
             },
           ],
         },
@@ -99,22 +122,6 @@ export default function useRouteElements() {
           ),
         },
       ],
-    },
-    {
-      path: "/StudentsCompetencies",
-      element: (
-        <Suspense fallback={<Loading />}>
-          <StudentsCompetencies />
-        </Suspense>
-      ),
-    },
-    {
-      path: "/TutorCompetencies",
-      element: (
-        <Suspense fallback={<Loading />}>
-          <TutorCompetencies />
-        </Suspense>
-      ),
     },
   ]);
   return routeElements;
