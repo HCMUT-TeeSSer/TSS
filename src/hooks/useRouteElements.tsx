@@ -1,6 +1,8 @@
 import Loading from "@/components/Loading";
 import path from "@/constants/path";
 import MainLayout from "@/layouts/MainLayout";
+import ProgramDetail from "@/pages/mentee/ProgramDetail/ProgramDetail";
+import Sessions from "@/pages/mentee/Sessions";
 import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 
@@ -8,6 +10,7 @@ const NotFound = lazy(() => import("@/pages/NotFound"));
 const StudentsCompetencies = lazy(() => import("@/pages/StudentsCompetencies"));
 const TutorCompetencies = lazy(() => import("@/pages/TutorCompetencies"));
 
+const Program = lazy(() => import("@/pages/mentee/Program"));
 // function ProtectedRoute() {
 //   const { isAuthenticated } = useContext(AppContext);
 //   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -57,33 +60,26 @@ export default function useRouteElements() {
           element: <MainLayout />,
           children: [
             {
+              path: "programs",
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <Program />
+                </Suspense>
+              ),
+            },
+            {
               path: "",
               // element: <ProgramLayout />,
               children: [
-                // {
-                //   path: path.profile,
-                //   element: (
-                //     <Suspense fallback={<Loading />}>
-                //       <Profile />
-                //     </Suspense>
-                //   ),
-                // },
-                // {
-                //   path: path.changePassword,
-                //   element: (
-                //     <Suspense fallback={<Loading />}>
-                //       <ChangePassword />
-                //     </Suspense>
-                //   ),
-                // },
-                // {
-                //   path: path.historyPurchase,
-                //   element: (
-                //     <Suspense fallback={<Loading />}>
-                //       <HistoryPurchase />
-                //     </Suspense>
-                //   ),
-                // },
+                { path: "sessions", element: <Sessions /> },
+                {
+                  path: "program-detail",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <ProgramDetail />
+                    </Suspense>
+                  ),
+                },
               ],
             },
           ],
