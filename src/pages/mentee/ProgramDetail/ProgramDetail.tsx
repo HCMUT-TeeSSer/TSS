@@ -58,7 +58,7 @@ const ProgramDetailPage: React.FC = () => {
 
   return (
     <div className='min-h-screen bg-slate-50'>
-      <div className='mx-auto max-w-6xl px-4 py-6'>
+      <div className='container mx-auto px-4 py-8'>
         {/* Breadcrumb */}
         <div className='mb-3 text-sm text-slate-500'>
           <span className='cursor-pointer hover:text-slate-700'>Chương trình học</span>
@@ -82,7 +82,7 @@ const ProgramDetailPage: React.FC = () => {
                 {/* Progress bar */}
                 <div className='flex items-center gap-3'>
                   <div className='h-2 flex-1 overflow-hidden rounded-full bg-slate-100'>
-                    <div className='h-2 rounded-full bg-blue-500' style={{ width: "65%" }} />
+                    <div className='h-2 w-[65%] rounded-full bg-blue-500' />
                   </div>
                   <span className='text-xs font-medium text-slate-600'>65% hoàn thành</span>
                 </div>

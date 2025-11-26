@@ -7,8 +7,8 @@ const sessions = SessionsData;
 export default function Sessions() {
   const navigate = useNavigate();
   return (
-    <div className='min-h-screen w-full bg-slate-50'>
-      <div className='mx-auto max-w-7xl px-6 py-8'>
+    <div className='min-h-screen bg-slate-50'>
+      <div className='container mx-auto px-4 py-8'>
         {/* ===================== HEADER ======================= */}
         <div className='mb-8'>
           {/* Breadcrumb */}
@@ -36,7 +36,7 @@ export default function Sessions() {
                   <div className='mt-3'>
                     <div className='mb-1 text-xs text-blue-600'>65% hoàn thành</div>
                     <div className='h-2 w-full overflow-hidden rounded-full bg-slate-200'>
-                      <div className='h-full rounded-full bg-blue-600' style={{ width: "65%" }} />
+                      <div className='h-full w-[65%] rounded-full bg-blue-600' />
                     </div>
                   </div>
                 </div>
@@ -61,7 +61,7 @@ export default function Sessions() {
               {/* TAB: Tổng quan */}
               <button
                 onClick={() => {
-                  void navigate("/mentee/test-program-detail");
+                  void navigate("/mentee/program-detail");
                 }}
                 className='rounded-lg px-3 py-2 text-slate-500 hover:bg-slate-50'
               >
@@ -95,7 +95,7 @@ export default function Sessions() {
                   </div>
 
                   <div className='flex items-center gap-3'>
-                    <span className={`rounded-full border px-3 py-[2px] text-xs ${s.statusColor}`}>{s.status}</span>
+                    <span className={`rounded-full border px-3 py-0.5 text-xs ${s.statusColor}`}>{s.status}</span>
 
                     <ArrowDownTrayIcon className='h-4 w-4 cursor-pointer text-slate-400 hover:text-slate-600' />
                   </div>
@@ -128,18 +128,18 @@ export default function Sessions() {
                 {/* ACTION BUTTONS */}
                 <div className='mt-5 flex items-center gap-4'>
                   {s.status === "Đang diễn ra" ? (
-                    <button className='flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-[6px] text-white shadow-sm hover:bg-blue-700'>
+                    <button className='flex items-center gap-2 rounded-lg border border-blue-500 px-4 py-1.5 text-blue-600 hover:bg-blue-50'>
                       <PlayIcon className='h-4 w-4' />
                       Tham gia ngay
                     </button>
                   ) : (
-                    <button className='flex items-center gap-2 rounded-lg border border-blue-500 px-4 py-[6px] text-blue-600 hover:bg-blue-50'>
+                    <button className='flex items-center gap-2 rounded-lg border border-blue-500 px-4 py-1.5 text-blue-600 hover:bg-blue-50'>
                       <CalendarIcon className='h-4 w-4' />
                       Thêm vào lịch
                     </button>
                   )}
 
-                  <button className='flex items-center gap-2 px-3 py-[6px] text-slate-600 hover:text-slate-900'>
+                  <button className='flex items-center gap-2 px-3 py-1.5 text-slate-600 hover:text-slate-900'>
                     <BellIcon className='h-4 w-4' />
                     Đặt nhắc nhở
                   </button>
@@ -207,7 +207,7 @@ export default function Sessions() {
                 <p className='text-slate-600'>Hôm nay, 14:00 - 15:30</p>
                 <p className='text-slate-600'>Với TS. Nguyễn Minh Hoàng</p>
 
-                <button className='mt-4 w-full rounded-xl bg-blue-600 py-2 font-medium text-white hover:bg-blue-700'>
+                <button className='mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-2 font-medium text-white hover:bg-blue-700'>
                   <CalendarIcon className='h-4 w-4' />
                   Tham gia buổi tư vấn
                 </button>
