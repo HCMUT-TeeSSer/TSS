@@ -73,7 +73,6 @@ export default function Sessions() {
 
               <button className='rounded-lg px-3 py-2 text-slate-500 hover:bg-slate-50'>Tài liệu</button>
               <button className='rounded-lg px-3 py-2 text-slate-500 hover:bg-slate-50'>Lộ trình</button>
-              <button className='rounded-lg px-3 py-2 text-slate-500 hover:bg-slate-50'>Người học</button>
             </div>
           </div>
         </div>
