@@ -1,0 +1,127 @@
+{
+  "stats": [
+    {
+      "value": "1,247",
+      "label": "Gia sư hoạt động"
+    },
+    {
+      "value": "15,832",
+      "label": "Học sinh đã hỗ trợ"
+    },
+    {
+      "value": "4.9/5",
+      "label": "Đánh giá trung bình"
+    },
+    {
+      "value": "50+",
+      "label": "Môn học có sẵn"
+    }
+  ],
+  "subjects": [
+    {
+      "id": 1,
+      "name": "DSA",
+      "tutorCount": 247,
+      "bgColor": "bg-blue-100",
+      "icon": "/images/vector5.png",
+      "type": "bg"
+    },
+    {
+      "id": 2,
+      "name": "Giải tích",
+      "tutorCount": 189,
+      "bgColor": "bg-purple-100",
+      "icon": "/images/vector6.png",
+      "type": "bg"
+    },
+    {
+      "id": 3,
+      "name": "Vật lý 1",
+      "tutorCount": 156,
+      "bgColor": "bg-green-100",
+      "icon": "/images/vector7.png",
+      "type": "img"
+    },
+    {
+      "id": 4,
+      "name": "Hóa đại cương",
+      "tutorCount": 134,
+      "bgColor": "bg-yellow-100",
+      "icon": "/images/vector8.png",
+      "type": "bg"
+    },
+    {
+      "id": 5,
+      "name": "Hóa Sinh",
+      "tutorCount": 98,
+      "bgColor": "bg-red-100",
+      "icon": "/images/vector9.png",
+      "type": "bg"
+    },
+    {
+      "id": 6,
+      "name": "Vi xử lý",
+      "tutorCount": 112,
+      "bgColor": "bg-orange-100",
+      "icon": "/images/vector10.png",
+      "type": "img"
+    }
+  ],
+  "howItWorks": [
+    {
+      "number": "1",
+      "title": "Chọn chương trình và Tutor",
+      "description": "Duyệt danh sách đầy đủ các Tutor có trình độ, lọc theo môn học và đọc các đánh giá để tìm được người phù hợp nhất."
+    },
+    {
+      "number": "2",
+      "title": "Đăng ký tham gia",
+      "description": "Tham gia buổi học theo lịch rảnh của bạn và đặt mục tiêu học tập."
+    },
+    {
+      "number": "3",
+      "title": "Bắt đầu học thôi",
+      "description": "Bắt đầu hành trình học tập cá nhân của bạn với sự hướng dẫn của Tutor và theo dõi tiến trình của bạn trong suốt quá trình."
+    }
+  ],
+  "testimonials": [
+    {
+      "id": 1,
+      "name": "Mark Stevens",
+      "role": "Sinh viên KHMT",
+      "avatar": "/images/img.jpg",
+      "content": "\"Cảm ơn thầy Duy đã giúp em hiểu bản chất của môn Mạng máy tính, thầy đã tổng hợp kiến thức cho final và cung cấp tài liệu hữu ích. Em đã đạt A+ cho kỳ này ạ\"",
+      "rating": 5
+    },
+    {
+      "id": 2,
+      "name": "Jessica Park",
+      "role": "Sinh viên QLCN",
+      "avatar": "/images/image.jpg",
+      "content": "\"Môn QLSX siêu khó hiểu với em, mặc dù vậy, thầy Sơn và các bạn học chung luôn hướng dẫn và luyện đề cho em quen với các case-study, và em đạt điểm rất cao!!!\"",
+      "rating": 5
+    },
+    {
+      "id": 3,
+      "name": "Ryan Martinez",
+      "role": "Sinh viên CK",
+      "avatar": "/images/img-2.jpg",
+      "content": "\"Cô Châu đã đồng hành cùng em từ những buổi học chuyên ngành cuối cùng và là một mentor tận tâm giúp em apply vị trí fresher của công ty V\"",
+      "rating": 5
+    }
+  ],
+  "ctaFeatures": [
+    {
+      "text": "Đảm bảo hài lòng 100%",
+      "icon": "/images/vector.png"
+    },
+    {
+      "text": "Hỗ trợ 24/7",
+      "icon": "/images/vector2.png"
+    },
+    {
+      "text": "Đánh giá trung bình 4.9/5",
+      "icon": "/images/vector3.png"
+    }
+  ]
+}
