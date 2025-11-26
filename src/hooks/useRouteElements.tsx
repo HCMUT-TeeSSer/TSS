@@ -11,6 +11,9 @@ const StudentsCompetencies = lazy(() => import("@/pages/StudentsCompetencies"));
 const TutorCompetencies = lazy(() => import("@/pages/TutorCompetencies"));
 
 const Program = lazy(() => import("@/pages/mentee/Program"));
+const MenteeMyProgramDetail = lazy(() => import("@/pages/mentee/MyProgram/MyProgramDetail"));
+const TutorMyProgramDetail = lazy(() => import("@/pages/tutor/MyProgram/MyProgramDetail"));
+
 // function ProtectedRoute() {
 //   const { isAuthenticated } = useContext(AppContext);
 //   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -91,6 +94,46 @@ export default function useRouteElements() {
                 </Suspense>
               ),
             },
+            {
+              // Route: /mentee/programs/my-program/:programId
+              // Lưu ý: path con không cần bắt đầu bằng "/" nếu muốn nối tiếp path cha
+              path: "my-program/:programId",
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <MenteeMyProgramDetail />
+                </Suspense>
+              ),
+            },
+            //
+            {
+              // element: <ProgramLayout />,
+              children: [
+                // {
+                //   path: path.profile,
+                //   element: (
+                //     <Suspense fallback={<Loading />}>
+                //       <Profile />
+                //     </Suspense>
+                //   ),
+                // },
+                // {
+                //   path: path.changePassword,
+                //   element: (
+                //     <Suspense fallback={<Loading />}>
+                //       <ChangePassword />
+                //     </Suspense>
+                //   ),
+                // },
+                // {
+                //   path: path.historyPurchase,
+                //   element: (
+                //     <Suspense fallback={<Loading />}>
+                //       <HistoryPurchase />
+                //     </Suspense>
+                //   ),
+                // },
+              ],
+            },
           ],
         },
         {
@@ -104,6 +147,54 @@ export default function useRouteElements() {
                   <TutorCompetencies />
                 </Suspense>
               ),
+            },
+            {
+              path: "programs",
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <Program />
+                </Suspense>
+              ),
+            },
+            {
+              // Route: /mentee/programs/my-program/:programId
+              // Lưu ý: path con không cần bắt đầu bằng "/" nếu muốn nối tiếp path cha
+              path: "my-program/:programId",
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <TutorMyProgramDetail />
+                </Suspense>
+              ),
+            },
+            //
+            {
+              // element: <ProgramLayout />,
+              children: [
+                // {
+                //   path: path.profile,
+                //   element: (
+                //     <Suspense fallback={<Loading />}>
+                //       <Profile />
+                //     </Suspense>
+                //   ),
+                // },
+                // {
+                //   path: path.changePassword,
+                //   element: (
+                //     <Suspense fallback={<Loading />}>
+                //       <ChangePassword />
+                //     </Suspense>
+                //   ),
+                // },
+                // {
+                //   path: path.historyPurchase,
+                //   element: (
+                //     <Suspense fallback={<Loading />}>
+                //       <HistoryPurchase />
+                //     </Suspense>
+                //   ),
+                // },
+              ],
             },
           ],
         },
