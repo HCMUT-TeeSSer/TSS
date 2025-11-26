@@ -1,12 +1,13 @@
 import Loading from "@/components/Loading";
 import path from "@/constants/path";
 import MainLayout from "@/layouts/MainLayout";
+import ProgramDetail from "@/pages/mentee/Program/ProgramDetail";
+import Sessions from "@/pages/Sessions";
 import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Program = lazy(() => import("@/pages/mentee/Program"));
-
 // function ProtectedRoute() {
 //   const { isAuthenticated } = useContext(AppContext);
 //   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -55,8 +56,7 @@ export default function useRouteElements() {
           path: path.mentee,
           element: <MainLayout />,
           children: [
-            {
-              path: "programs",
+            {path: "programs",
               element: (
                 <Suspense fallback={<Loading />}>
                   <Program />
@@ -64,8 +64,29 @@ export default function useRouteElements() {
               ),
             },
             {
+              path: "",
               // element: <ProgramLayout />,
               children: [
+                {
+  path: "test-program",
+  element: (
+    <Suspense fallback={<Loading />}>
+      <Program />
+    </Suspense>
+  ),
+},
+  { path: "sessions", element: <Sessions/> },
+  {
+  path: "test-program-detail",
+  element: (
+    <Suspense fallback={<Loading />}>
+      <ProgramDetail />
+    </Suspense>
+  ),
+},
+
+
+
                 // {
                 //   path: path.profile,
                 //   element: (
