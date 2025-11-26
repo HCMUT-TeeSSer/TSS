@@ -1,16 +1,13 @@
 import Loading from "@/components/Loading";
 import path from "@/constants/path";
 import MainLayout from "@/layouts/MainLayout";
-import ProgramDetail from "@/pages/mentee/ProgramDetail/ProgramDetail";
-import Sessions from "@/pages/mentee/Sessions";
 import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
-const StudentsCompetencies = lazy(() => import("@/pages/StudentsCompetencies"));
-const TutorCompetencies = lazy(() => import("@/pages/TutorCompetencies"));
-
 const Program = lazy(() => import("@/pages/mentee/Program"));
+const HomePage = lazy(() => import("@/pages/Home/HomePage"));
+
 // function ProtectedRoute() {
 //   const { isAuthenticated } = useContext(AppContext);
 //   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -68,42 +65,33 @@ export default function useRouteElements() {
               ),
             },
             {
-              path: "competencies",
-              element: (
-                <Suspense fallback={<Loading />}>
-                  <StudentsCompetencies />
-                </Suspense>
-              ),
-            },
-            {
-              path: "sessions",
-              element: (
-                <Suspense fallback={<Loading />}>
-                  <Sessions />
-                </Suspense>
-              ),
-            },
-            {
-              path: "program-detail",
-              element: (
-                <Suspense fallback={<Loading />}>
-                  <ProgramDetail />
-                </Suspense>
-              ),
-            },
-          ],
-        },
-        {
-          path: path.tutor,
-          element: <MainLayout />,
-          children: [
-            {
-              path: "competencies",
-              element: (
-                <Suspense fallback={<Loading />}>
-                  <TutorCompetencies />
-                </Suspense>
-              ),
+              // element: <ProgramLayout />,
+              children: [
+                // {
+                //   path: path.profile,
+                //   element: (
+                //     <Suspense fallback={<Loading />}>
+                //       <Profile />
+                //     </Suspense>
+                //   ),
+                // },
+                // {
+                //   path: path.changePassword,
+                //   element: (
+                //     <Suspense fallback={<Loading />}>
+                //       <ChangePassword />
+                //     </Suspense>
+                //   ),
+                // },
+                // {
+                //   path: path.historyPurchase,
+                //   element: (
+                //     <Suspense fallback={<Loading />}>
+                //       <HistoryPurchase />
+                //     </Suspense>
+                //   ),
+                // },
+              ],
             },
           ],
         },
@@ -113,6 +101,15 @@ export default function useRouteElements() {
       path: "",
       element: <MainLayout />,
       children: [
+        {
+          path: path.home,
+          index: true,
+          element: (
+            <Suspense fallback={<Loading />}>
+              <HomePage />
+            </Suspense>
+          ),
+        },
         {
           path: "*",
           element: (
