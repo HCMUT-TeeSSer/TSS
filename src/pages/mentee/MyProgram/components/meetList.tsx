@@ -54,13 +54,82 @@ function NewMeetModal({ isOpen, onClose, onConfirm, initialMeet }: NewMeetModalP
   const [date, setDate] = useState(initialMeet?.date ?? "");
   const [beginTime, setTime1] = useState(initialMeet?.beginTime ?? "");
   const [endTime, setTime2] = useState(initialMeet?.endTime ?? "");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setErrors] = useState({ time: "", future: "" });
 
   // Xác định chế độ dựa trên việc có ID hay không
   const isEditMode = !!initialMeet?.id;
 
   if (!isOpen) return null;
 
+  const validateInputs = () => {
+    let errorMsg = "";
+
+    // Kiểm tra rỗng (Topic, Describe, Date, BeginTime, EndTime)
+    if (!topic.trim() || !describe.trim() || !date || !beginTime || !endTime) {
+      errorMsg = "Vui lòng điền đầy đủ tất cả các trường bắt buộc.";
+    }
+
+    const timeToMinutes = (timeStr: string) => {
+      const [hour, minute] = timeStr.split(":").map(Number);
+      return hour * 60 + minute;
+    };
+    // Kiểm tra Thời gian diễn ra < 1h
+    if (!errorMsg && beginTime && endTime) {
+      const MIN_DURATION = 60;
+
+      const startMinutes = timeToMinutes(beginTime);
+      const endMinutes = timeToMinutes(endTime);
+      const durationMinutes = endMinutes - startMinutes;
+      if (durationMinutes <= 0) {
+        errorMsg = "Thời gian bắt đầu phải trước thời gian kết thúc.";
+      } else if (durationMinutes < MIN_DURATION) {
+        errorMsg = "Thời lượng lịch hẹn phải tối thiểu 60 phút.";
+      }
+    }
+
+    // Lấy thời điểm hiện tại (đã bao gồm phần làm tròn phút)
+    const now = new Date();
+    const futureTime = new Date(now.getTime() + 60000);
+    const year = futureTime.getFullYear();
+    const month = String(futureTime.getMonth() + 1).padStart(2, "0");
+    const day = String(futureTime.getDate()).padStart(2, "0");
+    const currentISODate = `${String(year)}-${month}-${day}`;
+    const currentMinute = now.getMinutes() + 1;
+    const currentHour = now.getHours() + (currentMinute === 60 ? 1 : 0);
+    const nextMinute = currentMinute === 60 ? 0 : currentMinute;
+    const currentTime = `${String(currentHour).padStart(2, "0")}:${String(nextMinute).padStart(2, "0")}`;
+
+    // Kiểm tra Ngày và Thời điểm > Hiện tại
+    if (!errorMsg && date) {
+      // So sánh ngày
+      if (date < currentISODate) {
+        errorMsg = "Lịch hẹn phải được đặt từ ngày hôm nay trở đi.";
+      }
+      // Nếu ngày là hôm nay, kiểm tra giờ (chỉ khi chưa có lỗi khác)
+      else if (date === currentISODate && beginTime && beginTime < currentTime) {
+        errorMsg = "Thời điểm hẹn phải lớn hơn thời điểm hiện tại.";
+      }
+    }
+
+    // Cập nhật state errors cho UI hiển thị
+    setErrors({
+      time:
+        (beginTime && endTime && beginTime >= endTime) || timeToMinutes(endTime) - timeToMinutes(beginTime) < 60
+          ? "Thời gian cuộc hẹn tối thiểu 60 phút."
+          : "",
+      future: date && date < currentISODate ? "Lịch hẹn phải được đặt từ ngày hôm nay trở đi." : "",
+    });
+
+    return { isValid: !errorMsg, errorMsg }; // Trả về đối tượng
+  };
+
   const handleConfirm = () => {
+    const validationResult = validateInputs();
+    if (!validationResult.isValid) {
+      toast.error(validationResult.errorMsg || "Vui lòng kiểm tra lại thông tin lịch hẹn.");
+      return;
+    }
     onConfirm({
       id: initialMeet?.id, // Giữ lại ID nếu đang sửa
       topic,
@@ -71,6 +140,20 @@ function NewMeetModal({ isOpen, onClose, onConfirm, initialMeet }: NewMeetModalP
     });
     onClose();
   };
+
+  const now = new Date();
+  // Thiết lập minDate cho input date
+  const futureTime = new Date(now.getTime() + 60000);
+  const year = futureTime.getFullYear();
+  const month = String(futureTime.getMonth() + 1).padStart(2, "0");
+  const day = String(futureTime.getDate()).padStart(2, "0");
+  const minDate = `${String(year)}-${month}-${day}`;
+  // Thiết lập minTime cho input date
+  const currentMinute = now.getMinutes() + 1;
+  const currentHour = now.getHours() + (currentMinute === 60 ? 1 : 0);
+  const nextMinute = currentMinute === 60 ? 0 : currentMinute;
+  const currentTime = `${String(currentHour).padStart(2, "0")}:${String(nextMinute).padStart(2, "0")}`;
+  const minTime = date === minDate ? currentTime : undefined;
 
   return (
     <div className='bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-gray-900'>
@@ -132,6 +215,7 @@ function NewMeetModal({ isOpen, onClose, onConfirm, initialMeet }: NewMeetModalP
                 onChange={(e) => {
                   setDate(e.target.value);
                 }}
+                min={minDate}
                 className='w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-blue-500 focus:ring-blue-500'
               />
             </div>
@@ -146,6 +230,7 @@ function NewMeetModal({ isOpen, onClose, onConfirm, initialMeet }: NewMeetModalP
                 onChange={(e) => {
                   setTime1(e.target.value);
                 }}
+                min={minTime}
                 className='w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-blue-500 focus:ring-blue-500'
               />
             </div>
@@ -160,6 +245,7 @@ function NewMeetModal({ isOpen, onClose, onConfirm, initialMeet }: NewMeetModalP
                 onChange={(e) => {
                   setTime2(e.target.value);
                 }}
+                min={minTime}
                 className='w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-blue-500 focus:ring-blue-500'
               />
             </div>
@@ -269,9 +355,55 @@ const getBoxClass = (status: Meet["status"]) => {
   // Mặc định hoặc cho các trạng thái khác (rejected đã bị lọc)
   return "border-gray-200 bg-white";
 };
+// Hàm trợ giúp để tính thời gian đã gửi
+const getSentTimeAgo = (createdAt: string) => {
+  const now = new Date();
+  const sentDate = new Date(createdAt);
+
+  if (isNaN(sentDate.getTime())) return "không rõ";
+
+  const diffMs = now.getTime() - sentDate.getTime();
+  if (diffMs < 60000) return "vừa gửi";
+
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays > 0) {
+    return `${String(diffDays)} ngày trước`;
+  }
+  if (diffHours > 0) {
+    return `${String(diffHours)} giờ trước`;
+  }
+  return `${String(diffMinutes)} phút trước`;
+};
+// Hàm trợ giúp để phân tích ngày và giờ từ chuỗi
+const parseDateTime = (dateStr: string, timeStr: string) => {
+  const dateObj = new Date(`${dateStr}T${timeStr}:00`);
+  if (isNaN(dateObj.getTime())) {
+    return new Date(dateStr);
+  }
+  return dateObj;
+};
+// Hàm trợ giúp để kiểm tra xem một ngày có thuộc tuần hiện tại hay không
+const isThisWeek = (dateStr: string) => {
+  const date = new Date(dateStr);
+  const now = new Date();
+
+  // Đặt về đầu tuần (ví dụ: Chủ nhật hoặc Thứ 2 tùy cài đặt locale, nhưng thường dùng để so sánh)
+  const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+  startOfWeek.setHours(0, 0, 0, 0);
+
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 7);
+
+  // Kiểm tra
+  return date >= startOfWeek && date < endOfWeek;
+};
 
 const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
   const [Meets, setMeets] = useState<Meet[]>([]);
+  const [allMeets, setAllMeets] = useState<Meet[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "approved" | "pending">("all");
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
@@ -291,7 +423,17 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
         } else {
           filteredData = filteredData.filter((app) => app.tutorName === CURRENT_TUTOR_NAME);
         }
-        setMeets(filteredData);
+
+        const now = new Date();
+
+        const futureMeets = filteredData.filter((app) => {
+          // if (app.status !== "approved") return true;
+          const endDateTime = parseDateTime(app.date, app.endTime);
+          return endDateTime > now;
+        });
+
+        setAllMeets(filteredData);
+        setMeets(futureMeets);
       } catch {
         toast.error("Không thể tải danh sách lịch hẹn.");
       } finally {
@@ -304,37 +446,6 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
   if (loading) {
     return <Loading />;
   }
-
-  // Hàm trợ giúp để tính thời gian đã gửi
-  const getSentTimeAgo = (createdAt: string) => {
-    const now = new Date();
-    const sentDate = new Date(createdAt);
-
-    if (isNaN(sentDate.getTime())) return "không rõ";
-
-    const diffMs = now.getTime() - sentDate.getTime();
-    if (diffMs < 60000) return "vừa gửi";
-
-    const diffMinutes = Math.floor(diffMs / (1000 * 60));
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-    if (diffDays > 0) {
-      return `${String(diffDays)} ngày trước`;
-    }
-    if (diffHours > 0) {
-      return `${String(diffHours)} giờ trước`;
-    }
-    return `${String(diffMinutes)} phút trước`;
-  };
-  // Hàm trợ giúp để phân tích ngày và giờ từ chuỗi
-  const parseDateTime = (dateStr: string, timeStr: string) => {
-    const dateObj = new Date(`${dateStr}T${timeStr}:00`);
-    if (isNaN(dateObj.getTime())) {
-      return new Date(dateStr);
-    }
-    return dateObj;
-  };
 
   const getNextMeet = () => {
     const now = new Date();
@@ -365,18 +476,35 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
   const handleAction = async (id: number, status: "approved" | "rejected" | "deleted", reason?: string) => {
     try {
       await updateMeetStatus(id, status, reason);
-      const newMeets = Meets.map((app) => {
-        if (app.id === id) {
-          return {
-            ...app,
-            status: status === "deleted" ? "rejected" : status,
-            reason: status === "rejected" ? (reason ?? "") : status === "approved" ? "Đã đồng ý" : app.reason,
-          };
-        }
-        return app;
-      }).filter((app) => status !== "deleted" || app.id !== id);
+      const updateMeetList = (list: Meet[]) => {
+        return list
+          .map((app) => {
+            if (app.id === id) {
+              // Thay đổi trạng thái, và lý do
+              return {
+                ...app,
+                status: status === "deleted" ? "rejected" : status,
+                reason: status === "rejected" ? (reason ?? "") : status === "approved" ? "Đã đồng ý" : app.reason,
+              };
+            }
+            return app;
+          })
+          .filter((app) => status !== "deleted" || app.id !== id); // Lọc nếu là deleted
+      };
+      // const newMeets = Meets.map((app) => {
+      //   if (app.id === id) {
+      //     return {
+      //       ...app,
+      //       status: status === "deleted" ? "rejected" : status,
+      //       reason: status === "rejected" ? (reason ?? "") : status === "approved" ? "Đã đồng ý" : app.reason,
+      //     };
+      //   }
+      //   return app;
+      // }).filter((app) => status !== "deleted" || app.id !== id);
+      //setMeets(newMeets);
 
-      setMeets(newMeets);
+      setMeets(updateMeetList(Meets));
+      setAllMeets(updateMeetList(allMeets));
 
       const actionText = status === "approved" ? "duyệt" : status === "rejected" ? "từ chối" : "xóa";
       toast.success(`Lịch hẹn đã được ${actionText}!`);
@@ -775,7 +903,15 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
                 </li>
                 <li className='flex justify-between text-gray-600'>
                   <span>Hoàn thành</span>
-                  <span className='font-medium text-blue-600'>5</span> {/* Mocked data */}
+                  <span className='font-medium text-blue-600'>
+                    {
+                      allMeets.filter((a) => {
+                        const endDateTime = parseDateTime(a.date, a.endTime);
+                        return a.status === "approved" && endDateTime <= new Date();
+                      }).length
+                    }
+                  </span>{" "}
+                  {/* Mocked data */}
                 </li>
               </ul>
             </div>
@@ -786,7 +922,7 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
               <ul className='mt-3 space-y-2 text-sm'>
                 <li className='flex justify-between text-gray-600'>
                   <span>Tổng yêu cầu</span>
-                  <span className='font-medium text-gray-900'>{Meets.length}</span>
+                  <span className='font-medium text-gray-900'>{allMeets.length}</span>
                 </li>
                 <li className='flex justify-between text-gray-600'>
                   <span>Chờ phê duyệt</span>
@@ -797,16 +933,27 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
                 <li className='flex justify-between text-gray-600'>
                   <span>Đã đồng ý</span>
                   <span className='font-medium text-green-600'>
-                    {Meets.filter((a) => a.status === "approved").length}
+                    {allMeets.filter((a) => a.status === "approved").length}
                   </span>
                 </li>
                 <li className='flex justify-between text-gray-600'>
                   <span>Đã hoàn thành</span>
-                  <span className='font-medium text-blue-600'>5</span> {/* Mocked data */}
+                  <span className='font-medium text-blue-600'>
+                    {
+                      allMeets.filter((a) => {
+                        const endDateTime = parseDateTime(a.date, a.endTime);
+                        return a.status === "approved" && endDateTime <= new Date();
+                      }).length
+                    }
+                  </span>{" "}
+                  {/* Mocked data */}
                 </li>
                 <li className='flex justify-between text-gray-600'>
                   <span>Tuần này</span>
-                  <span className='font-medium text-purple-600'>4</span> {/* Mocked data */}
+                  <span className='font-medium text-purple-600'>
+                    {Meets.filter((a) => a.status === "approved" && isThisWeek(a.date)).length}
+                  </span>{" "}
+                  {/* Mocked data */}
                 </li>
               </ul>
             </div>
