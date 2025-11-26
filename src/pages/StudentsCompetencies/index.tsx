@@ -2,31 +2,55 @@ import { useCallback } from "react";
 import styles from "./StudentsCompetencies.module.css";
 
 const StudentsCompetencies = () => {
-  const onDivContainerClick = useCallback(() => {
-    // Add your code here
+  const onDivContainerClick = useCallback((url: string) => {
+    window.location.href = url;
   }, []);
-
   return (
     <div className={styles.trangNhGiNngLcCaTu}>
       <div className={styles.headerComponentForMentee}>
         <div className={styles.div186}>
           <div className={styles.div187}>
             <div className={styles.div188}>
-              <div className={styles.div189} onClick={onDivContainerClick}>
+              <div
+                className={styles.div189}
+                onClick={() => {
+                  onDivContainerClick("/");
+                }}
+              >
                 <b className={styles.tutorSupportSystem3}>Tutor Support System</b>
-                <img className={styles.appLogoIcon} alt='' />
+                <img className={styles.appLogoIcon} alt='' src='/src/pages/StudentsCompetencies/imgs/hcmut.png' />
               </div>
               <div className={styles.nav3}>
-                <div className={styles.div190} onClick={onDivContainerClick}>
+                <div
+                  className={styles.div190}
+                  onClick={() => {
+                    onDivContainerClick("/");
+                  }}
+                >
                   <div className={styles.trangCh}>Trang chủ</div>
                 </div>
-                <div className={styles.div191} onClick={onDivContainerClick}>
+                <div
+                  className={styles.div191}
+                  onClick={() => {
+                    onDivContainerClick("/programs");
+                  }}
+                >
                   <div className={styles.chngTrnh}>Chương trình</div>
                 </div>
-                <div className={styles.div192} onClick={onDivContainerClick}>
+                <div
+                  className={styles.div192}
+                  onClick={() => {
+                    onDivContainerClick("/myprogram");
+                  }}
+                >
                   <div className={styles.chngTrnhCa2}>Chương trình của tôi</div>
                 </div>
-                <div className={styles.div193} onClick={onDivContainerClick}>
+                <div
+                  className={styles.div193}
+                  onClick={() => {
+                    onDivContainerClick("/resources");
+                  }}
+                >
                   <div className={styles.tiLiu}>Tài liệu</div>
                 </div>
               </div>
@@ -44,7 +68,12 @@ const StudentsCompetencies = () => {
                   <div className={styles.div196}>7</div>
                 </div>
               </div>
-              <div className={styles.div197} onClick={onDivContainerClick}>
+              <div
+                className={styles.div197}
+                onClick={() => {
+                  onDivContainerClick("https://google.com");
+                }}
+              >
                 <img className={styles.imgIcon5} alt='' />
                 <div className={styles.div198}>
                   <div className={styles.div199}>
@@ -85,7 +114,11 @@ const StudentsCompetencies = () => {
             <div className={styles.div28}>
               <div className={styles.div29}>
                 <div className={styles.div30}>
-                  <img className={styles.divIcon5} alt='' />
+                  <img
+                    className={styles.imgIcon6}
+                    alt=''
+                    src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/480px-Python-logo-notext.svg.png'
+                  />
                   <div className={styles.div31}>
                     <b className={styles.nhGiNng}>Đánh Giá Năng Lực Sinh Viên</b>
                     <div className={styles.lpTrnhPython2}>Lập trình Python nâng cao - Bảng điều khiển Mentor</div>

@@ -95,22 +95,6 @@ export default function useRouteElements() {
       element: <MainLayout />,
       children: [
         {
-          path: "/StudentsCompetencies",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <StudentsCompetencies />
-            </Suspense>
-          ),
-        },
-        {
-          path: "/TutorCompetencies",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <TutorCompetencies />
-            </Suspense>
-          ),
-        },
-        {
           path: "*",
           element: (
             <Suspense fallback={<Loading />}>
@@ -119,6 +103,22 @@ export default function useRouteElements() {
           ),
         },
       ],
+    },
+    {
+      path: "/StudentsCompetencies",
+      element: (
+        <Suspense fallback={<Loading />}>
+          <StudentsCompetencies />
+        </Suspense>
+      ),
+    },
+    {
+      path: "/TutorCompetencies",
+      element: (
+        <Suspense fallback={<Loading />}>
+          <TutorCompetencies />
+        </Suspense>
+      ),
     },
   ]);
   return routeElements;

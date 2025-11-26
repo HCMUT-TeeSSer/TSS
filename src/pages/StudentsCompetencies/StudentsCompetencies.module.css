@@ -63,6 +63,11 @@
   color: #2563eb;
 }
 
+.appLogoIcon {
+  max-width: 40px;
+  margin-top: -5px;
+}
+
 .nav3 {
   display: flex;
   gap: 24px;
@@ -152,6 +157,13 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
+  object-fit: cover;
+}
+
+.imgIcon6 {
+  width: 64px;
+  height: 64px;
+  border-radius: 25%;
   object-fit: cover;
 }
 
