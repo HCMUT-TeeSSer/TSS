@@ -6,6 +6,9 @@ import { useRoutes } from "react-router-dom";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Program = lazy(() => import("@/pages/mentee/Program"));
+const AdminProgram = lazy(() => import("@/pages/admin/Program/Program"));
+const AdminTutor = lazy(() => import("@/pages/admin/Tutor/Tutor"));
+const AdminMentee = lazy(() => import("@/pages/admin/Mentee/Mentee"));
 
 // function ProtectedRoute() {
 //   const { isAuthenticated } = useContext(AppContext);
@@ -93,6 +96,36 @@ export default function useRouteElements() {
               ],
             },
           ],
+        },
+      ],
+    },
+    {
+      path: path.admin, // Ví dụ '/admin'
+      element: <MainLayout />,
+      children: [
+        {
+          path: "programs",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminProgram />
+            </Suspense>
+          ),
+        },
+        {
+          path: "tutors",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminTutor />
+            </Suspense>
+          ),
+        },
+        {
+          path: "mentees",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminMentee />
+            </Suspense>
+          ),
         },
       ],
     },

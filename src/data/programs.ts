@@ -1,9 +1,12 @@
-interface Program {
+import type { Tutor } from "./tutors";
+import { tutors } from "./tutors";
+export interface Program {
   id: number;
   title: string;
   description: string;
   rating: number;
   availableTutors: number;
+  totalMentee: number;
   category: string;
   department: string;
   icon: string;
@@ -13,6 +16,9 @@ interface Program {
   duration: string;
   learningFormat: string;
   isAvailable: boolean;
+  mainTutor: Tutor;
+  listTutor: Tutor[];
+  progress: number;
 }
 export const programs: Program[] = [
   {
@@ -21,6 +27,7 @@ export const programs: Program[] = [
     description: "Thành thạo Python với các dự án thực tế và hướng dẫn chuyên môn từ các chuyên gia trong ngành.",
     rating: 4.9,
     availableTutors: 12,
+    totalMentee: 120,
     category: "Khoa học máy tính",
     department: "Khoa học máy tính",
     icon: "</>",
@@ -30,6 +37,9 @@ export const programs: Program[] = [
     duration: "12 tuần",
     learningFormat: "Trực tuyến",
     isAvailable: true,
+    mainTutor: tutors[0],
+    listTutor: [tutors[0]],
+    progress: 100,
   },
   {
     id: 2,
@@ -37,6 +47,7 @@ export const programs: Program[] = [
     description: "Từ giới hạn đến tích phân, thành thạo các khái niệm giải tích với hướng dẫn từng bước.",
     rating: 4.8,
     availableTutors: 18,
+    totalMentee: 140,
     category: "Toán học",
     department: "Toán học",
     icon: "calculator",
@@ -46,6 +57,9 @@ export const programs: Program[] = [
     duration: "10 tuần",
     learningFormat: "Trực tuyến",
     isAvailable: true,
+    mainTutor: tutors[0],
+    listTutor: [tutors[0]],
+    progress: 98,
   },
   {
     id: 3,
@@ -53,6 +67,7 @@ export const programs: Program[] = [
     description: "Khám phá thế giới hấp dẫn của cơ học lượng tử cùng các chuyên gia vật lý.",
     rating: 5.0,
     availableTutors: 8,
+    totalMentee: 100,
     category: "Vật lý",
     department: "Vật lý",
     icon: "gear",
@@ -62,6 +77,9 @@ export const programs: Program[] = [
     duration: "8 tuần",
     learningFormat: "Trực tuyến",
     isAvailable: true,
+    mainTutor: tutors[1],
+    listTutor: [tutors[1]],
+    progress: 96,
   },
   {
     id: 4,
@@ -69,6 +87,7 @@ export const programs: Program[] = [
     description: "Tìm hiểu sâu về các quá trình tế bào và cơ chế phân tử cùng các tiến sĩ sinh học.",
     rating: 4.7,
     availableTutors: 15,
+    totalMentee: 10,
     category: "Sinh học",
     department: "Sinh học",
     icon: "dna",
@@ -78,6 +97,9 @@ export const programs: Program[] = [
     duration: "14 tuần",
     learningFormat: "Trực tuyến",
     isAvailable: true,
+    mainTutor: tutors[1],
+    listTutor: [tutors[1]],
+    progress: 90,
   },
   {
     id: 5,
@@ -85,6 +107,7 @@ export const programs: Program[] = [
     description: "Học các kiến thức cơ bản về AI, mạng neural và thuật toán machine learning.",
     rating: 4.9,
     availableTutors: 9,
+    totalMentee: 80,
     category: "Khoa học máy tính",
     department: "Khoa học máy tính",
     icon: "robot",
@@ -94,6 +117,9 @@ export const programs: Program[] = [
     duration: "16 tuần",
     learningFormat: "Trực tuyến",
     isAvailable: true,
+    mainTutor: tutors[2],
+    listTutor: [tutors[2]],
+    progress: 100,
   },
   {
     id: 6,
@@ -101,6 +127,7 @@ export const programs: Program[] = [
     description: "Thành thạo các nguyên lý kỹ thuật, nhiệt động lực học và cơ bản thiết kế.",
     rating: 4.8,
     availableTutors: 14,
+    totalMentee: 200,
     category: "Kỹ thuật",
     department: "Kỹ thuật",
     icon: "gears",
@@ -110,6 +137,9 @@ export const programs: Program[] = [
     duration: "12 tuần",
     learningFormat: "Trực tiếp",
     isAvailable: true,
+    mainTutor: tutors[2],
+    listTutor: [tutors[2]],
+    progress: 60,
   },
   {
     id: 7,
@@ -117,6 +147,7 @@ export const programs: Program[] = [
     description: "Nâng cao kỹ năng tiếng Anh học thuật để chuẩn bị cho các kỳ thi quốc tế.",
     rating: 4.6,
     availableTutors: 22,
+    totalMentee: 150,
     category: "Ngôn ngữ",
     department: "Ngôn ngữ",
     icon: "AZ",
@@ -126,6 +157,9 @@ export const programs: Program[] = [
     duration: "10 tuần",
     learningFormat: "Trực tuyến",
     isAvailable: true,
+    mainTutor: tutors[3],
+    listTutor: [tutors[3]],
+    progress: 50,
   },
   {
     id: 8,
@@ -133,6 +167,7 @@ export const programs: Program[] = [
     description: "Học các khái niệm thống kê cơ bản và nâng cao cho nghiên cứu và phân tích dữ liệu.",
     rating: 4.7,
     availableTutors: 16,
+    totalMentee: 70,
     category: "Toán học",
     department: "Toán học",
     icon: "chart",
@@ -142,5 +177,8 @@ export const programs: Program[] = [
     duration: "10 tuần",
     learningFormat: "Trực tiếp",
     isAvailable: true,
+    mainTutor: tutors[3],
+    listTutor: [tutors[3]],
+    progress: 0,
   },
 ];
