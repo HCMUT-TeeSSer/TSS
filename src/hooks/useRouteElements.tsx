@@ -10,6 +10,11 @@ const HomePage = lazy(() => import("@/pages/Home/HomePage"));
 const MenteeMyProgramDetail = lazy(() => import("@/pages/mentee/MyProgram/MyProgramDetail"));
 const TutorMyProgramDetail = lazy(() => import("@/pages/tutor/MyProgram/MyProgramDetail"));
 
+const StudentsCompetencies = lazy(() => import("@/pages/mentee/StudentsCompetencies"));
+const TutorCompetencies = lazy(() => import("@/pages/tutor/TutorCompetencies"));
+const Sessions = lazy(() => import("@/pages/mentee/Sessions"));
+const ProgramDetail = lazy(() => import("@/pages/mentee/ProgramDetail"));
+
 // function ProtectedRoute() {
 //   const { isAuthenticated } = useContext(AppContext);
 //   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;

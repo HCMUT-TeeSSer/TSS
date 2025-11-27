@@ -118,7 +118,9 @@ const HeroSection = () => {
               <input
                 type='text'
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                }}
                 placeholder='Tìm kiếm gia sư, chương trình...'
                 className='w-full flex-1 bg-transparent px-4 py-3 text-white placeholder-blue-200 outline-none'
               />
@@ -135,7 +137,7 @@ const HeroSection = () => {
           <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
             {stats.map((stat, index) => (
               <div key={index} className='rounded-xl bg-white/20 p-6 backdrop-blur-sm'>
-                <div className='text-3xl font-bold text-white mb-1'>{stat.value}</div>
+                <div className='mb-1 text-3xl font-bold text-white'>{stat.value}</div>
                 <div className='text-sm text-blue-100'>{stat.label}</div>
               </div>
             ))}
@@ -161,9 +163,7 @@ const SubjectsSection = () => {
               key={subject.id}
               className='flex cursor-pointer flex-col items-center rounded-xl border border-gray-200 p-6 transition-shadow hover:shadow-lg'
             >
-              <div
-                className={`mb-4 flex h-16 w-16 items-center justify-center rounded-full ${subject.bgColor}`}
-              >
+              <div className={`mb-4 flex h-16 w-16 items-center justify-center rounded-full ${subject.bgColor}`}>
                 <img
                   src={subject.icon}
                   alt={subject.name}
@@ -183,12 +183,7 @@ const SubjectsSection = () => {
 const TestimonialsSection = () => {
   const renderStars = (rating: number) => {
     return Array.from({ length: Math.floor(rating) }, (_, index) => (
-      <img
-        key={index}
-        src={starIcon}
-        alt='star'
-        className='h-4 w-4 object-contain'
-      />
+      <img key={index} src={starIcon} alt='star' className='h-4 w-4 object-contain' />
     ));
   };
 
@@ -206,11 +201,7 @@ const TestimonialsSection = () => {
           {testimonials.map((item) => (
             <div key={item.id} className='flex flex-col rounded-xl bg-white p-8 shadow-sm'>
               <div className='mb-6 flex items-center gap-4'>
-                <img
-                  src={item.avatar}
-                  alt={item.name}
-                  className='h-12 w-12 rounded-full object-cover'
-                />
+                <img src={item.avatar} alt={item.name} className='h-12 w-12 rounded-full object-cover' />
                 <div>
                   <div className='font-semibold text-gray-900'>{item.name}</div>
                   <div className='text-sm text-gray-500'>{item.role}</div>

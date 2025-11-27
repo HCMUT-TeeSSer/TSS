@@ -39,7 +39,7 @@ const Header = () => {
           </Link>
 
           {/* Navigation */}
-          <nav className='hidden md:flex items-center gap-2'>
+          <nav className='hidden items-center gap-2 md:flex'>
             {navigation.map((item, index) => (
               <NavLink
                 key={index}
