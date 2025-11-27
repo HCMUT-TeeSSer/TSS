@@ -2,11 +2,17 @@ const path = {
   home: "/",
   docs: "/docs",
   mentee: "/mentee",
-  tutor: "/tutor",
   menteeProfile: "/mentee/profile",
   menteePrograms: "/mentee/programs",
-  menteeMyProgram: "/mentee/programs/my-program",
   menteeProgramDetail: "/mentee/programs/:programId",
+  menteeMyProgram: "/mentee/my-program",
+  menteeMyProgramDetail: "/mentee/my-program/:programId",
+
+  tutor: "/tutor",
+  TutorProgram: "/tutor/programs",
+  TutorProgramDetail: "/tutor/programs/:programId",
+  tutorMyProgram: "/tutor/my-program",
+  tutorMyProgramDetail: "/tutor/my-program/:programId",
 } as const;
 
 export default path;
