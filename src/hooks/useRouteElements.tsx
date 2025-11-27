@@ -1,16 +1,12 @@
 import Loading from "@/components/Loading";
 import path from "@/constants/path";
 import MainLayout from "@/layouts/MainLayout";
-import ProgramDetail from "@/pages/mentee/ProgramDetail/ProgramDetail";
-import Sessions from "@/pages/mentee/Sessions";
 import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
-const StudentsCompetencies = lazy(() => import("@/pages/StudentsCompetencies"));
-const TutorCompetencies = lazy(() => import("@/pages/TutorCompetencies"));
-
 const Program = lazy(() => import("@/pages/mentee/Program"));
+const HomePage = lazy(() => import("@/pages/Home/HomePage"));
 const MenteeMyProgramDetail = lazy(() => import("@/pages/mentee/MyProgram/MyProgramDetail"));
 const TutorMyProgramDetail = lazy(() => import("@/pages/tutor/MyProgram/MyProgramDetail"));
 
@@ -204,6 +200,15 @@ export default function useRouteElements() {
       path: "",
       element: <MainLayout />,
       children: [
+        {
+          path: path.home,
+          index: true,
+          element: (
+            <Suspense fallback={<Loading />}>
+              <HomePage />
+            </Suspense>
+          ),
+        },
         {
           path: "*",
           element: (

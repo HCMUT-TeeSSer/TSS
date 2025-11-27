@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Loading from "@/components/Loading";
+//import path from '@/constants/path';
 import {
   Search,
   Grid3x3,
@@ -15,7 +16,10 @@ import {
   Globe,
   FlaskConical,
 } from "lucide-react";
-import { programs } from "@/data/programs";
+import { programs } from "../../../data/programs";
+import type { Program } from "../../../data/programs";
+
+export type { Program };
 
 export default function Program() {
   const getDepartmentStyle = (dept: string) => {
@@ -144,7 +148,7 @@ export default function Program() {
   return (
     <div className='min-h-screen bg-gray-50'>
       {/*HERO SECTION */}
-      <div className='bg-linear-to-br from-indigo-500 to-purple-600 py-12'>
+      <div className='py-12' style={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}>
         <div className='container mx-auto px-4'>
           <h1 className='mb-4 text-center text-4xl font-bold text-gray-200'>Tìm Gia Sư Hoàn Hảo</h1>
           <p className='mb-8 text-center text-lg text-blue-100'>
@@ -204,12 +208,9 @@ export default function Program() {
             </div>
 
             {/*Sort & View Mode */}
-            <div className='flex shrink-0 items-center gap-3'>
+            <div className='flex flex-shrink-0 items-center gap-3'>
               <div className='relative'>
-                <select
-                  aria-label='Sắp xếp'
-                  className='cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2 pr-8 text-sm text-gray-700 transition-colors hover:border-gray-400 focus:border-blue-500 focus:outline-none'
-                >
+                <select className='cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2 pr-8 text-sm text-gray-700 transition-colors hover:border-gray-400 focus:border-blue-500 focus:outline-none'>
                   <option>Sắp xếp theo đánh giá</option>
                   <option>Mới nhất</option>
                   <option>Phổ biến nhất</option>
@@ -222,7 +223,6 @@ export default function Program() {
                   onClick={() => {
                     setViewMode("grid");
                   }}
-                  aria-label='Chế độ lưới'
                   className={`rounded p-1.5 transition-colors ${viewMode === "grid" ? "bg-blue-100 text-blue-600" : "text-gray-400 hover:text-gray-600"}`}
                 >
                   <Grid3x3 className='h-5 w-5' />
@@ -231,7 +231,6 @@ export default function Program() {
                   onClick={() => {
                     setViewMode("list");
                   }}
-                  aria-label='Chế độ danh sách'
                   className={`rounded p-1.5 transition-colors ${viewMode === "list" ? "bg-blue-100 text-blue-600" : "text-gray-400 hover:text-gray-600"}`}
                 >
                   <List className='h-5 w-5' />
@@ -251,7 +250,6 @@ export default function Program() {
                   onChange={(e) => {
                     setSelectedDifficulty(e.target.value);
                   }}
-                  aria-label='Mức độ khó'
                   className='w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none'
                 >
                   {difficulties.map((level) => (
@@ -273,7 +271,6 @@ export default function Program() {
                   onChange={(e) => {
                     setSelectedDuration(e.target.value);
                   }}
-                  aria-label='Thời lượng'
                   className='w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none'
                 >
                   {durations.map((d) => (
@@ -295,7 +292,6 @@ export default function Program() {
                   onChange={(e) => {
                     setSelectedTutorCount(e.target.value);
                   }}
-                  aria-label='Số lượng gia sư'
                   className='w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none'
                 >
                   {tutorCounts.map((c) => (
@@ -317,7 +313,6 @@ export default function Program() {
                   onChange={(e) => {
                     setSelectedLearningFormat(e.target.value);
                   }}
-                  aria-label='Hình thức học'
                   className='w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none'
                 >
                   {learningFormats.map((f) => (
@@ -440,7 +435,6 @@ export default function Program() {
                 setCurrentPage((prev) => Math.max(1, prev - 1));
               }}
               disabled={currentPage === 1}
-              aria-label='Trang trước'
               className='flex h-10 w-10 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-500 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50'
             >
               <ChevronLeft className='h-5 w-5' />
@@ -467,7 +461,6 @@ export default function Program() {
                 setCurrentPage((prev) => Math.min(totalPages, prev + 1));
               }}
               disabled={currentPage === totalPages}
-              aria-label='Trang sau'
               className='flex h-10 w-10 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-500 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50'
             >
               <ChevronRight className='h-5 w-5' />
