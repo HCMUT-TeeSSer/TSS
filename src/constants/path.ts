@@ -1,6 +1,7 @@
 const path = {
   home: "/",
   docs: "/docs",
+  login: "/login",
   mentee: "/mentee",
   menteeProfile: "/mentee/profile",
   menteePrograms: "/mentee/programs",
