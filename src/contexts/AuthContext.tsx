@@ -6,7 +6,7 @@ import { getAuthUser, login as authLogin, logout as authLogout, initializeSeedDa
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  login: (username: string, password: string) => Promise<{ success: boolean; error?: string; user?: User }>;
   logout: () => void;
   loading: boolean;
 }
@@ -22,13 +22,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
   const loading = false;
 
-  const login = (username: string, password: string): Promise<{ success: boolean; error?: string }> => {
+  const login = (username: string, password: string): Promise<{ success: boolean; error?: string; user?: User }> => {
     return new Promise((resolve) => {
       const result = authLogin(username, password);
 
       if (result.success && result.user) {
         setUser(result.user);
-        resolve({ success: true });
+        resolve({ success: true, user: result.user });
       } else {
         resolve({ success: false, error: result.error });
       }

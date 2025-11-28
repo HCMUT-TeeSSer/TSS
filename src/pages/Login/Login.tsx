@@ -13,7 +13,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { login: authLogin } = useAuth();
+  const { login: authLogin, user } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,11 +22,20 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const result = (await authLogin(username, password)) as { success: boolean; error?: string };
+      const result = await authLogin(username, password);
 
       if (result.success) {
-        // Redirect based on role will be handled by RejectedRoute
-        void navigate("/");
+        // Redirect based on role
+        const userRole = result.user?.role ?? user?.role;
+        if (userRole === "admin") {
+          void navigate("/admin");
+        } else if (userRole === "tutor") {
+          void navigate("/tutor");
+        } else if (userRole === "student") {
+          void navigate("/mentee");
+        } else {
+          void navigate("/");
+        }
       } else {
         setError(result.error ?? "Đăng nhập thất bại");
       }

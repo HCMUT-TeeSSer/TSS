@@ -113,10 +113,19 @@ export default function useRouteElements() {
         },
       ],
     },
+    // Admin routes - only accessible by admins
     {
-      path: path.admin, // Ví dụ '/admin'
-      element: <MainLayout />,
+      path: path.admin,
+      element: <ProtectedRoute allowedRoles={["admin"]} />,
       children: [
+        {
+          index: true,
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminProgram />
+            </Suspense>
+          ),
+        },
         {
           path: "programs",
           element: (
