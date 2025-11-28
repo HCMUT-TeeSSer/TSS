@@ -1,98 +1,112 @@
 import Loading from "@/components/Loading";
 import path from "@/constants/path";
 import MainLayout from "@/layouts/MainLayout";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import RejectedRoute from "@/components/RejectedRoute";
 import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
+const Login = lazy(() => import("@/pages/Login"));
 const Program = lazy(() => import("@/pages/mentee/Program"));
 const AdminProgram = lazy(() => import("@/pages/admin/Program/Program"));
 const AdminTutor = lazy(() => import("@/pages/admin/Tutor/Tutor"));
 const AdminMentee = lazy(() => import("@/pages/admin/Mentee/Mentee"));
+const HomePage = lazy(() => import("@/pages/Home/HomePage"));
+const MenteeMyProgramDetail = lazy(() => import("@/pages/mentee/MyProgram/MyProgramDetail"));
+const TutorMyProgramDetail = lazy(() => import("@/pages/tutor/MyProgram/MyProgramDetail"));
 
-// function ProtectedRoute() {
-//   const { isAuthenticated } = useContext(AppContext);
-//   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
-// }
-
-// function RejectedRoute() {
-//   const { isAuthenticated } = useContext(AppContext);
-//   return !isAuthenticated ? <Outlet /> : <Navigate to='/' />;
-// }
+const StudentsCompetencies = lazy(() => import("@/pages/mentee/StudentsCompetencies"));
+const TutorCompetencies = lazy(() => import("@/pages/tutor/TutorCompetencies"));
+const Sessions = lazy(() => import("@/pages/mentee/Sessions"));
+const ProgramDetail = lazy(() => import("@/pages/mentee/ProgramDetail"));
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
-    // {
-    //   path: "",
-    //   // element: <RejectedRoute />,
-    //   children: [
-    //     {
-    //       path: "",
-    //       element: <RegisterLayout />,
-    //       children: [
-    //         {
-    //           path: path.login,
-    //           element: (
-    //             <Suspense fallback={<Loading />}>
-    //               <Login />
-    //             </Suspense>
-    //           ),
-    //         },
-    //         {
-    //           path: path.register,
-    //           element: (
-    //             <Suspense fallback={<Loading />}>
-    //               <Register />
-    //             </Suspense>
-    //           ),
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // },
+    // Routes that require user to NOT be authenticated (login page)
     {
       path: "",
-      // element: <ProtectedRoute />,
+      element: <RejectedRoute />,
       children: [
         {
-          path: path.mentee,
+          path: path.login,
+          element: (
+            <Suspense fallback={<Loading />}>
+              <Login />
+            </Suspense>
+          ),
+        },
+      ],
+    },
+    // Protected routes - require authentication
+    {
+      path: "",
+      element: <ProtectedRoute />,
+      children: [
+        // Home page - accessible by all authenticated users
+        {
+          path: path.home,
           element: <MainLayout />,
           children: [
             {
-              path: "programs",
+              index: true,
               element: (
                 <Suspense fallback={<Loading />}>
-                  <Program />
+                  <HomePage />
                 </Suspense>
               ),
             },
+          ],
+        },
+        // Student routes - only accessible by students
+        {
+          path: "",
+          element: <ProtectedRoute allowedRoles={["student"]} />,
+          children: [
             {
-              // element: <ProgramLayout />,
+              path: path.mentee,
+              element: <MainLayout />,
               children: [
-                // {
-                //   path: path.profile,
-                //   element: (
-                //     <Suspense fallback={<Loading />}>
-                //       <Profile />
-                //     </Suspense>
-                //   ),
-                // },
-                // {
-                //   path: path.changePassword,
-                //   element: (
-                //     <Suspense fallback={<Loading />}>
-                //       <ChangePassword />
-                //     </Suspense>
-                //   ),
-                // },
-                // {
-                //   path: path.historyPurchase,
-                //   element: (
-                //     <Suspense fallback={<Loading />}>
-                //       <HistoryPurchase />
-                //     </Suspense>
-                //   ),
-                // },
+                {
+                  path: "programs",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <Program />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: "competencies",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <StudentsCompetencies />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: "sessions",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <Sessions />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: "program-detail",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <ProgramDetail />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: "my-program/:programId",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <MenteeMyProgramDetail />
+                    </Suspense>
+                  ),
+                },
               ],
             },
           ],
@@ -133,13 +147,57 @@ export default function useRouteElements() {
       path: "",
       element: <MainLayout />,
       children: [
+        // Tutor routes - only accessible by tutors
+        {
+          path: "",
+          element: <ProtectedRoute allowedRoles={["tutor"]} />,
+          children: [
+            {
+              path: path.tutor,
+              element: <MainLayout />,
+              children: [
+                {
+                  path: "competencies",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorCompetencies />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: "programs",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <Program />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: "my-program/:programId",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorMyProgramDetail />
+                    </Suspense>
+                  ),
+                },
+              ],
+            },
+          ],
+        },
+        // 404 page - accessible by all authenticated users
         {
           path: "*",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <NotFound />
-            </Suspense>
-          ),
+          element: <MainLayout />,
+          children: [
+            {
+              index: true,
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <NotFound />
+                </Suspense>
+              ),
+            },
+          ],
         },
       ],
     },
