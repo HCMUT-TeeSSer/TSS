@@ -6,6 +6,10 @@ const path = {
   menteeProfile: "/mentee/profile",
   menteePrograms: "/mentee/programs",
   menteeProgramDetail: "/mentee/programs/:programId",
+  admin: "/admin",
+  adminProgram: "/admin/Program",
+  adminTutor: "/admin/Tutor",
+  adminMentee: "/admin/Mentee",
   menteeMyProgram: "/mentee/my-program",
   menteeMyProgramDetail: "/mentee/my-program/:programId",
 

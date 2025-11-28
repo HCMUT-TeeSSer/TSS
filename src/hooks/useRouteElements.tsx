@@ -9,6 +9,9 @@ import { useRoutes } from "react-router-dom";
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Login = lazy(() => import("@/pages/Login"));
 const Program = lazy(() => import("@/pages/mentee/Program"));
+const AdminProgram = lazy(() => import("@/pages/admin/Program/Program"));
+const AdminTutor = lazy(() => import("@/pages/admin/Tutor/Tutor"));
+const AdminMentee = lazy(() => import("@/pages/admin/Mentee/Mentee"));
 const HomePage = lazy(() => import("@/pages/Home/HomePage"));
 const MenteeMyProgramDetail = lazy(() => import("@/pages/mentee/MyProgram/MyProgramDetail"));
 const TutorMyProgramDetail = lazy(() => import("@/pages/tutor/MyProgram/MyProgramDetail"));
@@ -108,6 +111,42 @@ export default function useRouteElements() {
             },
           ],
         },
+      ],
+    },
+    {
+      path: path.admin, // Ví dụ '/admin'
+      element: <MainLayout />,
+      children: [
+        {
+          path: "programs",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminProgram />
+            </Suspense>
+          ),
+        },
+        {
+          path: "tutors",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminTutor />
+            </Suspense>
+          ),
+        },
+        {
+          path: "mentees",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminMentee />
+            </Suspense>
+          ),
+        },
+      ],
+    },
+    {
+      path: "",
+      element: <MainLayout />,
+      children: [
         // Tutor routes - only accessible by tutors
         {
           path: "",
