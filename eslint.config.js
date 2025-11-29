@@ -4,6 +4,8 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 import react from "eslint-plugin-react";
+import reactDom from "eslint-plugin-react-dom";
+import reactX from "eslint-plugin-react-x";
 import eslintPluginPrettier from "eslint-plugin-prettier";
 import tsdoc from "eslint-plugin-tsdoc";
 
@@ -27,6 +29,8 @@ export default [
     },
     plugins: {
       react,
+      "react-dom": reactDom,
+      "react-x": reactX,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
       prettier: eslintPluginPrettier,
@@ -38,6 +42,9 @@ export default [
       "react/jsx-no-target-blank": "warn",
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "react/prop-types": "off",
+      "react/forbid-dom-props": "off",
+      "react-dom/no-inline-styles": "off",
+      "react-x/no-inline-styles": "off",
       "tsdoc/syntax": "warn",
       "@typescript-eslint/unified-signatures": "off",
       "prettier/prettier": [

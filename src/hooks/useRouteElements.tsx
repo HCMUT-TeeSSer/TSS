@@ -118,21 +118,21 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-          path: "library",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <Library />
-            </Suspense>
-          ),
-        },
-        {
-          path: "program-list",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <ProgramList />
-            </Suspense>
-          ),
-        },
+                  path: "library",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <Library />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: "program-list",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <ProgramList />
+                    </Suspense>
+                  ),
+                },
               ],
             },
           ],

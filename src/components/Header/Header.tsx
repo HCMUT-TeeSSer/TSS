@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth"; 
+import { useAuth } from "@/hooks/useAuth";
 import { LogOut, User } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 // Import ảnh
@@ -11,7 +11,7 @@ import iconDropdown from "@/assets/images/vector13.png";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { logout, user: authUser } = useAuth(); 
+  const { logout, user: authUser } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -32,7 +32,7 @@ const Header = () => {
         name: authUser.fullName || "User",
         role: authUser.role,
         department: "Khoa Khoa học Máy tính",
-        avatar: authUser.avatar || avatarUser,
+        avatar: authUser.avatar ?? avatarUser,
       }
     : {
         name: "Sarah Johnson",
@@ -40,12 +40,12 @@ const Header = () => {
         department: "Khoa Khoa học Máy tính",
         avatar: avatarUser,
       };
-      
+
   const logingout = () => {
     logout();
     setIsDropdownOpen(false);
-    navigate("/login");
-  }
+    void navigate("/login");
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -59,12 +59,12 @@ const Header = () => {
     };
   }, []);
 
-//  Trường hợp profile của tutor và mentee khác nhau và thuộc 2 file khác nhau, 
-//  bao giờ có trang profile riêng thì mở lại thì bạn tự adjust lại nhé
-//  const profilePath = displayUser.role === "tutor" ? "/tutor/profile" : "/mentee/profile";
-  
-  const profilePath = "...";  // Nhập đường dẫn trang profile vào (trường hhopwj chỉ có 1 profile.tsx, không phân profile theo role)
-  
+  //  Trường hợp profile của tutor và mentee khác nhau và thuộc 2 file khác nhau,
+  //  bao giờ có trang profile riêng thì mở lại thì bạn tự adjust lại nhé
+  //  const profilePath = displayUser.role === "tutor" ? "/tutor/profile" : "/mentee/profile";
+
+  const profilePath = "..."; // Nhập đường dẫn trang profile vào (trường hhopwj chỉ có 1 profile.tsx, không phân profile theo role)
+
   return (
     <header className='sticky top-0 z-50 w-full border-b border-gray-200 bg-white shadow-sm'>
       <div className='container mx-auto flex h-16 items-center justify-between px-4'>
@@ -77,7 +77,7 @@ const Header = () => {
           </Link>
 
           {/* Navigation */}
-          <nav className='hidden md:flex items-center gap-2'>
+          <nav className='hidden items-center gap-2 md:flex'>
             {navigation.map((item, index) => (
               <NavLink
                 key={index}
@@ -115,7 +115,9 @@ const Header = () => {
           {/* User Profile */}
           <div className='relative border-l border-gray-200 pl-4' ref={dropdownRef}>
             <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              onClick={() => {
+                setIsDropdownOpen(!isDropdownOpen);
+              }}
               className='flex items-center gap-3 rounded-lg p-1 transition-colors hover:bg-gray-50 focus:outline-none'
             >
               <img src={displayUser.avatar} alt='Avatar' className='h-8 w-8 rounded-full object-cover' />
@@ -131,14 +133,16 @@ const Header = () => {
                 />
               </div>
             </button>
-            
+
             {/* Dropdown Menu */}
             {isDropdownOpen && (
-              <div className='absolute right-0 top-full mt-2 w-48 origin-top-right rounded-md border border-gray-100 bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+              <div className='ring-opacity-5 absolute top-full right-0 mt-2 w-48 origin-top-right rounded-md border border-gray-100 bg-white py-1 shadow-lg ring-1 ring-black focus:outline-none'>
                 {/* Item 1: Hồ sơ */}
                 <Link
                   to={profilePath}
-                  onClick={() => setIsDropdownOpen(false)}
+                  onClick={() => {
+                    setIsDropdownOpen(false);
+                  }}
                   className='flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
                 >
                   <User className='mr-2 h-4 w-4 text-gray-500' />
