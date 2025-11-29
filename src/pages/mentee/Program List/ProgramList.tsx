@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import programs from "../../data/program.json";
+import programs from "@/data/program.json";
 import { BookOpen, Play, CheckCircle } from "lucide-react";
 
 interface Program {
@@ -200,3 +200,4 @@ const ProgramList: React.FC = () => {
 };
 
 export default ProgramList;
+
