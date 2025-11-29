@@ -9,6 +9,7 @@ import { useRoutes } from "react-router-dom";
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Login = lazy(() => import("@/pages/Login"));
 const Program = lazy(() => import("@/pages/mentee/Program"));
+const ProgramOverview = lazy(() => import("@/pages/mentee/ProgramOverview/ProgramOverview"));
 const AdminProgram = lazy(() => import("@/pages/admin/Program/Program"));
 const AdminTutor = lazy(() => import("@/pages/admin/Tutor/Tutor"));
 const AdminMentee = lazy(() => import("@/pages/admin/Mentee/Mentee"));
@@ -72,6 +73,14 @@ export default function useRouteElements() {
                   element: (
                     <Suspense fallback={<Loading />}>
                       <Program />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: "programs/:programId",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <ProgramOverview />
                     </Suspense>
                   ),
                 },
@@ -178,6 +187,14 @@ export default function useRouteElements() {
                   element: (
                     <Suspense fallback={<Loading />}>
                       <Program />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: "programs/:programId",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <ProgramOverview />
                     </Suspense>
                   ),
                 },

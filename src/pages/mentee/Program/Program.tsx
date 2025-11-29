@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { getUserRole } from "@/utils/auth";
 import Loading from "@/components/Loading";
 import {
   Search,
@@ -15,9 +16,14 @@ import {
   Globe,
   FlaskConical,
 } from "lucide-react";
+import vector4 from "@/assets/images/vector4.png";
 import { programs } from "@/data/programs";
 
 export default function Program() {
+  // Lấy role của user để tạo path động
+  const userRole = getUserRole();
+  const basePath = userRole === "tutor" ? "/tutor" : "/mentee";
+
   const getDepartmentStyle = (dept: string) => {
     switch (dept) {
       case "Sinh học":
@@ -117,15 +123,19 @@ export default function Program() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedPrograms = filteredPrograms.slice(startIndex, startIndex + itemsPerPage);
 
-  const handleSearch = () => {
-    setCurrentPage(1);
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    //Loại bỏ khoảng trắng thừa
+    setSearchQuery((prev) => prev.trim());
+    setCurrentPage(1); // Đặt lại trang về 1 khi tìm kiếm
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
+  const stats = [
+    { value: "1,247", label: "Gia sư hoạt động" },
+    { value: "15,832", label: "Học sinh đã hỗ trợ" },
+    { value: "4.9/5", label: "Đánh giá trung bình" },
+    { value: "50+", label: "Môn học có sẵn" },
+  ];
 
   useEffect(() => {
     // Giả lập loading
@@ -144,33 +154,46 @@ export default function Program() {
   return (
     <div className='min-h-screen bg-gray-50'>
       {/*HERO SECTION */}
-      <div className='bg-linear-to-br from-[#667eea] to-[#764ba2] py-12'>
+      <div className='relative bg-gradient-to-r from-[#667eea] to-[#764ba2] py-20'>
         <div className='container mx-auto px-4'>
-          <h1 className='mb-4 text-center text-4xl font-bold text-gray-200'>Tìm Gia Sư Hoàn Hảo</h1>
-          <p className='mb-8 text-center text-lg text-blue-100'>
-            Kết nối với các gia sư chuyên nghiệp và tăng tốc hành trình học tập
-          </p>
+          <div className='mx-auto max-w-4xl text-center'>
+            <h1 className='mb-4 text-4xl font-bold text-white md:text-5xl'>Tìm Gia Sư Hoàn Hảo</h1>
+            <p className='mb-8 text-xl text-blue-100'>
+              Kết nối với các gia sư chuyên nghiệp trong mọi lĩnh vực và tăng tốc hành trình học tập của bạn
+            </p>
 
-          {/* Search Bar */}
-          <div className='mx-auto mb-12 max-w-3xl'>
-            <div className='relative'>
-              <Search className='absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-gray-400' />
-              <input
-                type='text'
-                placeholder='Tìm kiếm gia sư, chương trình...'
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                }}
-                onKeyDown={handleKeyDown}
-                className='w-full rounded-full border border-white/20 bg-white/10 px-12 py-3.5 text-white placeholder-blue-200 backdrop-blur-sm focus:border-white/40 focus:ring-2 focus:ring-white/20 focus:outline-none'
-              />
-              <button
-                onClick={handleSearch}
-                className='absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-white px-6 py-2 font-medium text-blue-600 transition-colors hover:bg-gray-50'
-              >
-                Tìm kiếm
-              </button>
+            {/* Search Box */}
+            <form onSubmit={handleSearch} className='relative mx-auto mb-12 max-w-2xl'>
+              <div className='relative flex items-center rounded-full border border-white/20 bg-white/10 p-1 backdrop-blur-sm'>
+                <div className='pl-4'>
+                  <img src={vector4} alt='Search' className='h-4 w-4 opacity-70' />
+                </div>
+                <input
+                  type='text'
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                  }}
+                  placeholder='Tìm kiếm gia sư, chương trình...'
+                  className='w-full flex-1 bg-transparent px-4 py-3 text-white placeholder-blue-200 outline-none'
+                />
+                <button
+                  type='submit'
+                  className='rounded-full bg-white px-6 py-2.5 font-medium text-blue-600 transition-colors hover:bg-blue-50'
+                >
+                  Tìm kiếm
+                </button>
+              </div>
+            </form>
+
+            {/* Stats Grid */}
+            <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
+              {stats.map((stat, index) => (
+                <div key={index} className='rounded-xl bg-white/20 p-6 backdrop-blur-sm'>
+                  <div className='mb-1 text-3xl font-bold text-white'>{stat.value}</div>
+                  <div className='text-sm text-blue-100'>{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -399,7 +422,7 @@ export default function Program() {
                       Xem chi tiết chương trình
                     </button> */}
                     <Link
-                      to={`/mentee/my-program/${String(program.id)}`} // Đường dẫn trùng khớp với route đã định nghĩa
+                      to={`${basePath}/programs/${String(program.id)}`}
                       className={`block w-full rounded-xl text-center ${style.bg} py-3 text-sm font-bold text-white transition-opacity hover:opacity-90`}
                     >
                       Xem chi tiết chương trình
