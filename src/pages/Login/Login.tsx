@@ -29,11 +29,8 @@ export default function Login() {
         const userRole = result.user?.role ?? user?.role;
         if (userRole === "admin") {
           void navigate("/admin");
-        } else if (userRole === "tutor") {
-          void navigate("/tutor");
-        } else if (userRole === "student") {
-          void navigate("/mentee");
         } else {
+          // Mentee and tutor redirect to home page
           void navigate("/");
         }
       } else {
