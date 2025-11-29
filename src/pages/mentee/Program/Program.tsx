@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Loading from "@/components/Loading";
 import {
@@ -393,17 +393,18 @@ export default function Program() {
                     </div>
 
                     {/*  BUTTON FOOTER */}
-                    {/* <button
+                    <button
                       className={`w-full rounded-xl ${style.bg} py-3 text-sm font-bold text-white transition-opacity hover:opacity-90`}
                     >
                       Xem chi tiết chương trình
-                    </button> */}
-                    <Link
-                      to={`/mentee/my-program/${String(program.id)}`} // Đường dẫn trùng khớp với route đã định nghĩa
+                    </button>
+
+                    {/* <Link
+                      to={`/mentee/my-programs/${String(program.id)}`} // Đường dẫn trùng khớp với route đã định nghĩa
                       className={`block w-full rounded-xl text-center ${style.bg} py-3 text-sm font-bold text-white transition-opacity hover:opacity-90`}
                     >
                       Xem chi tiết chương trình
-                    </Link>
+                    </Link> */}
                   </div>
                 </div>
               );

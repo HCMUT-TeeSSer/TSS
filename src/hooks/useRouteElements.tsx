@@ -5,6 +5,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import RejectedRoute from "@/components/RejectedRoute";
 import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
+import MyProgramLayout from "@/layouts/student/MyProgramLayout";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Login = lazy(() => import("@/pages/Login"));
@@ -65,47 +66,108 @@ export default function useRouteElements() {
           children: [
             {
               path: path.mentee,
-              element: <MainLayout />,
               children: [
+                // NHÓM 1: Các trang dùng MainLayout (Programs, Competencies...)
                 {
-                  path: "programs",
-                  element: (
-                    <Suspense fallback={<Loading />}>
-                      <Program />
-                    </Suspense>
-                  ),
+                  element: <MainLayout />,
+                  children: [
+                    {
+                      path: "programs",
+                      element: (
+                        <Suspense fallback={<Loading />}>
+                          <Program />
+                        </Suspense>
+                      ),
+                    },
+                    {
+                      path: "competencies",
+                      element: (
+                        <Suspense fallback={<Loading />}>
+                          <StudentsCompetencies />
+                        </Suspense>
+                      ),
+                    },
+                    {
+                      path: "sessions",
+                      element: (
+                        <Suspense fallback={<Loading />}>
+                          <Sessions />
+                        </Suspense>
+                      ),
+                    },
+                    {
+                      path: "program-detail",
+                      element: (
+                        <Suspense fallback={<Loading />}>
+                          <ProgramDetail />
+                        </Suspense>
+                      ),
+                    },
+                  ],
                 },
+                // NHÓM 2: Trang MyProgram dùng Layout riêng (MyProgramLayout)
                 {
-                  path: "competencies",
-                  element: (
-                    <Suspense fallback={<Loading />}>
-                      <StudentsCompetencies />
-                    </Suspense>
-                  ),
+                  path: "my-programs",
+                  element: <MyProgramLayout />, // Layout này đã có Header/Footer
+                  children: [
+                    {
+                      path: ":programId",
+                      element: (
+                        <Suspense fallback={<Loading />}>
+                          <MenteeMyProgramDetail />
+                        </Suspense>
+                      ),
+                    },
+                  ],
                 },
+              ],
+            },
+          ],
+        },
+        // Tutor routes - only accessible by tutors
+        {
+          path: "",
+          element: <ProtectedRoute allowedRoles={["tutor"]} />,
+          children: [
+            {
+              path: path.tutor,
+              children: [
+                // Nhóm 1: Các trang dùng MainLayout bình thường
                 {
-                  path: "sessions",
-                  element: (
-                    <Suspense fallback={<Loading />}>
-                      <Sessions />
-                    </Suspense>
-                  ),
+                  element: <MainLayout />,
+                  children: [
+                    {
+                      path: "competencies",
+                      element: (
+                        <Suspense fallback={<Loading />}>
+                          <TutorCompetencies />
+                        </Suspense>
+                      ),
+                    },
+                    {
+                      path: "programs",
+                      element: (
+                        <Suspense fallback={<Loading />}>
+                          <Program />
+                        </Suspense>
+                      ),
+                    },
+                  ],
                 },
+                // Nhóm 2: Trang chi tiết dùng MyProgramLayout riêng
                 {
-                  path: "program-detail",
-                  element: (
-                    <Suspense fallback={<Loading />}>
-                      <ProgramDetail />
-                    </Suspense>
-                  ),
-                },
-                {
-                  path: "my-program/:programId",
-                  element: (
-                    <Suspense fallback={<Loading />}>
-                      <MenteeMyProgramDetail />
-                    </Suspense>
-                  ),
+                  path: "my-programs",
+                  element: <MyProgramLayout />,
+                  children: [
+                    {
+                      path: ":programId",
+                      element: (
+                        <Suspense fallback={<Loading />}>
+                          <TutorMyProgramDetail />
+                        </Suspense>
+                      ),
+                    },
+                  ],
                 },
               ],
             },
@@ -156,43 +218,6 @@ export default function useRouteElements() {
       path: "",
       element: <MainLayout />,
       children: [
-        // Tutor routes - only accessible by tutors
-        {
-          path: "",
-          element: <ProtectedRoute allowedRoles={["tutor"]} />,
-          children: [
-            {
-              path: path.tutor,
-              element: <MainLayout />,
-              children: [
-                {
-                  path: "competencies",
-                  element: (
-                    <Suspense fallback={<Loading />}>
-                      <TutorCompetencies />
-                    </Suspense>
-                  ),
-                },
-                {
-                  path: "programs",
-                  element: (
-                    <Suspense fallback={<Loading />}>
-                      <Program />
-                    </Suspense>
-                  ),
-                },
-                {
-                  path: "my-program/:programId",
-                  element: (
-                    <Suspense fallback={<Loading />}>
-                      <TutorMyProgramDetail />
-                    </Suspense>
-                  ),
-                },
-              ],
-            },
-          ],
-        },
         // 404 page - accessible by all authenticated users
         {
           path: "*",
