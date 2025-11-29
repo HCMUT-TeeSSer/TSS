@@ -189,7 +189,6 @@ export default function useRouteElements() {
           children: [
             {
               path: path.tutor,
-              element: <MainLayout />,
               children: [
                 {
                   path: "competencies",
