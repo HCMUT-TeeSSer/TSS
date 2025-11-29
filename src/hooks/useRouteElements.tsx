@@ -16,7 +16,8 @@ const AdminMentee = lazy(() => import("@/pages/admin/Mentee/Mentee"));
 const HomePage = lazy(() => import("@/pages/Home/HomePage"));
 const MenteeMyProgramDetail = lazy(() => import("@/pages/mentee/MyProgram/MyProgramDetail"));
 const TutorMyProgramDetail = lazy(() => import("@/pages/tutor/MyProgram/MyProgramDetail"));
-
+const Library = lazy(() => import("@/pages/mentee/Library/Library"));
+const ProgramList = lazy(() => import("@/pages/mentee/Program List/ProgramList"));
 const StudentsCompetencies = lazy(() => import("@/pages/mentee/StudentsCompetencies"));
 const TutorCompetencies = lazy(() => import("@/pages/tutor/TutorCompetencies"));
 const Sessions = lazy(() => import("@/pages/mentee/Sessions"));
@@ -116,6 +117,22 @@ export default function useRouteElements() {
                     </Suspense>
                   ),
                 },
+                {
+          path: "library",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <Library />
+            </Suspense>
+          ),
+        },
+        {
+          path: "program-list",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <ProgramList />
+            </Suspense>
+          ),
+        },
               ],
             },
           ],
