@@ -5,6 +5,8 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import RejectedRoute from "@/components/RejectedRoute";
 import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
+import AdminLayout from "@/pages/admin/Layout";
+import AdminWelcome from "@/pages/admin/Home/AdminWelcome";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Login = lazy(() => import("@/pages/Login"));
@@ -116,15 +118,11 @@ export default function useRouteElements() {
     // Admin routes - only accessible by admins
     {
       path: path.admin,
-      element: <ProtectedRoute allowedRoles={["admin"]} />,
+      element: <AdminLayout />,
       children: [
         {
           index: true,
-          element: (
-            <Suspense fallback={<Loading />}>
-              <AdminProgram />
-            </Suspense>
-          ),
+          element: <AdminWelcome />,
         },
         {
           path: "programs",

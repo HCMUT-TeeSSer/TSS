@@ -6,10 +6,7 @@ const path = {
   menteeProfile: "/mentee/profile",
   menteePrograms: "/mentee/programs",
   menteeProgramDetail: "/mentee/programs/:programId",
-  admin: "/admin",
-  adminProgram: "/admin/Program",
-  adminTutor: "/admin/Tutor",
-  adminMentee: "/admin/Mentee",
+
   menteeMyProgram: "/mentee/my-program",
   menteeMyProgramDetail: "/mentee/my-program/:programId",
 
@@ -18,6 +15,12 @@ const path = {
   TutorProgramDetail: "/tutor/programs/:programId",
   tutorMyProgram: "/tutor/my-program",
   tutorMyProgramDetail: "/tutor/my-program/:programId",
+
+  admin: "/admin",
+  adminWelcome: "/admin/home",
+  adminProgram: "/admin/programs",
+  adminTutor: "/admin/tutors",
+  adminMentee: "/admin/mentees",
 } as const;
 
 export default path;
