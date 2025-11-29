@@ -4,123 +4,32 @@ import MainLayout from "@/layouts/MainLayout";
 import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 
-const NotFound = lazy(() => import("@/pages/NotFound"));
-const Library = lazy(() => import("@/pages/mentee/Library"));
-const ProgramList = lazy(() => import("@/pages/mentee/ProgramList"));
-
-// function ProtectedRoute() {
-//   const { isAuthenticated } = useContext(AppContext);
-//   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
-// }
-
-// function RejectedRoute() {
-//   const { isAuthenticated } = useContext(AppContext);
-//   return !isAuthenticated ? <Outlet /> : <Navigate to='/' />;
-// }
+const Library = lazy(() => import("@/pages/component/Library"));
+const ProgramList = lazy(() => import("@/pages/component/ProgramList"));
 
 export default function useRouteElements() {
-  const routeElements = useRoutes([
-    // {
-    //   path: "",
-    //   // element: <RejectedRoute />,
-    //   children: [
-    //     {
-    //       path: "",
-    //       element: <RegisterLayout />,
-    //       children: [
-    //         {
-    //           path: path.login,
-    //           element: (
-    //             <Suspense fallback={<Loading />}>
-    //               <Login />
-    //             </Suspense>
-    //           ),
-    //         },
-    //         {
-    //           path: path.register,
-    //           element: (
-    //             <Suspense fallback={<Loading />}>
-    //               <Register />
-    //             </Suspense>
-    //           ),
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // },
+  return useRoutes([
     {
-      path: "",
-      // element: <ProtectedRoute />,
-      children: [
-        {
-          path: path.mentee,
-          element: <MainLayout />,
-          children: [
-            {
-              path: "",
-              // element: <ProgramLayout />,
-              children: [
-                {
-  path: "library",
-  element: (
-    <Suspense fallback={<Loading />}>
-      <Library />
-    </Suspense>
-  ),
-},
-{
-  path: "program-list",
-  element: (
-    <Suspense fallback={<Loading />}>
-      <ProgramList />
-    </Suspense>
-  ),
-},
-
-                // {
-                //   path: path.profile,
-                //   element: (
-                //     <Suspense fallback={<Loading />}>
-                //       <Profile />
-                //     </Suspense>
-                //   ),
-                // },
-                // {
-                //   path: path.changePassword,
-                //   element: (
-                //     <Suspense fallback={<Loading />}>
-                //       <ChangePassword />
-                //     </Suspense>
-                //   ),
-                // },
-                // {
-                //   path: path.historyPurchase,
-                //   element: (
-                //     <Suspense fallback={<Loading />}>
-                //       <HistoryPurchase />
-                //     </Suspense>
-                //   ),
-                // },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      path: "",
+      path: path.mentee,
       element: <MainLayout />,
       children: [
         {
-          path: "*",
+          path: "library",
           element: (
             <Suspense fallback={<Loading />}>
-              <NotFound />
+              <Library />
             </Suspense>
-          ),
+          )
         },
-      ],
-    },
+        {
+          path: "program-list",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <ProgramList />
+            </Suspense>
+          )
+        }
+      ]
+    }
   ]);
-  return routeElements;
 }
