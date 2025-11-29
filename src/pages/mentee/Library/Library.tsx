@@ -1,6 +1,6 @@
 import React from "react";
 import { FiDownload, FiEye } from "react-icons/fi";
-import libraryData from "../../data/library.json";
+import libraryData from "@/data/library.json";
 
 const categories = libraryData.categories;
 const docs = libraryData.docs;
@@ -216,3 +216,4 @@ const Library = () => {
 };
 
 export default Library;
+
