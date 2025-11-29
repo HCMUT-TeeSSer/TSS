@@ -104,10 +104,12 @@ export default function AdminLayout() {
       {/* HEADER */}
       <header className='flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4'>
         <div className='flex items-center gap-3'>
-          <div className='flex h-16 w-16 items-center justify-center overflow-hidden rounded-md bg-white'>
-            <img src={Logo} alt='Logo trường' className='h-full w-full object-contain' />
-          </div>
-          <div className='text-lg font-semibold'>Tutor Support System</div>
+          <NavLink to={path.admin} className='flex items-center gap-3'>
+            <div className='flex h-16 w-16 items-center justify-center overflow-hidden rounded-md bg-white'>
+              <img src={Logo} alt='Logo trường' className='h-full w-full object-contain' />
+            </div>
+            <div className='text-lg font-semibold'>Tutor Support System</div>
+          </NavLink>
         </div>
         <div className='ml-auto flex items-center gap-6'>
           <HeaderNotifications bellCount={3} mailCount={5} />
