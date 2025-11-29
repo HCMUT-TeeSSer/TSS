@@ -19,6 +19,8 @@ export interface Program {
   mainTutor: Tutor;
   listTutor: Tutor[];
   progress: number;
+  chapters: string[];
+  competencies: [string, number[]][];
 }
 export const programs: Program[] = [
   {
@@ -40,6 +42,22 @@ export const programs: Program[] = [
     mainTutor: tutors[0],
     listTutor: [tutors[0]],
     progress: 100,
+    chapters: [
+      "Giới thiệu về Python",
+      "Cấu trúc dữ liệu",
+      "Hàm",
+      "Lập trình hướng đối tượng",
+      "Thư viện",
+      "Cơ sở dữ liệu",
+      "Mạng",
+      "Máy học",
+      "Trí tuệ nhân tạo",
+      "Khoa học dữ liệu",
+    ],
+    competencies: [
+      ["user_001", [80, 90, 67, 85, 46, 92, 88, 70, 65, 95]],
+      ["user_002", [80, 90, 67, 85, 46, 92, 88, 70, 65, 95]],
+    ],
   },
   {
     id: 2,
@@ -60,6 +78,15 @@ export const programs: Program[] = [
     mainTutor: tutors[0],
     listTutor: [tutors[0]],
     progress: 98,
+    chapters: [
+      "Giới hạn và Tính liên tục",
+      "Đạo hàm",
+      "Ứng dụng của Đạo hàm",
+      "Tích phân bất định",
+      "Tích phân xác định",
+      "Ứng dụng của Tích phân",
+    ],
+    competencies: [["user_001", [80, 90, 67, 85, 76, 92]]],
   },
   {
     id: 3,
@@ -80,6 +107,19 @@ export const programs: Program[] = [
     mainTutor: tutors[1],
     listTutor: [tutors[1]],
     progress: 96,
+    chapters: [
+      "Điện trường và thế năng điện",
+      "Định luật Gauss",
+      "Điện dung và điện môi",
+      "Dòng điện và điện trở",
+      "Mạch điện một chiều",
+      "Từ trường và lực từ",
+      "Định luật Ampere",
+      "Cảm ứng điện từ và định luật Faraday",
+      "Mạch RLC và dòng điện xoay chiều",
+      "Sóng điện từ",
+    ],
+    competencies: [["user_001", [80, 90, 67, 85, 76, 92, 88, 70, 65, 95]]],
   },
   {
     id: 4,
@@ -100,6 +140,19 @@ export const programs: Program[] = [
     mainTutor: tutors[1],
     listTutor: [tutors[1]],
     progress: 90,
+    chapters: [
+      "Cấu trúc và chức năng của DNA",
+      "Sao chép DNA",
+      "Phiên mã và dịch mã",
+      "Cấu trúc và chức năng của protein",
+      "Điều hòa biểu hiện gen",
+      "Công nghệ tái tổ hợp DNA",
+      "Kỹ thuật PCR",
+      "Giải trình tự DNA",
+      "Công nghệ chỉnh sửa gen (CRISPR)",
+      "Ứng dụng trong y học và nông nghiệp",
+    ],
+    competencies: [["user_001", [80, 90, 67, 85, 76, 92, 88, 70, 65, 95]]],
   },
   {
     id: 5,
@@ -119,7 +172,23 @@ export const programs: Program[] = [
     isAvailable: true,
     mainTutor: tutors[2],
     listTutor: [tutors[2]],
-    progress: 100,
+    progress: 10,
+    chapters: [
+      "Giới thiệu về AI và Machine Learning",
+      "Học máy có giám sát (Supervised Learning)",
+      "Học máy không giám sát (Unsupervised Learning)",
+      "Học sâu (Deep Learning) và Mạng Neural",
+      "Xử lý ngôn ngữ tự nhiên (NLP)",
+      "Thị giác máy tính (Computer Vision)",
+      "Học tăng cường (Reinforcement Learning)",
+      "Đạo đức và trách nhiệm trong AI",
+      "Triển khai và tối ưu hóa mô hình AI",
+      "Các ứng dụng thực tế của AI",
+    ],
+    competencies: [
+      ["user_001", [80, 90, 67, 85, 46, 92, 88, 70, 65, 95]],
+      ["user_002", [80, 90, 67, 85, 46, 92, 88, 70, 65, 95]],
+    ],
   },
   {
     id: 6,
@@ -140,6 +209,19 @@ export const programs: Program[] = [
     mainTutor: tutors[2],
     listTutor: [tutors[2]],
     progress: 60,
+    chapters: [
+      "Giới thiệu về Kỹ thuật Cơ khí",
+      "Cơ học kỹ thuật (Tĩnh học và Động học)",
+      "Sức bền vật liệu",
+      "Nhiệt động lực học",
+      "Cơ học chất lỏng",
+      "Truyền nhiệt",
+      "Nguyên lý thiết kế cơ khí",
+      "Vật liệu kỹ thuật",
+      "Hệ thống điều khiển tự động",
+      "Sản xuất và gia công cơ khí",
+    ],
+    competencies: [["user_001", [80, 90, 67, 85, 76, 92, 88, 70, 65, 95]]],
   },
   {
     id: 7,
@@ -160,6 +242,16 @@ export const programs: Program[] = [
     mainTutor: tutors[3],
     listTutor: [tutors[3]],
     progress: 50,
+    chapters: [
+      "Giới thiệu về Anh Văn 4",
+      "Cấu trúc và ngữ pháp",
+      "Vocabulary",
+      "Listening",
+      "Reading",
+      "Writing",
+      "Speaking",
+    ],
+    competencies: [["user_001", [80, 90, 67, 85, 76, 92, 88]]],
   },
   {
     id: 8,
@@ -179,6 +271,19 @@ export const programs: Program[] = [
     isAvailable: true,
     mainTutor: tutors[3],
     listTutor: [tutors[3]],
-    progress: 0,
+    progress: 50,
+    chapters: [
+      "Giới thiệu về Xác suất và Thống kê",
+      "Xác suất có điều kiện và Định lý Bayes",
+      "Biến ngẫu nhiên rời rạc và liên tục",
+      "Các phân phối xác suất cơ bản",
+      "Định lý Giới hạn Trung tâm",
+      "Ước lượng điểm và ước lượng khoảng",
+      "Kiểm định giả thuyết",
+      "Phân tích tương quan và hồi quy",
+      "Thống kê suy luận",
+      "Ứng dụng thống kê trong thực tế",
+    ],
+    competencies: [["user_001", [80, 90, 67, 85, 76, 92, 88, 70, 65, 95]]],
   },
 ];

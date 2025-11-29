@@ -86,7 +86,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "competencies",
+                  path: "programs/:programId/competencies",
                   element: (
                     <Suspense fallback={<Loading />}>
                       <StudentsCompetencies />
@@ -118,21 +118,21 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-          path: "library",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <Library />
-            </Suspense>
-          ),
-        },
-        {
-          path: "program-list",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <ProgramList />
-            </Suspense>
-          ),
-        },
+                  path: "library",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <Library />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: "program-list",
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <ProgramList />
+                    </Suspense>
+                  ),
+                },
               ],
             },
           ],
@@ -189,10 +189,10 @@ export default function useRouteElements() {
           children: [
             {
               path: path.tutor,
-              element: <MainLayout />,
+              // element: <MainLayout />, // duplicated layout
               children: [
                 {
-                  path: "competencies",
+                  path: "programs/:programId/competencies",
                   element: (
                     <Suspense fallback={<Loading />}>
                       <TutorCompetencies />
