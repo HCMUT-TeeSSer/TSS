@@ -133,6 +133,12 @@ const ProgramDetailPage: React.FC = () => {
       },
     },
   ];
+  const MEET_URL = "https://meet.google.com/tow-zzir-waj";
+
+  const handleJoinMeet = () => {
+    toast.info("Bắt đầu vào phòng họp...");
+    window.open(MEET_URL, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -525,16 +531,17 @@ const ProgramDetailPage: React.FC = () => {
                   </p>
                   <button
                     type="button"
-                    onClick={() => toast.info("Bắt đầu cuộc họp")}
+                    onClick={handleJoinMeet}
                     className="flex w-full items-center justify-center gap-3
-                          rounded-md bg-blue-600 px-6 py-3
-                          text-base font-medium text-white
-                          shadow-sm hover:bg-blue-700
-                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                              rounded-md bg-blue-600 px-6 py-3
+                              text-base font-medium text-white
+                              shadow-sm hover:bg-blue-700
+                              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
                   >
                     <Video className="h-5 w-5" />
                     <span>Tham gia</span>
                   </button>
+
                 </>
               ) : (
                 <p className="text-xs text-slate-600">

@@ -74,6 +74,13 @@ export default function Sessions() {
     },
   ];
 
+  const MEET_URL = "https://meet.google.com/tow-zzir-waj";
+  
+    const handleJoinMeet = () => {
+      toast.info("Bắt đầu buổi tư vấn...");
+      window.open(MEET_URL, "_blank", "noopener,noreferrer");
+    };
+
   // ====== FILTER BUỔI TƯ VẤN ======
   type FilterType = "upcoming" | "completed" | "all";
   const [filter, setFilter] = React.useState<FilterType>("upcoming");
@@ -400,11 +407,7 @@ export default function Sessions() {
                               <button
                                 type="button"
                                 className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
-                                onClick={() =>
-                                  toast.info(
-                                    `Bắt đầu cuộc họp cho buổi tư vấn "${s.topic}".`
-                                  )
-                                }
+                                onClick={handleJoinMeet}
                               >
                                 <PlayIcon className="h-4 w-4" />
                                 Tham gia ngay
@@ -532,8 +535,8 @@ export default function Sessions() {
                   <button
                     className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700"
                     type="button"
-                    onClick={() =>
-                      toast.info("Bắt đầu cuộc họp cho buổi tư vấn tiếp theo.")
+                    onClick={
+                      handleJoinMeet
                     }
                   >
                     <Video className="h-6 w-6" />
