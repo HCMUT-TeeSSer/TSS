@@ -94,7 +94,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "sessions",
+                  path: "sessions/:programId",
                   element: (
                     <Suspense fallback={<Loading />}>
                       <Sessions />
@@ -102,7 +102,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "program-detail",
+                  path: "program-detail/:programId",
                   element: (
                     <Suspense fallback={<Loading />}>
                       <ProgramDetail />
