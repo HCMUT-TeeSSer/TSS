@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   CalendarIcon,
   ClockIcon,
@@ -18,119 +18,47 @@ import {
   ChevronRight,
   Clock,
   Star,
+  Calendar,
   Video,
   Eye,
   FileText,
 } from "lucide-react";
 
-import { toast } from "react-toastify";
+// dữ liệu chương trình
 import { programs } from "@/data/programs";
+import { toast } from "react-toastify";
 
-const sessions = SessionsData;
-
-// Modal yêu cầu buổi tư vấn mới (chỉ gửi yêu cầu, không lưu vào list)
-interface RequestSessionModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const RequestSessionModal: React.FC<RequestSessionModalProps> = ({
-  isOpen,
-  onClose,
-}) => {
-  const [topic, setTopic] = useState("");
-  const [description, setDescription] = useState("");
-
-  if (!isOpen) return null;
-
-  const handleSubmit = () => {
-    if (!topic.trim()) {
-      toast.error("Vui lòng nhập chủ đề buổi tư vấn.");
-      return;
-    }
-    toast.success("Đã gửi yêu cầu buổi tư vấn mới.");
-    setTopic("");
-    setDescription("");
-    onClose();
-  };
-
-  return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-        <h3 className="text-lg font-semibold text-slate-900">
-          Yêu cầu buổi tư vấn mới
-        </h3>
-        <p className="mt-1 text-sm text-slate-500">
-          Nhập nhanh thông tin mong muốn, yêu cầu sẽ được gửi đến Tutor phụ
-          trách.
-        </p>
-
-        <div className="mt-4 space-y-3 text-sm">
-          <div>
-            <label className="mb-1 block font-medium text-slate-700">
-              Chủ đề
-            </label>
-            <input
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-              placeholder="Ví dụ: Ôn tập giữa kỳ, project cuối kỳ..."
-            />
-          </div>
-          <div>
-            <label className="mb-1 block font-medium text-slate-700">
-              Mô tả (không bắt buộc)
-            </label>
-            <textarea
-              rows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-              placeholder="Bạn muốn tập trung vào nội dung nào, khó khăn gì cần Tutor hỗ trợ..."
-            />
-          </div>
-        </div>
-
-        <div className="mt-5 flex justify-end gap-2 text-sm">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg border border-slate-300 px-4 py-2 font-medium text-slate-700 hover:bg-slate-50"
-          >
-            Hủy
-          </button>
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
-          >
-            Gửi yêu cầu
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-type FilterMode = "all" | "upcoming" | "completed";
+const sessions = SessionsData as Array<{
+  id: number;
+  topic: string;
+  description: string;
+  date: string;
+  time: string;
+  duration: number;
+  tutor: string;
+  avatar: string;
+  status: string;
+}>;
 
 export default function Sessions() {
   const navigate = useNavigate();
   const { programId } = useParams<{ programId?: string }>();
 
-  const programID = Number(programId ?? 1) || 1;
+  // lấy id từ URL /mentee/session/:programID, mặc định = 1
+  const programID = Number(programId ?? 1);
   const program = programs.find((p) => p.id === programID);
 
-  const programTitle = program?.title ?? "Lập trình Python nâng cao";
+  const programTitle = program?.title ?? "Lập trình Python Nâng cao";
   const programDepartment =
     program?.department ?? program?.category ?? "Khoa học máy tính";
   const programDuration = program?.duration ?? "12 tuần";
   const programRating = program?.rating ?? 4.9;
   const programDifficulty = program?.difficulty ?? "Nâng cao";
 
+  // chỉ khóa Python (id = 1) mới có dữ liệu buổi tư vấn mock
   const isPythonProgram = program?.id === 1;
 
-  // Trang này là "Buổi tư vấn"
+  // Tab hiện tại
   const currentTab: "overview" | "sessions" | "meet" | "skills" = "sessions";
 
   const tabs = [
@@ -144,45 +72,77 @@ export default function Sessions() {
       label: "Buổi tư vấn",
       onClick: () => navigate(`/mentee/session/${programID}`),
     },
-    {
-      id: "meet" as const,
-      label: "Lịch hẹn",
-      onClick: () => {
-        // TODO: route lịch hẹn
-      },
-    },
-    {
-      id: "skills" as const,
-      label: "Năng lực",
-      onClick: () => {
-        // TODO: route năng lực
-      },
-    },
   ];
 
-  // Filter buổi
-  const [filterMode, setFilterMode] = useState<FilterMode>("all");
+  // ====== FILTER BUỔI TƯ VẤN ======
+  type FilterType = "upcoming" | "completed" | "all";
+  const [filter, setFilter] = React.useState<FilterType>("upcoming");
 
-  // Modal yêu cầu buổi tư vấn
-  const [showRequestModal, setShowRequestModal] = useState(false);
-
-  const handleJoinSession = () => {
-    toast.info("Bắt đầu cuộc họp");
+  // mọi status có chữ "hoàn thành" được xem là đã hoàn thành
+  const isSessionCompleted = (status: string) => {
+    const normalized = status.toLowerCase();
+    return normalized.includes("hoàn thành");
   };
 
-  const handleExport = () => {
-    toast.info("Bắt đầu tải về");
+  const filteredSessions = React.useMemo(() => {
+    if (!isPythonProgram) return [];
+    return sessions.filter((s) => {
+      const done = isSessionCompleted(s.status);
+      if (filter === "upcoming") return !done;
+      if (filter === "completed") return done;
+      return true;
+    });
+  }, [filter, isPythonProgram]);
+
+  // ====== MODAL YÊU CẦU BUỔI TƯ VẤN MỚI ======
+  const [isRequestModalOpen, setIsRequestModalOpen] = React.useState(false);
+  const [requestTopic, setRequestTopic] = React.useState("");
+  const [requestNote, setRequestNote] = React.useState("");
+  const [requestPreferredTime, setRequestPreferredTime] = React.useState("");
+
+  const sendSessionRequest = (payload: {
+    programId: number;
+    topic: string;
+    note: string;
+    preferredTime: string;
+  }) => {
+    return new Promise<void>((resolve) => {
+      console.log("Sending session request:", payload);
+      setTimeout(resolve, 400);
+    });
   };
 
-  // Lọc sessions dựa trên status thay vì time thực
-  const filteredSessions = !isPythonProgram
-    ? []
-    : sessions.filter((s) => {
-        const isCompleted = s.status === "Đã hoàn thành";
-        if (filterMode === "completed") return isCompleted;
-        if (filterMode === "upcoming") return !isCompleted;
-        return true; // all
+  const handleSubmitRequest = async () => {
+    if (!requestTopic.trim()) {
+      toast.error("Vui lòng nhập chủ đề buổi tư vấn.");
+      return;
+    }
+
+    try {
+      await sendSessionRequest({
+        programId: programID,
+        topic: requestTopic.trim(),
+        note: requestNote.trim(),
+        preferredTime: requestPreferredTime.trim(),
       });
+
+      toast.success("Yêu cầu buổi tư vấn đã được gửi đến tutor.");
+      setIsRequestModalOpen(false);
+      setRequestTopic("");
+      setRequestNote("");
+      setRequestPreferredTime("");
+    } catch {
+      toast.error("Không thể gửi yêu cầu. Vui lòng thử lại sau.");
+    }
+  };
+
+  const handleOpenRequestModal = () => {
+    setIsRequestModalOpen(true);
+  };
+
+  const handleCloseRequestModal = () => {
+    setIsRequestModalOpen(false);
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -234,11 +194,7 @@ export default function Sessions() {
                 <Share2 className="h-4 w-4" />
                 Chia sẻ
               </button>
-              <button
-                type="button"
-                onClick={handleExport}
-                className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black hover:bg-gray-50"
-              >
+              <button className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black hover:bg-gray-50">
                 <FileDown className="h-4 w-4" />
                 Xuất file
               </button>
@@ -304,67 +260,34 @@ export default function Sessions() {
         <div className="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-3">
           {/* LEFT – session list */}
           <div className="flex flex-col gap-6 lg:col-span-2">
-            {/* Thanh tiêu đề + filter + nút yêu cầu */}
-            <div className="mb-2 flex items-center justify-between">
-              <h3 className="text-base font-semibold text-slate-900">
-                Danh sách buổi tư vấn
-              </h3>
+            {/* FILTER BAR + BUTTON TRÊN CÙNG (đều nằm bên phải) */}
+            <div className="mb-2 flex items-center justify-end gap-3">
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value as FilterType)}
+                className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              >
+                <option value="upcoming">Buổi sắp tới</option>
+                <option value="completed">Buổi đã hoàn thành</option>
+                <option value="all">Tất cả buổi tư vấn</option>
+              </select>
 
-              <div className="flex items-center gap-3">
-                {/* Filter pills */}
-                <div className="inline-flex rounded-full bg-slate-100 p-1 text-xs">
-                  <button
-                    type="button"
-                    onClick={() => setFilterMode("all")}
-                    className={`rounded-full px-3 py-1 font-medium transition ${
-                      filterMode === "all"
-                        ? "bg-white text-slate-900 shadow-sm"
-                        : "text-slate-600 hover:text-slate-800"
-                    }`}
-                  >
-                    Tất cả buổi
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFilterMode("upcoming")}
-                    className={`rounded-full px-3 py-1 font-medium transition ${
-                      filterMode === "upcoming"
-                        ? "bg-white text-slate-900 shadow-sm"
-                        : "text-slate-600 hover:text-slate-800"
-                    }`}
-                  >
-                    Buổi sắp tới
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFilterMode("completed")}
-                    className={`rounded-full px-3 py-1 font-medium transition ${
-                      filterMode === "completed"
-                        ? "bg-white text-slate-900 shadow-sm"
-                        : "text-slate-600 hover:text-slate-800"
-                    }`}
-                  >
-                    Đã hoàn thành
-                  </button>
-                </div>
-
-                {/* Nút yêu cầu buổi tư vấn mới */}
-                <button
-                  type="button"
-                  onClick={() => setShowRequestModal(true)}
-                  className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-xs font-medium text-white hover:bg-blue-700"
-                >
-                  <PlusIcon className="h-4 w-4" />
-                  Yêu cầu buổi tư vấn mới
-                </button>
-              </div>
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+                onClick={handleOpenRequestModal}
+              >
+                <PlusIcon className="h-4 w-4" />
+                Yêu cầu buổi tư vấn mới
+              </button>
             </div>
 
             {isPythonProgram ? (
               filteredSessions.length > 0 ? (
                 filteredSessions.map((s) => {
-                  const isDone = s.status === "Đã hoàn thành";
-                  const isRunning = s.status === "Đang diễn ra";
+                  const done = isSessionCompleted(s.status);
+                  const isRunning =
+                    s.status.toLowerCase().includes("đang diễn ra");
 
                   return (
                     <div
@@ -374,13 +297,13 @@ export default function Sessions() {
                       {/* TITLE + STATUS + ACTION ICONS */}
                       <div className="flex items-start justify-between">
                         <div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-3">
                             <h2 className="text-base font-semibold text-slate-900">
                               {s.topic}
                             </h2>
                             <span
                               className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-                                isDone
+                                done
                                   ? "bg-emerald-50 text-emerald-700"
                                   : isRunning
                                   ? "bg-blue-50 text-blue-600"
@@ -395,7 +318,7 @@ export default function Sessions() {
                           </p>
                         </div>
 
-                        <div className="flex items-start gap-2 text-slate-400">
+                        <div className="mt-1 flex items-center gap-2 text-slate-400">
                           <button
                             type="button"
                             className="rounded-full p-1 hover:bg-slate-100 hover:text-slate-600"
@@ -404,7 +327,6 @@ export default function Sessions() {
                           </button>
                           <button
                             type="button"
-                            onClick={handleExport}
                             className="rounded-full p-1 hover:bg-slate-100 hover:text-slate-600"
                           >
                             <ArrowDownTrayIcon className="h-4 w-4" />
@@ -430,10 +352,11 @@ export default function Sessions() {
                         </div>
                       </div>
 
+                      {/* DIVIDER */}
                       <div className="mt-3 border-t border-slate-100" />
 
                       {/* BOTTOM ROW */}
-                      {isDone ? (
+                      {done ? (
                         <div className="mt-3 flex items-center justify-between text-sm">
                           <div className="flex items-center gap-2">
                             <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-200">
@@ -476,20 +399,40 @@ export default function Sessions() {
                             {isRunning ? (
                               <button
                                 type="button"
-                                onClick={handleJoinSession}
                                 className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
+                                onClick={() =>
+                                  toast.info(
+                                    `Bắt đầu cuộc họp cho buổi tư vấn "${s.topic}".`
+                                  )
+                                }
                               >
                                 <PlayIcon className="h-4 w-4" />
                                 Tham gia ngay
                               </button>
                             ) : (
-                              <button className="flex items-center gap-2 rounded-lg border border-blue-500 px-4 py-1.5 text-blue-600 hover:bg-blue-50">
+                              <button
+                                type="button"
+                                className="flex items-center gap-2 rounded-lg border border-blue-500 px-4 py-1.5 text-blue-600 hover:bg-blue-50"
+                                onClick={() =>
+                                  toast.info(
+                                    `Buổi tư vấn "${s.topic}" đã được thêm vào lịch.`
+                                  )
+                                }
+                              >
                                 <CalendarIcon className="h-4 w-4" />
                                 Thêm vào lịch
                               </button>
                             )}
 
-                            <button className="flex items-center gap-2 px-3 py-1.5 text-slate-600 hover:text-slate-900">
+                            <button
+                              type="button"
+                              className="flex items-center gap-2 px-3 py-1.5 text-slate-600 hover:text-slate-900"
+                              onClick={() =>
+                                toast.info(
+                                  `Đã đặt nhắc nhở cho buổi tư vấn "${s.topic}" (giả lập).`
+                                )
+                              }
+                            >
                               <BellIcon className="h-4 w-4" />
                               Đặt nhắc nhở
                             </button>
@@ -501,7 +444,7 @@ export default function Sessions() {
                 })
               ) : (
                 <div className="rounded-xl border border-dashed border-slate-200 bg-white p-8 text-center text-sm text-slate-500">
-                  Không tìm thấy buổi tư vấn nào với bộ lọc hiện tại.
+                  Không có buổi tư vấn nào phù hợp với bộ lọc hiện tại.
                 </div>
               )
             ) : (
@@ -555,9 +498,9 @@ export default function Sessions() {
 
               <div className="flex flex-col gap-3 text-sm">
                 <button
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700"
                   type="button"
-                  onClick={() => setShowRequestModal(true)}
-                  className="mt-1 flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                  onClick={handleOpenRequestModal}
                 >
                   <PlusIcon className="h-4 w-4" />
                   Yêu cầu buổi tư vấn mới
@@ -567,11 +510,7 @@ export default function Sessions() {
                   Xem tất cả buổi tư vấn
                 </button>
 
-                <button
-                  type="button"
-                  onClick={handleExport}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-slate-700 hover:bg-slate-50"
-                >
+                <button className="flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-slate-700 hover:bg-slate-50">
                   <ArrowDownTrayIcon className="h-4 w-4" />
                   Xuất file
                 </button>
@@ -591,11 +530,13 @@ export default function Sessions() {
                   <p className="text-slate-600">Với TS. Nguyễn Minh Hoàng</p>
 
                   <button
+                    className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700"
                     type="button"
-                    onClick={handleJoinSession}
-                    className="mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                    onClick={() =>
+                      toast.info("Bắt đầu cuộc họp cho buổi tư vấn tiếp theo.")
+                    }
                   >
-                    <Video className="h-5 w-5" />
+                    <Video className="h-6 w-6" />
                     Tham gia buổi tư vấn
                   </button>
                 </div>
@@ -610,11 +551,91 @@ export default function Sessions() {
         </div>
       </div>
 
-      {/* Modal yêu cầu buổi tư vấn */}
-      <RequestSessionModal
-        isOpen={showRequestModal}
-        onClose={() => setShowRequestModal(false)}
-      />
+      {/* MODAL YÊU CẦU BUỔI TƯ VẤN MỚI */}
+      {isRequestModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Yêu cầu buổi tư vấn mới
+            </h3>
+            <p className="mt-2 text-sm text-gray-500">
+              Điền thông tin buổi tư vấn mà bạn muốn đề xuất cho tutor. Yêu cầu
+              chỉ được gửi, chưa hiển thị trong danh sách buổi tư vấn.
+            </p>
+
+            <div className="mt-4 space-y-4">
+              <div>
+                <label
+                  htmlFor="request-topic"
+                  className="mb-1 block text-sm font-medium text-gray-700"
+                >
+                  Chủ đề <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="request-topic"
+                  type="text"
+                  value={requestTopic}
+                  onChange={(e) => setRequestTopic(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="Ví dụ: Ôn tập trước kỳ giữa kỳ"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="request-note"
+                  className="mb-1 block text-sm font-medium text-gray-700"
+                >
+                  Nội dung trao đổi
+                </label>
+                <textarea
+                  id="request-note"
+                  rows={3}
+                  value={requestNote}
+                  onChange={(e) => setRequestNote(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="Mô tả ngắn về chủ đề bạn muốn trao đổi..."
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="request-preferred-time"
+                  className="mb-1 block text-sm font-medium text-gray-700"
+                >
+                  Thời gian mong muốn (tuỳ chọn)
+                </label>
+                <input
+                  id="request-preferred-time"
+                  type="text"
+                  value={requestPreferredTime}
+                  onChange={(e) => setRequestPreferredTime(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="Ví dụ: Tối thứ 5, sau 19:00"
+                />
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end space-x-3">
+              <button
+                type="button"
+                onClick={handleCloseRequestModal}
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onClick={handleSubmitRequest}
+                disabled={!requestTopic.trim()}
+                className="rounded-lg border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:bg-blue-300"
+              >
+                Gửi yêu cầu
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
