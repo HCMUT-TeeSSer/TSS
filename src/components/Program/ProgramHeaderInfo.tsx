@@ -1,5 +1,5 @@
 import React from "react";
-import { Code2 } from "lucide-react"; // Icon đại diện khóa học
+import { Code2 } from "lucide-react";
 
 interface ProgramHeaderInfoProps {
   title: string;

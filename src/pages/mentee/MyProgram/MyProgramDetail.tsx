@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-// Dùng CornerUpRight thay cho Share2 để có icon mũi tên cong giống hình
 import { Bookmark, CornerUpRight, Download, AlertCircle } from "lucide-react";
 import { programs } from "@/data/programs";
 import MeetList from "./components/meetList";
@@ -38,11 +37,11 @@ export default function ProgramDetail() {
         <div className='overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm'>
           {/* Header Info */}
           <ProgramHeaderInfo
-            title={program.title} // "Lập trình Python nâng cao"
+            title={program.title}
             subtitle='với TS. Trần Minh Khoa'
             statusLabel='Đang hoạt động'
             metaText='Tiến độ: 65%'
-            progress={65} // Hiện thanh progress
+            progress={65}
             actions={
               <>
                 <button className='flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700'>
