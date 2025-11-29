@@ -766,7 +766,10 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
 
           {/* Right Side: Start Meeting Button */}
           <button
-            onClick={() => toast.info("Bắt đầu cuộc họp")}
+            onClick={() => {
+              //toast.info("Đang chuyển hướng đến Google Meet...");
+              window.open("https://meet.google.com/sah-uyrf-fqn", "_blank");
+            }}
             className='inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700'
             title='Bắt đầu cuộc họp'
           >
@@ -1025,7 +1028,10 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
                 </div>
 
                 <button
-                  onClick={() => toast.info("Bắt đầu cuộc họp")}
+                  onClick={() => {
+                    //toast.info("Đang chuyển hướng đến Google Meet...");
+                    window.open("https://meet.google.com/sah-uyrf-fqn", "_blank");
+                  }}
                   className={`mt-2 inline-flex w-full justify-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm ${
                     userRole === "mentee" ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"
                   }`}
