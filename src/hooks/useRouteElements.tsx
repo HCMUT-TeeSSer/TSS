@@ -68,7 +68,7 @@ export default function useRouteElements() {
           element: <ProtectedRoute allowedRoles={["student"]} />,
           children: [
             {
-              path: path.mentee,
+              path: path.student,
               element: <MainLayout />,
               children: [
                 {
