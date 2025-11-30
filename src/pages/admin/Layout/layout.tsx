@@ -82,8 +82,9 @@ function AdminUserMenu() {
           <button
             className='flex w-full items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100'
             onClick={() => {
-              alert("Chức năng hồ sơ đang cập nhật");
-            }} // To be continued :)
+              setOpen(false);
+              void navigate(path.adminProfile);
+            }}
           >
             <User className='h-4 w-4' /> Hồ sơ
           </button>

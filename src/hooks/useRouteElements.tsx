@@ -1,6 +1,7 @@
 import Loading from "@/components/Loading";
 import path from "@/constants/path";
 import MainLayout from "@/layouts/MainLayout";
+import ProfileLayout from "@/layouts/ProfileLayout";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import RejectedRoute from "@/components/RejectedRoute";
 import { lazy, Suspense } from "react";
@@ -27,6 +28,8 @@ const ProgramDetail = lazy(() => import("@/pages/student/ProgramDetail"));
 const TutorSessions = lazy(() => import("@/pages/tutor/Sessions/Sessions"));
 const TutorProgramList = lazy(() => import("@/pages/tutor/ProgramList/ProgramList"));
 const TutorProgramDetail = lazy(() => import("@/pages/tutor/ProgramDetail/ProgramDetail"));
+const StudentProfile = lazy(() => import("@/pages/student/Profile"));
+const TutorProfile = lazy(() => import("@/pages/tutor/Profile"));
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
@@ -85,6 +88,22 @@ export default function useRouteElements() {
           path: "",
           element: <ProtectedRoute allowedRoles={["student"]} />,
           children: [
+            // Student Profile with ProfileLayout
+            {
+              path: path.studentProfile,
+              element: <ProfileLayout />,
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <StudentProfile />
+                    </Suspense>
+                  ),
+                },
+                // You can add more student profile related routes here
+              ],
+            },
             {
               path: path.student,
               element: <MainLayout />,
@@ -154,6 +173,22 @@ export default function useRouteElements() {
           path: "",
           element: <ProtectedRoute allowedRoles={["tutor"]} />,
           children: [
+            // Tutor Profile with ProfileLayout
+            {
+              path: path.tutorProfile,
+              element: <ProfileLayout />,
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorProfile />
+                    </Suspense>
+                  ),
+                },
+                // You can add more tutor profile related routes here
+              ],
+            },
             {
               path: path.tutor,
               element: <MainLayout />,

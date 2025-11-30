@@ -5,6 +5,8 @@ const path = {
 
   student: "/student",
   studentProfile: "/student/profile",
+  studentMeetings: "/student/meetings",
+  studentProgress: "/student/progress",
   studentPrograms: "/student/programs",
   studentProgramDetail: "/student/programs/:programId",
   studentProgramCompetencies: "/student/programs/:programId/competencies",
@@ -18,6 +20,8 @@ const path = {
 
   tutor: "/tutor",
   tutorProfile: "/tutor/profile",
+  tutorCalendar: "/tutor/calendar",
+  tutorProgress: "/tutor/progress",
   tutorPrograms: "/tutor/programs",
   tutorProgramDetail: "/tutor/programs/:programId",
   tutorProgramCompetencies: "/tutor/programs/:programId/competencies",

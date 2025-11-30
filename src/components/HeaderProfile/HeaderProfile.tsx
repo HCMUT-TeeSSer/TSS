@@ -10,29 +10,28 @@ import iconMail from "@/assets/images/vector12.png";
 import avatarUser from "@/assets/images/img-3.jpg";
 import iconDropdown from "@/assets/images/vector13.png";
 
-const Header = () => {
+const HeaderProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout, user: authUser } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const navigation = [
-    { label: "Trang chủ", path: path.home },
-    ...(authUser?.role !== "tutor"
+  // Navigation based on role
+  const navigation =
+    authUser?.role === "tutor"
       ? [
-          {
-            label: "Chương trình",
-            path: path.studentPrograms,
-          },
+          { label: "Trang chủ", path: path.home },
+          { label: "Hồ sơ", path: path.tutorProfile },
+          { label: "Lịch rảnh", path: path.tutorCalendar },
+          { label: "Tiến trình", path: path.tutorProgress },
         ]
-      : []),
-    {
-      label: "Chương trình của tôi",
-      path: authUser?.role === "tutor" ? path.tutorProgramList : path.studentProgramList,
-    },
-    { label: "Tài liệu", path: path.library },
-  ];
+      : [
+          { label: "Trang chủ", path: path.home },
+          { label: "Hồ sơ", path: path.studentProfile },
+          { label: "Lịch hẹn", path: path.studentMeetings },
+          { label: "Tiến trình", path: path.studentProgress },
+        ];
 
   const notifications = [
     { count: 3, color: "bg-red-500", icon: iconBell },
@@ -71,43 +70,15 @@ const Header = () => {
     };
   }, []);
 
-  const profilePath = displayUser.role === "tutor" ? path.tutorProfile : path.studentProfile;
+  const profilePath = authUser?.role === "tutor" ? path.tutorProfile : path.studentProfile;
 
   // Helper function to check if a path is active
-  const isPathActive = (itemPath: string, itemLabel: string) => {
+  const isPathActive = (itemPath: string) => {
     const currentPath = location.pathname;
 
     // Exact match for home page - only active when exactly at "/"
     if (itemPath === path.home) {
       return currentPath === path.home;
-    }
-
-    // Special handling for "Chương trình" tab - should be active for program list pages only
-    if (itemLabel === "Chương trình") {
-      return (
-        currentPath === path.studentPrograms ||
-        currentPath === path.tutorPrograms ||
-        /\/(student|tutor)\/programs\/\d+$/.test(currentPath)
-      );
-    }
-
-    // Special handling for "Chương trình của tôi" - should be active for program-list and my-program routes
-    if (itemLabel === "Chương trình của tôi") {
-      return (
-        currentPath === path.studentProgramList ||
-        currentPath.startsWith(path.studentMyProgram) ||
-        currentPath.startsWith(path.tutorMyProgram) ||
-        currentPath.includes("/my-program/") ||
-        currentPath.includes("/program-list") ||
-        currentPath.includes("/sessions/") ||
-        currentPath.includes("/program-detail/") ||
-        /\/(student|tutor)\/programs\/\d+\/competencies/.test(currentPath)
-      );
-    }
-
-    // Special handling for "Tài liệu" (Library)
-    if (itemLabel === "Tài liệu") {
-      return currentPath === path.library || currentPath.startsWith(path.library);
     }
 
     // For other paths, check if current path starts with the item path
@@ -128,7 +99,7 @@ const Header = () => {
           {/* Navigation */}
           <nav className='hidden items-center gap-2 md:flex'>
             {navigation.map((item, index) => {
-              const isActive = isPathActive(item.path, item.label);
+              const isActive = isPathActive(item.path);
 
               return (
                 <NavLink
@@ -219,4 +190,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderProfile;
