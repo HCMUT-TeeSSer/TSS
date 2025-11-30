@@ -1,5 +1,5 @@
 {
   "version": 2,
-  "builds": [{ "use": "@vercel/static-build" }],
+  "builds": [{ "src": "package.json", "use": "@vercel/static-build" }],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
