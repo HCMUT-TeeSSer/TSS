@@ -17,7 +17,7 @@ import {
   BarChart2,
 } from "lucide-react";
 
-import { programs as PROGRAMS_DATA } from "../../../data/programs";
+import { programs as PROGRAM_DATA } from "../../../data/programs";
 import type { Program } from "../../../data/programs";
 import { tutors as TUTORS_DATA } from "@/data/tutors";
 
@@ -28,17 +28,20 @@ export default function ProgramAdminPage(): React.ReactElement {
   const [itemsPerPage, setItemsPerPage] = useState<number>(4);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
 
-  const [programs, setPrograms] = useState<Program[]>(PROGRAMS_DATA);
+  const [programs, setPrograms] = useState<Program[]>(PROGRAM_DATA);
   const [newProgramTitle, setNewProgramTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [newBadge, setNewBadge] = useState("Mới");
   const [newColor, setNewColor] = useState("blue");
   const [newIcon, setNewIcon] = useState("globe");
+  const [newDuration, setNewDuration] = useState<number>(10);
   const [mainTutorId, setMainTutorId] = useState<number | null>(null);
+  const [extraTutorIds, setExtraTutorIds] = useState<number[]>([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
 
-  const totalTutors = PROGRAMS_DATA.reduce((acc, p) => acc + p.availableTutors, 0);
-  const totalMentees = PROGRAMS_DATA.reduce((acc, p) => acc + p.totalMentee, 0);
+  const totalTutors = programs.reduce((acc, p) => acc + p.availableTutors, 0);
+  const totalMentees = programs.reduce((acc, p) => acc + p.totalMentee, 0);
+  const durationOptions = Array.from({ length: 8 }, (_, i) => i + 8);
 
   // Map program.icon string -> lucide-react icon
   const getProgramIcon = (iconName?: string) => {
@@ -79,8 +82,8 @@ export default function ProgramAdminPage(): React.ReactElement {
     }
   };
   const filteredPrograms = useMemo(
-    () => PROGRAMS_DATA.filter((p) => p.title.toLowerCase().includes(searchKeyword.toLowerCase())),
-    [searchKeyword]
+    () => programs.filter((p) => p.title.toLowerCase().includes(searchKeyword.toLowerCase())),
+    [searchKeyword, programs]
   );
 
   const totalPages = Math.max(1, Math.ceil(filteredPrograms.length / itemsPerPage));
@@ -97,13 +100,13 @@ export default function ProgramAdminPage(): React.ReactElement {
       <div className='mt-6 grid grid-cols-4 gap-4'>
         <StatCard
           label='Tổng chương trình'
-          value={String(PROGRAMS_DATA.length)}
+          value={String(programs.length)}
           icon={<BookOpen className='h-6 w-6 text-sky-600' />}
           valueColor='text-sky-600'
         />
         <StatCard
           label='Đang hoạt động'
-          value={String(PROGRAMS_DATA.filter((p) => p.isAvailable).length)}
+          value={String(programs.filter((p) => p.isAvailable).length)}
           icon={<CheckCircle className='h-6 w-6 text-green-600' />}
           valueColor='text-green-600'
         />
@@ -222,6 +225,23 @@ export default function ProgramAdminPage(): React.ReactElement {
                   <option value='chart'>Chart</option>
                 </select>
               </div>
+              {/* Duration */}
+              <div className='mt-2'>
+                <label className='text-sm font-semibold text-gray-700'>Thời lượng khóa học</label>
+                <select
+                  className='mt-1 w-full rounded-lg border p-2'
+                  value={newDuration}
+                  onChange={(e) => {
+                    setNewDuration(Number(e.target.value));
+                  }}
+                >
+                  {durationOptions.map((week) => (
+                    <option key={week} value={week}>
+                      {week} tuần
+                    </option>
+                  ))}
+                </select>
+              </div>
 
               {/* Main tutor */}
               <select
@@ -239,7 +259,27 @@ export default function ProgramAdminPage(): React.ReactElement {
                   </option>
                 ))}
               </select>
-
+              {/* Available tutor list */}
+              <div className='mt-2'>
+                <label className='text-sm font-semibold text-gray-700'>Chọn các tutor khác</label>
+                <div className='mt-2 max-h-40 overflow-y-auto rounded-lg border p-2'>
+                  {TUTORS_DATA.filter((t) => t.status === "Hoạt động").map((t) => (
+                    <label key={t.id} className='flex items-center gap-2 py-1'>
+                      <input
+                        type='checkbox'
+                        checked={extraTutorIds.includes(t.id)}
+                        disabled={t.id === mainTutorId}
+                        onChange={() => {
+                          setExtraTutorIds((prev) =>
+                            prev.includes(t.id) ? prev.filter((id) => id !== t.id) : [...prev, t.id]
+                          );
+                        }}
+                      />
+                      <span>{t.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
               <button
                 className='w-full rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700'
                 onClick={() => {
@@ -252,20 +292,22 @@ export default function ProgramAdminPage(): React.ReactElement {
                     alert("Tutor chính không hợp lệ.");
                     return;
                   }
+                  const extraTutors = TUTORS_DATA.filter((t) => extraTutorIds.includes(t.id));
+
                   const newProgram: Program = {
-                    id: PROGRAMS_DATA[PROGRAMS_DATA.length - 1]?.id + 1 || 1,
+                    id: programs[programs.length - 1]?.id + 1 || 1,
                     title: newProgramTitle,
                     description: newDescription || "Mô tả chương trình mới",
                     isAvailable: true,
-                    availableTutors: 1,
+                    availableTutors: extraTutors.length,
                     totalMentee: 0,
-                    duration: "3 tháng",
+                    duration: `${String(newDuration)} tuần`,
                     progress: 0,
                     badge: newBadge,
                     color: newColor,
                     icon: newIcon,
-                    mainTutor,
-                    listTutor: [mainTutor], // chỉ mainTutor
+                    mainTutor, // tutor chính
+                    listTutor: [mainTutor, ...extraTutors], // TUTOR CHÍNH + CÁC TUTOR KHÁC
                     rating: 0,
                     category: "Khác",
                     department: "Không xác định",
@@ -274,7 +316,6 @@ export default function ProgramAdminPage(): React.ReactElement {
                     chapters: [],
                     competencies: [],
                   };
-
                   setPrograms([newProgram, ...programs]);
                   setNewProgramTitle("");
                   setNewDescription("");
@@ -282,6 +323,7 @@ export default function ProgramAdminPage(): React.ReactElement {
                   setNewColor("blue");
                   setNewIcon("globe");
                   setMainTutorId(null);
+                  setExtraTutorIds([]);
                   setShowCreateForm(false);
                 }}
               >
@@ -373,7 +415,7 @@ export default function ProgramAdminPage(): React.ReactElement {
             ))}
           </select>
           <span>
-            trên tổng số <span className='font-medium'>{PROGRAMS_DATA.length}</span> chương trình
+            trên tổng số <span className='font-medium'>{programs.length}</span> chương trình
           </span>
         </div>
         <div className='flex items-center gap-2'>
