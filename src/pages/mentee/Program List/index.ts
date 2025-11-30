@@ -1,3 +1,3 @@
-import Program from "./Program";
+import ProgramList from "./ProgramList";
 
-export default Program;
+export default ProgramList;

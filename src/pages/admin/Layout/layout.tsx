@@ -60,19 +60,19 @@ function AdminUserMenu() {
           setOpen((prev) => !prev);
         }}
       >
-        <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-slate-200'>
+        <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-200'>
           <img
             src={user?.avatar ?? "/default-avatar.png"}
             alt={user?.username ?? "User"}
             className='h-10 w-10 rounded-full object-cover'
           />
         </div>
-        <div className='flex max-w-[160px] items-center gap-2'>
+        <div className='flex max-w-40 items-center gap-2'>
           <div className='truncate text-left'>
             <div className='truncate font-medium'>{user?.fullName ?? "User"}</div>
             <div className='truncate text-xs text-gray-500'>Phòng Đào tạo</div>
           </div>
-          <ChevronDown className='h-4 w-4 flex-shrink-0 text-gray-500' />
+          <ChevronDown className='h-4 w-4 shrink-0 text-gray-500' />
         </div>
       </div>
 
@@ -143,7 +143,7 @@ export default function AdminLayout() {
             </NavLink>
 
             <NavLink
-              to={path.adminMentee}
+              to={path.adminStudent}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-4 py-2 ${isActive ? "bg-sky-600 text-white" : "hover:bg-slate-100"}`
               }
