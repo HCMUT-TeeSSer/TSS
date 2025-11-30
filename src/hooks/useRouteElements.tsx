@@ -88,7 +88,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "competencies",
+                  path: "programs/:programId/competencies",
                   element: (
                     <Suspense fallback={<Loading />}>
                       <StudentsCompetencies />
@@ -148,7 +148,7 @@ export default function useRouteElements() {
               path: path.tutor,
               children: [
                 {
-                  path: "competencies",
+                  path: "programs/:programId/competencies",
                   element: (
                     <Suspense fallback={<Loading />}>
                       <TutorCompetencies />
