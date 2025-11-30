@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Save, Share2, FileDown, ChevronRight, Clock, Star, Calendar, Users, Award, Video } from "lucide-react";
 import { UserGroupIcon } from "@heroicons/react/20/solid";
 import { toast } from "react-toastify";
+import path from "@/constants/path";
 
 // dữ liệu chương trình
 import { programs } from "@/data/programs";
@@ -97,12 +98,12 @@ const ProgramDetailPage: React.FC = () => {
     {
       id: "overview" as const,
       label: "Nội dung",
-      onClick: () => navigate(`/mentee/my-program/${String(programID)}`),
+      onClick: () => navigate(path.studentMyProgramDetail.replace(":programId", String(programID))),
     },
     {
       id: "sessions" as const,
       label: "Buổi tư vấn",
-      onClick: () => navigate(`/mentee/session/${String(programID)}`),
+      onClick: () => navigate(path.studentSessions.replace(":programId", String(programID))),
     },
     {
       id: "meet" as const,
@@ -134,7 +135,7 @@ const ProgramDetailPage: React.FC = () => {
           <button
             type='button'
             onClick={() => {
-              void navigate("/mentee/programs");
+              void navigate(path.studentPrograms);
             }}
             className='hover:text-blue-600'
           >

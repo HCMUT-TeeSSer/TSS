@@ -10,20 +10,20 @@ import AdminWelcome from "@/pages/admin/Home/AdminWelcome";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Login = lazy(() => import("@/pages/Login"));
-const Program = lazy(() => import("@/pages/mentee/Program"));
-const ProgramOverview = lazy(() => import("@/pages/mentee/ProgramOverview/ProgramOverview"));
+const Program = lazy(() => import("@/pages/student/Program"));
+const ProgramOverview = lazy(() => import("@/pages/student/ProgramOverview/ProgramOverview"));
 const AdminProgram = lazy(() => import("@/pages/admin/Program/Program"));
 const AdminTutor = lazy(() => import("@/pages/admin/Tutor/Tutor"));
-const AdminMentee = lazy(() => import("@/pages/admin/Mentee/Mentee"));
+const AdminMentee = lazy(() => import("@/pages/admin/Student/Mentee"));
 const HomePage = lazy(() => import("@/pages/Home/HomePage"));
-const MenteeMyProgramDetail = lazy(() => import("@/pages/mentee/MyProgram/MyProgramDetail"));
+const MenteeMyProgramDetail = lazy(() => import("@/pages/student/MyProgram/MyProgramDetail"));
 const TutorMyProgramDetail = lazy(() => import("@/pages/tutor/MyProgram/MyProgramDetail"));
-const Library = lazy(() => import("@/pages/mentee/Library/Library"));
-const ProgramList = lazy(() => import("@/pages/mentee/Program List/ProgramList"));
-const StudentsCompetencies = lazy(() => import("@/pages/mentee/StudentsCompetencies"));
+const Library = lazy(() => import("@/pages/student/Library/Library"));
+const ProgramList = lazy(() => import("@/pages/student/Program List/ProgramList"));
+const StudentsCompetencies = lazy(() => import("@/pages/student/StudentsCompetencies"));
 const TutorCompetencies = lazy(() => import("@/pages/tutor/TutorCompetencies"));
-const Sessions = lazy(() => import("@/pages/mentee/Sessions"));
-const ProgramDetail = lazy(() => import("@/pages/mentee/ProgramDetail"));
+const Sessions = lazy(() => import("@/pages/student/Sessions"));
+const ProgramDetail = lazy(() => import("@/pages/student/ProgramDetail"));
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
@@ -62,6 +62,21 @@ export default function useRouteElements() {
             },
           ],
         },
+        // Library - accessible by all authenticated users
+        {
+          path: path.library,
+          element: <MainLayout />,
+          children: [
+            {
+              index: true,
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <Library />
+                </Suspense>
+              ),
+            },
+          ],
+        },
         // Student routes - only accessible by students
         {
           path: "",
@@ -72,7 +87,7 @@ export default function useRouteElements() {
               element: <MainLayout />,
               children: [
                 {
-                  path: "programs",
+                  path: path.studentPrograms,
                   element: (
                     <Suspense fallback={<Loading />}>
                       <Program />
@@ -80,7 +95,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "programs/:programId",
+                  path: path.studentProgramDetail,
                   element: (
                     <Suspense fallback={<Loading />}>
                       <ProgramOverview />
@@ -88,7 +103,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "programs/:programId/competencies",
+                  path: path.studentProgramCompetencies,
                   element: (
                     <Suspense fallback={<Loading />}>
                       <StudentsCompetencies />
@@ -96,7 +111,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "sessions/:programId",
+                  path: path.studentSessions,
                   element: (
                     <Suspense fallback={<Loading />}>
                       <Sessions />
@@ -104,7 +119,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "program-detail/:programId",
+                  path: path.studentProgramDetailView,
                   element: (
                     <Suspense fallback={<Loading />}>
                       <ProgramDetail />
@@ -112,7 +127,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "my-program/:programId",
+                  path: path.studentMyProgramDetail,
                   element: (
                     <Suspense fallback={<Loading />}>
                       <MenteeMyProgramDetail />
@@ -120,15 +135,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "library",
-                  element: (
-                    <Suspense fallback={<Loading />}>
-                      <Library />
-                    </Suspense>
-                  ),
-                },
-                {
-                  path: "program-list",
+                  path: path.studentProgramList,
                   element: (
                     <Suspense fallback={<Loading />}>
                       <ProgramList />
@@ -148,7 +155,7 @@ export default function useRouteElements() {
               path: path.tutor,
               children: [
                 {
-                  path: "programs/:programId/competencies",
+                  path: path.tutorProgramCompetencies,
                   element: (
                     <Suspense fallback={<Loading />}>
                       <TutorCompetencies />
@@ -156,7 +163,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "programs",
+                  path: path.tutorPrograms,
                   element: (
                     <Suspense fallback={<Loading />}>
                       <Program />
@@ -164,7 +171,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "programs/:programId",
+                  path: path.tutorProgramDetail,
                   element: (
                     <Suspense fallback={<Loading />}>
                       <ProgramOverview />
@@ -172,7 +179,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "my-program/:programId",
+                  path: path.tutorMyProgramDetail,
                   element: (
                     <Suspense fallback={<Loading />}>
                       <TutorMyProgramDetail />
@@ -195,7 +202,7 @@ export default function useRouteElements() {
           element: <AdminWelcome />,
         },
         {
-          path: "programs",
+          path: path.adminPrograms,
           element: (
             <Suspense fallback={<Loading />}>
               <AdminProgram />
@@ -203,7 +210,7 @@ export default function useRouteElements() {
           ),
         },
         {
-          path: "tutors",
+          path: path.adminTutors,
           element: (
             <Suspense fallback={<Loading />}>
               <AdminTutor />
@@ -211,7 +218,7 @@ export default function useRouteElements() {
           ),
         },
         {
-          path: "mentees",
+          path: path.adminMentees,
           element: (
             <Suspense fallback={<Loading />}>
               <AdminMentee />

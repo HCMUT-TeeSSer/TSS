@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { programs } from "@/data/programs";
 import { tutors } from "@/data/tutors";
 import { ArrowLeft, Star, CheckCircle, Filter, ChevronDown } from "lucide-react";
+import path from "@/constants/path";
 
 const curriculum = [
   {
@@ -117,7 +118,7 @@ const ProgramOverview: React.FC = () => {
       <div className='min-h-screen bg-gray-50'>
         <div className='container mx-auto px-4 py-16 text-center'>
           <p className='text-lg font-medium text-gray-600'>Không tìm thấy chương trình.</p>
-          <Link to='/mentee/programs' className='mt-4 inline-flex items-center gap-2 text-blue-600 hover:underline'>
+          <Link to={path.studentPrograms} className='mt-4 inline-flex items-center gap-2 text-blue-600 hover:underline'>
             <ArrowLeft size={16} /> Quay lại danh sách
           </Link>
         </div>
@@ -184,7 +185,7 @@ const ProgramOverview: React.FC = () => {
 
     setIsRegistering(false);
     setShowRegistrationModal(false);
-    void navigate("/mentee/program-list", {
+    void navigate(path.studentProgramList, {
       state: {
         message: "Đăng ký chương trình thành công!",
         program: program,
@@ -204,7 +205,7 @@ const ProgramOverview: React.FC = () => {
       <div className='border-b border-gray-200 bg-white'>
         <div className='container mx-auto px-4 py-4'>
           <div className='flex items-center gap-2 text-sm text-gray-500'>
-            <Link to='/mentee/programs' className='hover:text-blue-600'>
+            <Link to={path.studentPrograms} className='hover:text-blue-600'>
               Chương trình
             </Link>
             <span className='text-gray-300'>/</span>

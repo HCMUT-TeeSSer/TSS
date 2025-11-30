@@ -123,7 +123,7 @@ export default function AdminLayout() {
         <aside className='flex w-64 flex-col border-r border-gray-200 bg-white p-6'>
           <nav className='mt-8 flex flex-col gap-2'>
             <NavLink
-              to={path.adminProgram}
+              to={path.adminPrograms}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-4 py-2 ${isActive ? "bg-sky-600 text-white" : "hover:bg-slate-100"}`
               }
@@ -133,7 +133,7 @@ export default function AdminLayout() {
             </NavLink>
 
             <NavLink
-              to={path.adminTutor}
+              to={path.adminTutors}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-4 py-2 ${isActive ? "bg-sky-600 text-white" : "hover:bg-slate-100"}`
               }
@@ -143,7 +143,7 @@ export default function AdminLayout() {
             </NavLink>
 
             <NavLink
-              to={path.adminStudent}
+              to={path.adminMentees}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-4 py-2 ${isActive ? "bg-sky-600 text-white" : "hover:bg-slate-100"}`
               }

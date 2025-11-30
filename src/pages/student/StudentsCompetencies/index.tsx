@@ -2,6 +2,7 @@ import { useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styles from "./StudentsCompetencies.module.css";
 import { programs } from "../../../data/programs";
+import path from "@/constants/path";
 
 import { useAuth } from "@/hooks/useAuth";
 
@@ -28,7 +29,7 @@ const StudentsCompetencies = () => {
   }, []);
 
   const onButtonContainerClick = useCallback(() => {
-    void navigate("/");
+    void navigate(path.home);
   }, [navigate]);
 
   const averageScore = useMemo(() => {

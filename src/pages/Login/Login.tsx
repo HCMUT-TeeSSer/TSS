@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, User, Lock, LogIn, CheckCircle, AlertCircle } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import path from "@/constants/path";
 import logoBK from "@/assets/images/logoBK1.png";
 import appLogo from "@/assets/images/applogo.png";
 import bgImage from "@/assets/images/BKlogin.png";
@@ -28,10 +29,10 @@ export default function Login() {
         // Redirect based on role
         const userRole = result.user?.role ?? user?.role;
         if (userRole === "admin") {
-          void navigate("/admin");
+          void navigate(path.admin);
         } else {
           // Mentee and tutor redirect to home page
-          void navigate("/");
+          void navigate(path.home);
         }
       } else {
         setError(result.error ?? "Đăng nhập thất bại");

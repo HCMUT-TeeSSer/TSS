@@ -155,6 +155,7 @@ export default function TutorAdminPage(): React.ReactElement {
               onChange={(e) => {
                 setSelectedCategory(e.target.value);
               }}
+              aria-label='Chọn chương trình'
             >
               <option>Tất cả chương trình</option>
               {programCategories.map((cat) => (
@@ -320,13 +321,13 @@ export default function TutorAdminPage(): React.ReactElement {
                       )}
                     </td>
                     <td className='flex items-center justify-center gap-2 p-3'>
-                      <button className='rounded p-2 hover:bg-gray-100'>
+                      <button className='rounded p-2 hover:bg-gray-100' aria-label='Xem chi tiết tutor'>
                         <Eye className='h-4 w-4 text-sky-500' />
                       </button>
-                      <button className='rounded p-2 hover:bg-gray-100'>
+                      <button className='rounded p-2 hover:bg-gray-100' aria-label='Chỉnh sửa thông tin tutor'>
                         <Edit2 className='h-4 w-4 text-indigo-600' />
                       </button>
-                      <button className='rounded p-2 hover:bg-gray-100'>
+                      <button className='rounded p-2 hover:bg-gray-100' aria-label='Xóa tutor'>
                         <Trash2 className='h-4 w-4 text-rose-600' />
                       </button>
                     </td>
@@ -348,6 +349,7 @@ export default function TutorAdminPage(): React.ReactElement {
               setItemsPerPage(Number(e.target.value));
               setCurrentPage(1);
             }}
+            aria-label='Số tutor trên mỗi trang'
           >
             {[4, 5, 6, 7, 8].map((n) => (
               <option key={n} value={n}>

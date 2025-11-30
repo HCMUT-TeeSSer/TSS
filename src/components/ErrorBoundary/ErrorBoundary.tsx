@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
+import path from "@/constants/path";
 
 interface Props {
   children?: ReactNode;
@@ -33,7 +34,7 @@ export default class ErrorBoundary extends Component<Props, State> {
           <div className='bg-orange absolute rotate-12 rounded px-2 text-sm text-white'>Error!</div>
           <button className='mt-5' type='button'>
             <a
-              href='/'
+              href={path.home}
               className='group relative inline-block text-sm font-medium text-white focus:ring focus:outline-none active:text-orange-500'
             >
               <span className='bg-orange absolute inset-0 translate-x-0.5 translate-y-0.5 transition-transform group-hover:translate-x-0 group-hover:translate-y-0' />

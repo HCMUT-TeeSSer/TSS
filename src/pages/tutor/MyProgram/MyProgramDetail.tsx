@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { CalendarPlus, Users, FileText, AlertCircle } from "lucide-react";
 import { programs } from "@/data/programs";
-import MeetList from "@/pages/mentee/MyProgram/components/meetList";
+import path from "@/constants/path";
+import MeetList from "@/pages/student/MyProgram/components/meetList";
 
 import ProgramBreadcrumb from "@/components/Program/ProgramBreadcrumb";
 import ProgramHeaderInfo from "@/components/Program/ProgramHeaderInfo";
@@ -19,7 +20,7 @@ export default function ProgramDetail() {
       <div className='flex min-h-screen flex-col items-center justify-center space-y-4 bg-gray-50'>
         <AlertCircle className='h-16 w-16 text-red-500' />
         <h2 className='text-2xl font-bold text-gray-900'>Không tìm thấy chương trình</h2>
-        <Link to='/tutor/programs' className='font-medium text-blue-600 hover:underline'>
+        <Link to={path.tutorPrograms} className='font-medium text-blue-600 hover:underline'>
           Quay lại danh sách
         </Link>
       </div>
@@ -30,7 +31,7 @@ export default function ProgramDetail() {
 
   return (
     <div className='min-h-screen bg-gray-50 pb-12'>
-      <ProgramBreadcrumb backLink='/tutor/programs' currentTitle={program.title} />
+      <ProgramBreadcrumb backLink={path.tutorPrograms} currentTitle={program.title} />
 
       <div className='container mx-auto mt-6 px-4'>
         <div className='overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm'>

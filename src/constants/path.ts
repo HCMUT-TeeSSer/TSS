@@ -1,22 +1,26 @@
 const path = {
   home: "/",
-  docs: "/docs",
+  library: "/library",
   login: "/login",
 
   student: "/student",
   studentProfile: "/student/profile",
   studentPrograms: "/student/programs",
   studentProgramDetail: "/student/programs/:programId",
+  studentProgramCompetencies: "/student/programs/:programId/competencies",
   studentMyProgram: "/student/my-program",
   studentMyProgramDetail: "/student/my-program/:programId",
   studentSessions: "/student/sessions/:programId",
+  studentProgramDetailView: "/student/program-detail/:programId",
+  studentProgramList: "/student/program-list",
   studentMeet: "/student/meet/:programId",
   studentCompetence: "/student/competence/:programId",
 
   tutor: "/tutor",
   tutorProfile: "/tutor/profile",
-  TutorProgram: "/tutor/programs",
-  TutorProgramDetail: "/tutor/programs/:programId",
+  tutorPrograms: "/tutor/programs",
+  tutorProgramDetail: "/tutor/programs/:programId",
+  tutorProgramCompetencies: "/tutor/programs/:programId/competencies",
   tutorMyProgram: "/tutor/my-program",
   tutorMyProgramDetail: "/tutor/my-program/:programId",
   tutorSessions: "/tutor/sessions/:programId",
@@ -26,9 +30,10 @@ const path = {
   admin: "/admin",
   adminProfile: "/admin/profile",
   adminWelcome: "/admin/home",
-  adminProgram: "/admin/programs",
-  adminTutor: "/admin/tutors",
-  adminStudent: "/admin/students",
+  adminPrograms: "/admin/programs",
+  adminTutors: "/admin/tutors",
+  adminMentees: "/admin/mentees",
+  adminStudents: "/admin/students",
 } as const;
 
 export default path;

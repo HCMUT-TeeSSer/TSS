@@ -2,6 +2,7 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { LogOut, User } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import path from "@/constants/path";
 // Import ảnh
 import logo from "@/assets/images/applogo.png";
 import iconBell from "@/assets/images/vector11.png";
@@ -17,14 +18,16 @@ const Header = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const navigation = [
-    { label: "Trang chủ", path: "/", active: true },
+    { label: "Trang chủ", path: path.home },
     {
       label: "Chương trình",
-      path: authUser?.role === "tutor" ? "/tutor/programs" : "/mentee/programs",
-      active: false,
+      path: authUser?.role === "tutor" ? path.tutorPrograms : path.studentPrograms,
     },
-    { label: "Chương trình của tôi", path: "/my-programs", active: false },
-    { label: "Tài liệu", path: "/documents", active: false },
+    {
+      label: "Chương trình của tôi",
+      path: authUser?.role === "tutor" ? path.tutorPrograms : path.studentProgramList,
+    },
+    { label: "Tài liệu", path: path.library },
   ];
 
   const notifications = [
@@ -49,7 +52,7 @@ const Header = () => {
   const logingout = () => {
     logout();
     setIsDropdownOpen(false);
-    void navigate("/login");
+    void navigate(path.login);
   };
 
   useEffect(() => {
@@ -66,7 +69,7 @@ const Header = () => {
 
   //  Trường hợp profile của tutor và mentee khác nhau và thuộc 2 file khác nhau,
   //  bao giờ có trang profile riêng thì mở lại thì bạn tự adjust lại nhé
-  //  const profilePath = displayUser.role === "tutor" ? "/tutor/profile" : "/mentee/profile";
+  //  const profilePath = displayUser.role === "tutor" ? "/tutor/profile" : "/student/profile";
 
   const profilePath = "..."; // Nhập đường dẫn trang profile vào (trường hhopwj chỉ có 1 profile.tsx, không phân profile theo role)
 
@@ -75,17 +78,36 @@ const Header = () => {
     const currentPath = location.pathname;
 
     // Exact match for home page - only active when exactly at "/"
-    if (itemPath === "/") {
-      return currentPath === "/";
+    if (itemPath === path.home) {
+      return currentPath === path.home;
     }
 
-    // Special handling for "Chương trình" tab - should be active for both /mentee/programs and /tutor/programs
+    // Special handling for "Chương trình" tab - should be active for program list pages only
     if (itemLabel === "Chương trình") {
-      return currentPath.startsWith("/mentee/programs") || currentPath.startsWith("/tutor/programs");
+      return (
+        currentPath === path.studentPrograms ||
+        currentPath === path.tutorPrograms ||
+        /\/(student|tutor)\/programs\/\d+$/.test(currentPath)
+      );
+    }
+
+    // Special handling for "Chương trình của tôi" - should be active for program-list and my-program routes
+    if (itemLabel === "Chương trình của tôi") {
+      return (
+        currentPath === path.studentProgramList ||
+        currentPath.startsWith(path.studentMyProgram) ||
+        currentPath.startsWith(path.tutorMyProgram) ||
+        currentPath.includes("/my-program/") ||
+        currentPath.includes("/program-list")
+      );
+    }
+
+    // Special handling for "Tài liệu" (Library)
+    if (itemLabel === "Tài liệu") {
+      return currentPath === path.library || currentPath.startsWith(path.library);
     }
 
     // For other paths, check if current path starts with the item path
-    // This allows /mentee/programs to be active for both /mentee/programs and /mentee/programs/1
     return currentPath.startsWith(itemPath);
   };
 
@@ -95,7 +117,7 @@ const Header = () => {
         {/* Left Side: Logo & Nav */}
         <div className='flex items-center gap-10'>
           {/* Logo */}
-          <Link to='/' className='flex items-center gap-3'>
+          <Link to={path.home} className='flex items-center gap-3'>
             <img src={logo} alt='Logo' className='h-8 w-8 object-cover' />
             <span className='text-xl font-bold text-gray-900'>Tutor Support System</span>
           </Link>

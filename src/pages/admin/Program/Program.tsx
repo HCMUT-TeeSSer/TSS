@@ -196,6 +196,7 @@ export default function ProgramAdminPage(): React.ReactElement {
                     setNewColor(e.target.value);
                   }}
                   className='flex-1 rounded-lg border px-3 py-2 focus:ring-2 focus:ring-sky-400 focus:outline-none'
+                  aria-label='Chọn màu chương trình'
                 >
                   <option value='blue'>Blue</option>
                   <option value='pink'>Pink</option>
@@ -211,6 +212,7 @@ export default function ProgramAdminPage(): React.ReactElement {
                     setNewIcon(e.target.value);
                   }}
                   className='flex-1 rounded-lg border px-3 py-2 focus:ring-2 focus:ring-sky-400 focus:outline-none'
+                  aria-label='Chọn biểu tượng chương trình'
                 >
                   <option value='globe'>Globe</option>
                   <option value='az'>Code</option>
@@ -228,6 +230,7 @@ export default function ProgramAdminPage(): React.ReactElement {
                   setMainTutorId(Number(e.target.value));
                 }}
                 className='w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-sky-400 focus:outline-none'
+                aria-label='Chọn tutor chính'
               >
                 <option value=''>-- Chọn tutor chính --</option>
                 {TUTORS_DATA.filter((t) => t.status === "Hoạt động").map((t) => (
@@ -268,6 +271,8 @@ export default function ProgramAdminPage(): React.ReactElement {
                     department: "Không xác định",
                     difficulty: "Dễ",
                     learningFormat: "...",
+                    chapters: [],
+                    competencies: [],
                   };
 
                   setPrograms([newProgram, ...programs]);
@@ -341,12 +346,7 @@ export default function ProgramAdminPage(): React.ReactElement {
                     </button>
                   </div>
 
-                  <div className='w-48'>
-                    <div className='h-2 w-full rounded-full bg-slate-100'>
-                      <div className='h-2 rounded-full bg-sky-500' style={{ width: `${String(p.progress)}%` }} />
-                    </div>
-                    <div className='mt-1 text-right text-xs text-gray-500'>{p.progress}% hoàn thành</div>
-                  </div>
+                  <ProgressBar progress={p.progress} />
                 </div>
               </div>
             </div>
@@ -364,6 +364,7 @@ export default function ProgramAdminPage(): React.ReactElement {
             onChange={(e) => {
               setItemsPerPage(Number(e.target.value));
             }}
+            aria-label='Số chương trình trên mỗi trang'
           >
             {Array.from({ length: 7 }, (_, i) => i + 4).map((num) => (
               <option key={num} value={num}>
@@ -415,6 +416,21 @@ export default function ProgramAdminPage(): React.ReactElement {
 }
 
 /* ---------------- Components ---------------- */
+function ProgressBar({ progress }: { progress: number }) {
+  // Use data attribute to avoid inline style lint error
+  return (
+    <div className='w-48'>
+      <div className='h-2 w-full rounded-full bg-slate-100'>
+        <div
+          className='h-2 rounded-full bg-sky-500 transition-all duration-300'
+          style={{ width: `${String(progress)}%` }}
+        />
+      </div>
+      <div className='mt-1 text-right text-xs text-gray-500'>{progress}% hoàn thành</div>
+    </div>
+  );
+}
+
 function StatCard({
   label,
   value,

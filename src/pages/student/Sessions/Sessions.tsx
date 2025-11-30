@@ -3,6 +3,7 @@ import { CalendarIcon, ClockIcon, PlayIcon, BellIcon, ArrowDownTrayIcon, PlusIco
 
 import SessionsData from "@/data/sessions.json";
 import { useNavigate, useParams } from "react-router-dom";
+import path from "@/constants/path";
 
 import { Save, Share2, FileDown, ChevronRight, Clock, Star, Video, Eye, FileText } from "lucide-react";
 
@@ -26,7 +27,7 @@ export default function Sessions() {
   const navigate = useNavigate();
   const { programId } = useParams<{ programId?: string }>();
 
-  // lấy id từ URL /mentee/session/:programID, mặc định = 1
+  // lấy id từ URL /student/session/:programID, mặc định = 1
   const programID = Number(programId ?? 1);
   const program = programs.find((p) => p.id === programID);
 
@@ -46,12 +47,12 @@ export default function Sessions() {
     {
       id: "overview" as const,
       label: "Nội dung",
-      onClick: () => navigate(`/mentee/my-program/${String(programID)}`),
+      onClick: () => navigate(path.studentMyProgramDetail.replace(":programId", String(programID))),
     },
     {
       id: "sessions" as const,
       label: "Buổi tư vấn",
-      onClick: () => navigate(`/mentee/session/${String(programID)}`),
+      onClick: () => navigate(path.studentSessions.replace(":programId", String(programID))),
     },
   ];
 
@@ -135,7 +136,7 @@ export default function Sessions() {
           <button
             type='button'
             onClick={() => {
-              void navigate("/mentee/programs");
+              void navigate(path.studentPrograms);
             }}
             className='hover:text-blue-600'
           >

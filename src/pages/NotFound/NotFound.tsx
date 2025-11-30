@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import path from "@/constants/path";
 
 export default function NotFound() {
   return (
@@ -7,7 +8,7 @@ export default function NotFound() {
       <div className='bg-orange absolute rotate-12 rounded px-2 text-sm text-white'>Page Not Found</div>
       <button className='mt-5' type='button'>
         <Link
-          to='/'
+          to={path.home}
           className='group relative inline-block text-sm font-medium text-white focus:ring focus:outline-none active:text-orange-500'
         >
           <span className='bg-orange absolute inset-0 translate-x-0.5 translate-y-0.5 transition-transform group-hover:translate-x-0 group-hover:translate-y-0' />

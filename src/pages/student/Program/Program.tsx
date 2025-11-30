@@ -22,7 +22,7 @@ import { programs } from "@/data/programs";
 export default function Program() {
   // Lấy role của user để tạo path động
   const userRole = getUserRole();
-  const basePath = userRole === "tutor" ? "/tutor" : "/mentee";
+  const basePath = userRole === "tutor" ? "/tutor" : "/student";
 
   const getDepartmentStyle = (dept: string) => {
     switch (dept) {
