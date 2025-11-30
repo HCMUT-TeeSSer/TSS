@@ -139,47 +139,6 @@ export default function useRouteElements() {
             },
           ],
         },
-      ],
-    },
-    // Admin routes - only accessible by admins
-    {
-      path: path.admin,
-      element: <AdminLayout />,
-      children: [
-        {
-          index: true,
-          element: <AdminWelcome />,
-        },
-        {
-          path: "programs",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <AdminProgram />
-            </Suspense>
-          ),
-        },
-        {
-          path: "tutors",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <AdminTutor />
-            </Suspense>
-          ),
-        },
-        {
-          path: "mentees",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <AdminMentee />
-            </Suspense>
-          ),
-        },
-      ],
-    },
-    {
-      path: "",
-      element: <MainLayout />,
-      children: [
         // Tutor routes - only accessible by tutors
         {
           path: "",
@@ -225,6 +184,47 @@ export default function useRouteElements() {
             },
           ],
         },
+      ],
+    },
+    // Admin routes - only accessible by admins
+    {
+      path: path.admin,
+      element: <AdminLayout />,
+      children: [
+        {
+          index: true,
+          element: <AdminWelcome />,
+        },
+        {
+          path: "programs",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminProgram />
+            </Suspense>
+          ),
+        },
+        {
+          path: "tutors",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminTutor />
+            </Suspense>
+          ),
+        },
+        {
+          path: "mentees",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminMentee />
+            </Suspense>
+          ),
+        },
+      ],
+    },
+    {
+      path: "",
+      element: <MainLayout />,
+      children: [
         // 404 page - accessible by all authenticated users
         {
           path: "*",

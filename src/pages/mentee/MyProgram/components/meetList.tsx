@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { fetchJsonData } from "@/utils/mockApi";
 import Loading from "@/components/Loading";
+import { useAuth } from "@/hooks/useAuth";
+import { programs } from "@/data/programs";
 // import { Link } from "react-router-dom";
 import { Check, Plus, X, Video, Calendar, Clock, GraduationCap, AlertCircle, CheckCircle } from "lucide-react";
 import { toast } from "react-toastify";
@@ -329,8 +331,8 @@ function RejectModal({ isOpen, onClose, onConfirm }: RejectModalProps) {
 }
 
 // Where and Who Meet appear
-const CURRENT_MENTEE_NAME = "Nguyễn Thị Hà";
-const CURRENT_TUTOR_NAME = "Trần Minh Khoa";
+// const CURRENT_MENTEE_NAME = "Nguyễn Thị Hà";
+// const CURRENT_TUTOR_NAME = "Trần Minh Khoa";
 // const CURRENT_PROGRAM_NAME = "";
 
 // Simulated update function
@@ -402,6 +404,7 @@ const isThisWeek = (dateStr: string) => {
 };
 
 const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
+  const { user } = useAuth();
   const [Meets, setMeets] = useState<Meet[]>([]);
   const [allMeets, setAllMeets] = useState<Meet[]>([]);
   const [loading, setLoading] = useState(true);
@@ -418,10 +421,12 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
         const data = await fetchJsonData<Meet[]>("meets", 500);
         let filteredData = data.filter((app) => app.status !== "rejected");
         filteredData = filteredData.filter((app) => app.programId === programId);
-        if (userRole === "mentee") {
-          filteredData = filteredData.filter((app) => app.menteeName === CURRENT_MENTEE_NAME);
-        } else {
-          filteredData = filteredData.filter((app) => app.tutorName === CURRENT_TUTOR_NAME);
+        if (user?.fullName) {
+          if (userRole === "mentee") {
+            filteredData = filteredData.filter((app) => app.menteeName === user.fullName);
+          } else {
+            filteredData = filteredData.filter((app) => app.tutorName === user.fullName);
+          }
         }
 
         const now = new Date();
@@ -441,7 +446,7 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
       }
     };
     void loadMeets();
-  }, [programId, userRole]);
+  }, [programId, userRole, user]);
 
   if (loading) {
     return <Loading />;
@@ -561,6 +566,7 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
           return {
             ...meet,
             topic: data.topic,
+            describe: data.describe,
             date: data.date,
             beginTime: data.beginTime,
             endTime: data.endTime,
@@ -573,6 +579,10 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
       setMeets(updatedMeets);
       toast.success("Đã cập nhật thông tin lịch hẹn.");
     } else {
+      const currentProgram = programs.find((p) => p.id === programId);
+      const CURRENT_TUTOR_NAME = currentProgram?.mainTutor.name ?? "Giảng viên";
+      const CURRENT_MENTEE_NAME = user?.fullName ?? "Học viên";
+
       const newApp: Meet = {
         id: Date.now(),
         programId: programId,
@@ -766,7 +776,10 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
 
           {/* Right Side: Start Meeting Button */}
           <button
-            onClick={() => toast.info("Bắt đầu cuộc họp")}
+            onClick={() => {
+              //toast.info("Đang chuyển hướng đến Google Meet...");
+              window.open("https://meet.google.com/sah-uyrf-fqn", "_blank");
+            }}
             className='inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700'
             title='Bắt đầu cuộc họp'
           >
@@ -1025,7 +1038,10 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
                 </div>
 
                 <button
-                  onClick={() => toast.info("Bắt đầu cuộc họp")}
+                  onClick={() => {
+                    //toast.info("Đang chuyển hướng đến Google Meet...");
+                    window.open("https://meet.google.com/sah-uyrf-fqn", "_blank");
+                  }}
                   className={`mt-2 inline-flex w-full justify-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm ${
                     userRole === "mentee" ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"
                   }`}
