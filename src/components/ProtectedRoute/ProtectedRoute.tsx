@@ -62,7 +62,7 @@ export default function ProtectedRoute({ allowedRoles, redirectTo = path.login }
 function getUserHomePath(role: UserRole): string {
   switch (role) {
     case "student":
-      return path.mentee;
+      return path.student;
     case "tutor":
       return path.tutor;
     case "admin":

@@ -1,5 +1,4 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import path from "@/constants/path";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { LogOut, User } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
@@ -12,14 +11,19 @@ import iconDropdown from "@/assets/images/vector13.png";
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { logout, user: authUser } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const navigation = [
-    { label: "Trang chủ", path: path.home, active: true },
-    { label: "Chương trình", path: path.menteePrograms, active: false },
-    { label: "Chương trình của tôi", path: path.menteeMyProgram, active: false },
+    { label: "Trang chủ", path: "/", active: true },
+    {
+      label: "Chương trình",
+      path: authUser?.role === "tutor" ? "/tutor/programs" : "/mentee/programs",
+      active: false,
+    },
+    { label: "Chương trình của tôi", path: "/my-programs", active: false },
     { label: "Tài liệu", path: "/documents", active: false },
   ];
 
@@ -66,6 +70,25 @@ const Header = () => {
 
   const profilePath = "..."; // Nhập đường dẫn trang profile vào (trường hhopwj chỉ có 1 profile.tsx, không phân profile theo role)
 
+  // Helper function to check if a path is active
+  const isPathActive = (itemPath: string, itemLabel: string) => {
+    const currentPath = location.pathname;
+
+    // Exact match for home page - only active when exactly at "/"
+    if (itemPath === "/") {
+      return currentPath === "/";
+    }
+
+    // Special handling for "Chương trình" tab - should be active for both /mentee/programs and /tutor/programs
+    if (itemLabel === "Chương trình") {
+      return currentPath.startsWith("/mentee/programs") || currentPath.startsWith("/tutor/programs");
+    }
+
+    // For other paths, check if current path starts with the item path
+    // This allows /mentee/programs to be active for both /mentee/programs and /mentee/programs/1
+    return currentPath.startsWith(itemPath);
+  };
+
   return (
     <header className='sticky top-0 z-50 w-full border-b border-gray-200 bg-white shadow-sm'>
       <div className='container mx-auto flex h-16 items-center justify-between px-4'>
@@ -79,19 +102,21 @@ const Header = () => {
 
           {/* Navigation */}
           <nav className='hidden items-center gap-2 md:flex'>
-            {navigation.map((item, index) => (
-              <NavLink
-                key={index}
-                to={item.path}
-                className={({ isActive }) =>
-                  `rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+            {navigation.map((item, index) => {
+              const isActive = isPathActive(item.path, item.label);
+
+              return (
+                <NavLink
+                  key={index}
+                  to={item.path}
+                  className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                     isActive ? "bg-blue-50 text-blue-600" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
-                  }`
-                }
-              >
-                {item.label}
-              </NavLink>
-            ))}
+                  }`}
+                >
+                  {item.label}
+                </NavLink>
+              );
+            })}
           </nav>
         </div>
 

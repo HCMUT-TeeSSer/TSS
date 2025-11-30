@@ -26,6 +26,8 @@
     "@tailwindcss/vite": "^4.1.17",
     "axios": "^1.13.2",
     "framer-motion": "^12.23.24",
+    "jspdf": "3.0.4",
+    "jspdf-autotable": "5.0.2",
     "lucide-react": "^0.553.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -37,6 +39,7 @@
     "tailwindcss": "^4.1.17",
     "tsx": "4.20.6",
     "vite-tsconfig-paths": "^5.1.4",
+    "xlsx": "0.18.5",
     "zod": "^4.1.12",
     "zustand": "^5.0.8"
   },

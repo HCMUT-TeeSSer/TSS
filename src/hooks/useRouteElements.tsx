@@ -5,6 +5,8 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import RejectedRoute from "@/components/RejectedRoute";
 import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
+import AdminLayout from "@/pages/admin/Layout";
+import AdminWelcome from "@/pages/admin/Home/AdminWelcome";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Login = lazy(() => import("@/pages/Login"));
@@ -66,7 +68,7 @@ export default function useRouteElements() {
           element: <ProtectedRoute allowedRoles={["student"]} />,
           children: [
             {
-              path: path.mentee,
+              path: path.student,
               element: <MainLayout />,
               children: [
                 {
@@ -94,7 +96,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "sessions",
+                  path: "sessions/:programId",
                   element: (
                     <Suspense fallback={<Loading />}>
                       <Sessions />
@@ -102,7 +104,7 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: "program-detail",
+                  path: "program-detail/:programId",
                   element: (
                     <Suspense fallback={<Loading />}>
                       <ProgramDetail />
@@ -137,51 +139,6 @@ export default function useRouteElements() {
             },
           ],
         },
-      ],
-    },
-    // Admin routes - only accessible by admins
-    {
-      path: path.admin,
-      element: <ProtectedRoute allowedRoles={["admin"]} />,
-      children: [
-        {
-          index: true,
-          element: (
-            <Suspense fallback={<Loading />}>
-              <AdminProgram />
-            </Suspense>
-          ),
-        },
-        {
-          path: "programs",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <AdminProgram />
-            </Suspense>
-          ),
-        },
-        {
-          path: "tutors",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <AdminTutor />
-            </Suspense>
-          ),
-        },
-        {
-          path: "mentees",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <AdminMentee />
-            </Suspense>
-          ),
-        },
-      ],
-    },
-    {
-      path: "",
-      element: <MainLayout />,
-      children: [
         // Tutor routes - only accessible by tutors
         {
           path: "",
@@ -189,7 +146,6 @@ export default function useRouteElements() {
           children: [
             {
               path: path.tutor,
-              // element: <MainLayout />, // duplicated layout
               children: [
                 {
                   path: "programs/:programId/competencies",
@@ -227,6 +183,47 @@ export default function useRouteElements() {
             },
           ],
         },
+      ],
+    },
+    // Admin routes - only accessible by admins
+    {
+      path: path.admin,
+      element: <AdminLayout />,
+      children: [
+        {
+          index: true,
+          element: <AdminWelcome />,
+        },
+        {
+          path: "programs",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminProgram />
+            </Suspense>
+          ),
+        },
+        {
+          path: "tutors",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminTutor />
+            </Suspense>
+          ),
+        },
+        {
+          path: "mentees",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminMentee />
+            </Suspense>
+          ),
+        },
+      ],
+    },
+    {
+      path: "",
+      element: <MainLayout />,
+      children: [
         // 404 page - accessible by all authenticated users
         {
           path: "*",
