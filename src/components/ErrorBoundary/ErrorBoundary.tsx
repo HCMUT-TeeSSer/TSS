@@ -1,5 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import path from "@/constants/path";
+import { Home, AlertTriangle } from "lucide-react";
 
 interface Props {
   children?: ReactNode;
@@ -29,20 +30,27 @@ export default class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       // You can render any custom fallback UI
       return (
-        <main className='flex h-screen w-full flex-col items-center justify-center'>
-          <h1 className='text-9xl font-extrabold tracking-widest text-gray-900'>500</h1>
-          <div className='bg-orange absolute rotate-12 rounded px-2 text-sm text-white'>Error!</div>
-          <button className='mt-5' type='button'>
+        <main className='flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-linear-to-br from-red-50 to-orange-50 px-4 py-16'>
+          <div className='relative text-center'>
+            <div className='mb-4 flex justify-center'>
+              <AlertTriangle className='h-20 w-20 text-red-500' />
+            </div>
+            <h1 className='text-9xl font-extrabold tracking-widest text-red-600'>500</h1>
+            <div className='absolute top-8 left-1/2 -translate-x-1/2'>
+              <div className='rotate-12 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-lg'>
+                Internal Error
+              </div>
+            </div>
+            <p className='mt-8 text-lg text-gray-600'>Oops! Đã xảy ra lỗi không mong muốn.</p>
+            <p className='mt-2 text-sm text-gray-500'>Chúng tôi đã ghi nhận sự cố và sẽ khắc phục sớm nhất có thể.</p>
             <a
               href={path.home}
-              className='group relative inline-block text-sm font-medium text-white focus:ring focus:outline-none active:text-orange-500'
+              className='mt-8 inline-flex items-center gap-2 rounded-lg bg-red-600 px-6 py-3 text-base font-medium text-white shadow-lg transition-all hover:bg-red-700 hover:shadow-xl focus:ring-4 focus:ring-red-300 focus:outline-none'
             >
-              <span className='bg-orange absolute inset-0 translate-x-0.5 translate-y-0.5 transition-transform group-hover:translate-x-0 group-hover:translate-y-0' />
-              <span className='relative block border border-current px-8 py-3'>
-                <span>Go Home</span>
-              </span>
+              <Home className='h-5 w-5' />
+              <span>Về trang chủ</span>
             </a>
-          </button>
+          </div>
         </main>
       );
     }

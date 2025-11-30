@@ -290,24 +290,18 @@ export default function useRouteElements() {
         },
       ],
     },
+    // 404 page - accessible by all users
     {
-      path: "",
+      path: "*",
       element: <MainLayout />,
       children: [
-        // 404 page - accessible by all authenticated users
         {
           path: "*",
-          element: <MainLayout />,
-          children: [
-            {
-              index: true,
-              element: (
-                <Suspense fallback={<Loading />}>
-                  <NotFound />
-                </Suspense>
-              ),
-            },
-          ],
+          element: (
+            <Suspense fallback={<Loading />}>
+              <NotFound />
+            </Suspense>
+          ),
         },
       ],
     },
