@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { programs } from "@/data/programs";
 import { tutors } from "@/data/tutors";
 import { ArrowLeft, Star, CheckCircle, Filter, ChevronDown } from "lucide-react";
@@ -103,9 +103,14 @@ type SortOption = "rating" | "availability" | "experience";
 
 const ProgramOverview: React.FC = () => {
   const { programId } = useParams<{ programId: string }>();
+  const navigate = useNavigate();
   const program = programs.find((p) => String(p.id) === programId);
+
   const [sortBy, setSortBy] = useState<SortOption>("rating");
   const [showSortMenu, setShowSortMenu] = useState(false);
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false);
+  const [selectedTutor, setSelectedTutor] = useState<(typeof extendedTutors)[0] | null>(null);
+  const [isRegistering, setIsRegistering] = useState(false);
 
   if (!program) {
     return (
@@ -165,6 +170,33 @@ const ProgramOverview: React.FC = () => {
         return 0;
     }
   });
+
+  const handleRequestTutor = (tutor: (typeof extendedTutors)[0]) => {
+    setSelectedTutor(tutor);
+    setShowRegistrationModal(true);
+  };
+
+  const handleConfirmRegistration = async () => {
+    setIsRegistering(true);
+    await new Promise<void>((resolve) => {
+      setTimeout(resolve, 1500);
+    });
+
+    setIsRegistering(false);
+    setShowRegistrationModal(false);
+    void navigate("/mentee/program-list", {
+      state: {
+        message: "Đăng ký chương trình thành công!",
+        program: program,
+        tutor: selectedTutor,
+      },
+    });
+  };
+
+  const handleCancelRegistration = () => {
+    setShowRegistrationModal(false);
+    setSelectedTutor(null);
+  };
 
   return (
     <div className='min-h-screen bg-gray-50 pb-20 font-sans'>
@@ -318,7 +350,13 @@ const ProgramOverview: React.FC = () => {
                     </div>
                   </div>
 
-                  <button className='mt-6 w-full rounded-xl bg-blue-600 py-3.5 font-bold text-white shadow-lg shadow-blue-200 transition-all hover:bg-blue-700 hover:shadow-blue-300 active:scale-[0.98]'>
+                  <button
+                    onClick={() => {
+                      const tutorsSection = document.getElementById("tutors-section");
+                      tutorsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }}
+                    className='mt-6 w-full rounded-xl bg-blue-600 py-3.5 font-bold text-white shadow-lg shadow-blue-200 transition-all hover:bg-blue-700 hover:shadow-blue-300 active:scale-[0.98]'
+                  >
                     Đăng ký chương trình
                   </button>
 
@@ -335,7 +373,7 @@ const ProgramOverview: React.FC = () => {
         </div>
 
         {/* Available Tutors Section */}
-        <div className='mt-16'>
+        <div id='tutors-section' className='mt-16'>
           <div className='mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between'>
             <div>
               <h2 className='text-2xl font-bold text-gray-900'>Tutor có sẵn</h2>
@@ -436,6 +474,9 @@ const ProgramOverview: React.FC = () => {
                   </div>
 
                   <button
+                    onClick={() => {
+                      if (!isFullyBooked) handleRequestTutor(tutor);
+                    }}
                     disabled={isFullyBooked}
                     className={`mt-6 w-full rounded-xl py-3 text-sm font-bold transition-colors ${
                       isFullyBooked
@@ -451,6 +492,119 @@ const ProgramOverview: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Box xac nhan dang ky */}
+      {showRegistrationModal && selectedTutor && (
+        <div className='bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4'>
+          <div className='w-full max-w-2xl rounded-3xl bg-white shadow-2xl'>
+            {/* Modal Header */}
+            <div className='border-b border-gray-100 p-6'>
+              <h2 className='text-2xl font-bold text-gray-900'>Xác nhận đăng ký chương trình</h2>
+              <p className='mt-1 text-sm text-gray-500'>Vui lòng kiểm tra thông tin trước khi xác nhận</p>
+            </div>
+
+            {/* Modal Content */}
+            <div className='p-6'>
+              {/* Thong tin Program */}
+              <div className='mb-6 rounded-2xl bg-blue-50 p-5'>
+                <p className='mb-2 text-xs font-semibold tracking-wide text-blue-600 uppercase'>Chương trình</p>
+                <h3 className='text-xl font-bold text-gray-900'>{program.title}</h3>
+                <div className='mt-3 flex flex-wrap gap-4 text-sm'>
+                  <div className='flex items-center gap-2'>
+                    <span className='text-gray-500'>Thời lượng:</span>
+                    <span className='font-semibold text-gray-900'>{program.duration}</span>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <span className='text-gray-500'>Cấp độ:</span>
+                    <span className='font-semibold text-gray-900'>{program.difficulty}</span>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <Star className='h-4 w-4 fill-yellow-400 text-yellow-400' />
+                    <span className='font-semibold text-gray-900'>{program.rating}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tutor Info */}
+              <div className='rounded-2xl bg-gray-50 p-5'>
+                <p className='mb-3 text-xs font-semibold tracking-wide text-gray-600 uppercase'>Tutor được chọn</p>
+                <div className='flex items-start gap-4'>
+                  <img
+                    src={selectedTutor.avatarUrl}
+                    alt={selectedTutor.name}
+                    className='h-16 w-16 rounded-full object-cover ring-4 ring-white'
+                  />
+                  <div className='flex-1'>
+                    <h4 className='text-lg font-bold text-gray-900'>{selectedTutor.name}</h4>
+                    <p className='text-sm text-gray-600'>{selectedTutor.title}</p>
+                    <div className='mt-2 flex items-center gap-4 text-sm'>
+                      <div className='flex items-center gap-1'>
+                        <Star className='h-4 w-4 fill-yellow-400 text-yellow-400' />
+                        <span className='font-semibold text-gray-900'>{selectedTutor.rating}</span>
+                        <span className='text-gray-500'>({selectedTutor.totalMentee})</span>
+                      </div>
+                      <div className={`flex items-center gap-1 ${selectedTutor.tagColor}`}>
+                        <div className={`h-2 w-2 rounded-full ${selectedTutor.dotColor}`} />
+                        <span className='font-semibold'>{selectedTutor.tags[0]}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Info Notice */}
+              <div className='mt-6 rounded-xl border border-blue-200 bg-blue-50 p-4'>
+                <p className='text-sm text-blue-800'>
+                  <span className='font-semibold'>Lưu ý:</span> Sau khi xác nhận, bạn sẽ được đăng ký vào chương trình
+                  với tutor đã chọn.
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className='flex gap-3 border-t border-gray-100 p-6'>
+              <button
+                onClick={handleCancelRegistration}
+                disabled={isRegistering}
+                className='flex-1 rounded-xl border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50'
+              >
+                Hủy
+              </button>
+              <button
+                onClick={() => {
+                  void handleConfirmRegistration();
+                }}
+                disabled={isRegistering}
+                className='flex-1 rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-200 transition-all hover:bg-blue-700 hover:shadow-blue-300 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50'
+              >
+                {isRegistering ? (
+                  <span className='flex items-center justify-center gap-2'>
+                    <svg className='h-5 w-5 animate-spin' viewBox='0 0 24 24'>
+                      <circle
+                        className='opacity-25'
+                        cx='12'
+                        cy='12'
+                        r='10'
+                        stroke='currentColor'
+                        strokeWidth='4'
+                        fill='none'
+                      />
+                      <path
+                        className='opacity-75'
+                        fill='currentColor'
+                        d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                      />
+                    </svg>
+                    Đang xử lý...
+                  </span>
+                ) : (
+                  "Xác nhận đăng ký"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
