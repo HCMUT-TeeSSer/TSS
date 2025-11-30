@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import path from "@/constants/path";
 import Logo from "./../logo.png";
 import { ChevronDown, BookOpen, Mail, Bell, Users, GraduationCap, LogOut, User } from "lucide-react";
@@ -33,11 +33,12 @@ function HeaderNotifications({ bellCount = 3, mailCount = 5 }: { bellCount?: num
 function AdminUserMenu() {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
 
   const handleLogout = () => {
     logout();
-    window.location.href = "/login";
+    void navigate(path.login, { replace: true });
   };
 
   useEffect(() => {
