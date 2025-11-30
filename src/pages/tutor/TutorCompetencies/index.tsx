@@ -1,8 +1,13 @@
 import { useMemo, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import styles from "./TutorCompetencies.module.css";
 import { programs } from "../../../data/programs";
 import { sampleUsers } from "@/utils/auth";
+import path from "@/constants/path";
+import { getGrade, getGradeLabel, getGradeColor, calculateAverageScore } from "@/utils/grading";
+import { Download, Edit, FileText } from "lucide-react";
+import ProgramBreadcrumb from "@/components/Program/ProgramBreadcrumb";
+import ProgramHeaderInfo from "@/components/Program/ProgramHeaderInfo";
+import ProgramTabs from "@/components/Program/ProgramTabs";
 
 const TutorCompetencies = () => {
   const { programId } = useParams();
@@ -43,320 +48,206 @@ const TutorCompetencies = () => {
   const scores = useMemo(() => (selectedStudent ? selectedStudent.scores : []), [selectedStudent]);
   const chapters = program?.chapters ?? [];
 
-  const averageScore = useMemo(() => {
-    if (!scores.length) return 0;
-    const sum = scores.reduce((a, b) => a + b, 0);
-    return sum / scores.length;
-  }, [scores]);
-
+  const averageScore = useMemo(() => calculateAverageScore(scores), [scores]);
   const overallScore = (averageScore / 10).toFixed(1);
 
-  const getGrade = (score: number) => {
-    if (score >= 85) return "A+";
-    if (score >= 80) return "A";
-    if (score >= 70) return "B+";
-    if (score >= 65) return "B";
-    if (score >= 50) return "C";
-    return "F";
-  };
-
-  const getGradeLabel = (score: number) => {
-    if (score >= 85) return "Xuất sắc";
-    if (score >= 80) return "Giỏi";
-    if (score >= 65) return "Khá";
-    if (score >= 50) return "Trung bình";
-    return "Yếu";
-  };
-
   const getSkillAttributes = (s: number) => {
-    if (s >= 85) return { label: "Xuất sắc", color: "#22c55e", badgeClass: styles.scoreBadgeGreen };
-    if (s >= 80) return { label: "Giỏi", color: "#22c55e", badgeClass: styles.scoreBadgeGreen };
-    if (s >= 65) return { label: "Khá", color: "#eab308", badgeClass: styles.scoreBadgeYellow };
-    if (s >= 50) return { label: "Trung bình", color: "#f97316", badgeClass: styles.scoreBadgeOrange };
-    return { label: "Yếu", color: "#ef4444", badgeClass: styles.scoreBadgeRed };
+    const label = getGradeLabel(s);
+    const color = getGradeColor(s);
+    return { label, color };
   };
+
+  const programID = program?.id ?? 1;
 
   if (!program) {
-    return <div className={styles.trangNhGiNngLcCaTu}>Program not found</div>;
+    return <div className='min-h-screen bg-gray-50 p-8 text-center'>Program not found</div>;
   }
 
+  const programTitle = program.title;
+
   return (
-    <div className={styles.trangNhGiNngLcCaTu}>
-      <div className={styles.body}>
-        {/* Breadcrumbs */}
-        <div className={styles.section}>
-          <div className={styles.div}>
-            <div className={styles.nav}>
-              <div className={styles.ol}>
-                <div className={styles.li}>
-                  <div className={styles.div2}>
-                    <div className={styles.chngTrnhCa}>Chương trình của tôi</div>
-                  </div>
+    <>
+      <div className='min-h-screen bg-gray-50 pb-12'>
+        <ProgramBreadcrumb backLink={path.tutorProgramList} currentTitle={programTitle} />
+
+        <div className='container mx-auto mt-6 px-4'>
+          <div className='overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm'>
+            <ProgramHeaderInfo
+              title={programTitle}
+              subtitle='Quản lý năng lực sinh viên'
+              statusLabel='Đang hoạt động'
+              metaText={`${String(program.totalMentee)} sinh viên`}
+              progress={undefined}
+              actions={
+                <>
+                  <button className='flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50'>
+                    <Download className='h-4 w-4' /> Xuất tất cả
+                  </button>
+                  <button className='flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700'>
+                    <Edit className='h-4 w-4' /> Đánh giá hàng loạt
+                  </button>
+                  <button className='flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700'>
+                    <FileText className='h-4 w-4' /> Phân tích
+                  </button>
+                </>
+              }
+            />
+
+            <ProgramTabs activeTab='do' programId={programID} userRole='tutor' />
+          </div>
+
+          <div className='mt-6'>
+            <div className='grid grid-cols-1 items-start gap-8 lg:grid-cols-3'>
+              {/* LEFT SIDEBAR - Student List */}
+              <div className='rounded-xl border border-slate-200 bg-white p-6 shadow-sm'>
+                <div className='mb-4 flex items-center justify-between'>
+                  <h3 className='text-lg font-semibold text-slate-900'>Sinh viên</h3>
+                  <select
+                    value={selectedStudentId}
+                    onChange={(e) => {
+                      setSelectedStudentId(e.target.value);
+                    }}
+                    className='rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none'
+                    aria-label='Chọn sinh viên'
+                  >
+                    {students.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                <img className={styles.liIcon} alt='' />
-                <div className={styles.li2}>
-                  <div className={styles.lpTrnhPython}>{program.title}</div>
+
+                <div className='space-y-2'>
+                  {students.map((s) => {
+                    const avg = s.scores.reduce((a, b) => a + b, 0) / s.scores.length;
+                    const studentScore = (avg / 10).toFixed(1);
+
+                    return (
+                      <div
+                        key={s.id}
+                        className={`cursor-pointer rounded-lg border p-3 transition-all hover:shadow-sm ${
+                          s.id === selectedStudentId
+                            ? "border-blue-500 bg-blue-50"
+                            : "border-slate-200 bg-white hover:border-slate-300"
+                        }`}
+                        onClick={() => {
+                          setSelectedStudentId(s.id);
+                        }}
+                      >
+                        <div className='flex items-center gap-3'>
+                          <img
+                            className='h-10 w-10 rounded-full object-cover'
+                            alt={s.name}
+                            src={`https://i.pravatar.cc/150?u=${s.id}`}
+                          />
+                          <div className='flex-1'>
+                            <div className='font-medium text-slate-900'>{s.name}</div>
+                            <div className='text-sm text-slate-500'>Điểm: {studentScore}/10</div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Header */}
-        <div className={styles.section2}>
-          <div className={styles.div27}>
-            <div className={styles.div28}>
-              <div className={styles.div29}>
-                <div className={styles.div30}>
-                  {/* <img className={styles.imgIcon6} alt='' src={program.icon} /> TODO: Map icon properly */}
-                  <div className={styles.div31}>
-                    <b className={styles.nhGiNng}>Đánh Giá Năng Lực Sinh Viên</b>
-                    <div className={styles.lpTrnhPython2}>{program.title} - Bảng điều khiển Mentor</div>
-                    <div className={styles.div32}>
-                      <div className={styles.span}>
-                        <div className={styles.sinhVinAng}>{program.totalMentee} Sinh viên đang hoạt động</div>
-                      </div>
-                      <div className={styles.tinChng}>Tiến độ chương trình: {program.progress}%</div>
+              {/* MAIN CONTENT - Competency Details */}
+              <div className='flex flex-col gap-6 lg:col-span-2'>
+                {/* Header */}
+                <div className='rounded-xl border border-slate-200 bg-white p-6 shadow-sm'>
+                  <div className='flex items-center justify-between'>
+                    <div>
+                      <h2 className='text-xl font-bold text-slate-900'>Đánh giá chi tiết</h2>
+                      <p className='mt-1 text-sm text-slate-600'>{selectedStudent?.name}</p>
+                    </div>
+                    <div className='flex gap-2'>
+                      <button className='flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50'>
+                        <Edit className='h-4 w-4' />
+                        Sửa đánh giá
+                      </button>
+                      <button className='flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700'>
+                        <FileText className='h-4 w-4' />
+                        Mới
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Performance Cards */}
+                  <div className='mt-6 grid grid-cols-1 gap-4 md:grid-cols-3'>
+                    <div className='rounded-lg border border-slate-200 bg-gradient-to-br from-blue-50 to-white p-4'>
+                      <div className='text-3xl font-bold text-blue-600'>{overallScore}</div>
+                      <div className='mt-1 text-sm font-medium text-slate-700'>Điểm tổng thể</div>
+                      <div className='mt-1 text-xs text-slate-500'>trên 10</div>
+                    </div>
+
+                    <div className='rounded-lg border border-slate-200 bg-gradient-to-br from-emerald-50 to-white p-4'>
+                      <div className='text-3xl font-bold text-emerald-600'>{getGrade(averageScore)}</div>
+                      <div className='mt-1 text-sm font-medium text-slate-700'>Điểm số</div>
+                      <div className='mt-1 text-xs text-slate-500'>{getGradeLabel(averageScore)}</div>
+                    </div>
+
+                    <div className='rounded-lg border border-slate-200 bg-gradient-to-br from-purple-50 to-white p-4'>
+                      <div className='text-3xl font-bold text-purple-600'>92%</div>
+                      <div className='mt-1 text-sm font-medium text-slate-700'>Thứ hạng lớp</div>
+                      <div className='mt-1 text-xs text-slate-500'>Top 8% lớp học</div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className={styles.div35}>
-                <div className={styles.button}>
-                  <img className={styles.iIcon} alt='' />
-                  <div className={styles.xutTtC}>Xuất tất cả</div>
-                </div>
-                <div className={styles.button2}>
-                  <img className={styles.iIcon2} alt='' />
-                  <div className={styles.nhGiHng}>Đánh giá hàng loạt</div>
-                </div>
-                <div className={styles.button3}>
-                  <img className={styles.iIcon3} alt='' />
-                  <div className={styles.phnTch}>Phân tích</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Tabs */}
-        <div className={styles.section3}>
-          <div className={styles.div36}>
-            <div className={styles.nav2}>
-              <div className={styles.button4}>
-                <img className={styles.iIcon4} alt='' />
-                <div className={styles.niDung}>Nội dung</div>
-              </div>
-              <div className={styles.button5}>
-                <img className={styles.iIcon5} alt='' />
-                <div className={styles.buiTVn}>Buổi tư vấn</div>
-              </div>
-              <div className={styles.button6}>
-                <img className={styles.iIcon4} alt='' />
-                <div className={styles.lchHn}>Lịch hẹn</div>
-              </div>
-              <div className={styles.button7}>
-                <img className={styles.iIcon7} alt='' />
-                <div className={styles.nngLc}>Năng lực</div>
-              </div>
-            </div>
-          </div>
-        </div>
+                {/* Competency List */}
+                <div className='space-y-4'>
+                  <h3 className='text-lg font-semibold text-slate-900'>Chi tiết năng lực</h3>
 
-        {/* Main Content */}
-        <div className={styles.section4}>
-          <div className={styles.div37}>
-            <div className={styles.div38}>
-              <div className={styles.div39}>
-                <div className={styles.div40}>
-                  <div className={styles.div41}>
-                    <div className={styles.div42}>
-                      <div className={styles.sinhVin}>Sinh viên</div>
-                      <div className={styles.div43}>
-                        <img className={styles.buttonIcon} alt='' />
-                        <select
-                          className={styles.select}
-                          value={selectedStudentId}
-                          onChange={(e) => {
-                            setSelectedStudentId(e.target.value);
-                          }}
-                          style={{
-                            border: "none",
-                            background: "transparent",
-                            fontSize: "14px",
-                            fontWeight: 500,
-                            color: "#374151",
-                          }}
-                        >
-                          {students.map((s) => (
-                            <option key={s.id} value={s.id}>
-                              {s.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
+                  {chapters.map((chapter, index) => {
+                    const score = scores[index] || 0;
+                    const score10 = (score / 10).toFixed(1);
+                    const { label, color } = getSkillAttributes(score);
 
-                    {/* Student List Sidebar (Simplified for now to just show selected or list) */}
-                    <div className={styles.div44}>
-                      {students.map((s) => (
-                        <div
-                          key={s.id}
-                          className={styles.div45}
-                          style={{
-                            backgroundColor: s.id === selectedStudentId ? "#f3f4f6" : "transparent",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            setSelectedStudentId(s.id);
-                          }}
-                        >
-                          <div className={styles.div46}>
-                            <img className={styles.imgIcon} alt='' src={`https://i.pravatar.cc/150?u=${s.id}`} />
-                            <div className={styles.div47}>
-                              <div className={styles.div48}>
-                                <div className={styles.sarahJohnson}>{s.name}</div>
-                              </div>
-                              <div className={styles.div50}>
-                                <div className={styles.div53}>
-                                  {/* Calculate average for this student */}
-                                  {(() => {
-                                    const avg = s.scores.reduce((a, b) => a + b, 0) / s.scores.length;
-                                    return (avg / 10).toFixed(1);
-                                  })()}
-                                </div>
-                              </div>
+                    return (
+                      <div
+                        key={index}
+                        className='rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md'
+                        style={{ borderLeft: `4px solid ${color}` }}
+                      >
+                        <div className='flex items-start justify-between'>
+                          <div className='flex-1'>
+                            <h4 className='text-base font-semibold text-slate-900'>{chapter}</h4>
+                            <p className='mt-1 text-sm text-slate-600'>Đánh giá năng lực</p>
+                          </div>
+                          <div className='text-right'>
+                            <div className='text-xl font-bold text-slate-900'>{score10}/10</div>
+                            <div className='mt-1 text-sm font-medium' style={{ color: color }}>
+                              {label}
                             </div>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
 
-                {/* Detail View */}
-                <div className={styles.div95}>
-                  <div className={styles.div96}>
-                    <div className={styles.div97}>
-                      <div className={styles.div98}>
-                        <b className={styles.nhGiChi}>Đánh giá chi tiết</b>
-                        <div className={styles.span2}>
-                          <div className={styles.sarahJohnson2}>{selectedStudent?.name}</div>
+                        {/* Progress Bar */}
+                        <div className='mt-4 h-2 w-full overflow-hidden rounded-full bg-slate-100'>
+                          <div
+                            className='h-full rounded-full transition-all'
+                            style={{ width: `${String(score)}%`, backgroundColor: color }}
+                          />
                         </div>
-                      </div>
-                      <div className={styles.div99}>
-                        <div className={styles.button8}>
-                          <img className={styles.iIcon8} alt='' />
-                          <div className={styles.saNhGi}>Sửa đánh giá</div>
-                        </div>
-                        <div className={styles.button9}>
-                          <img className={styles.iIcon9} alt='' />
-                          <div className={styles.mi}>Mới</div>
-                        </div>
-                      </div>
-                    </div>
 
-                    {/* Performance Cards */}
-                    <div className={styles.div100}>
-                      <div className={styles.div101}>
-                        <div className={styles.div102}>
-                          <div className={styles.div103}>
-                            <b className={styles.b}>{overallScore}</b>
-                          </div>
-                          <div className={styles.div104}>
-                            <div className={styles.imTngTh}>Điểm tổng thể</div>
-                          </div>
-                          <div className={styles.div105}>
-                            <div className={styles.hiuSutXut}>trên 10</div>
-                          </div>
-                          <img className={styles.divIcon6} alt='' />
-                        </div>
-                      </div>
-                      <div className={styles.div106}>
-                        <div className={styles.div107}>
-                          <div className={styles.div108}>
-                            <b className={styles.a}>{getGrade(averageScore)}</b>
-                          </div>
-                          <div className={styles.div104}>
-                            <div className={styles.imTngTh}>Điểm số</div>
-                          </div>
-                          <div className={styles.div105}>
-                            <div className={styles.hiuSutXut}>{getGradeLabel(averageScore)}</div>
+                        {/* Mentor Notes */}
+                        <div className='mt-4 rounded-lg bg-slate-50 p-3'>
+                          <div className='text-xs font-semibold text-slate-700'>Mentor Notes:</div>
+                          <div className='mt-1 text-xs text-slate-600'>
+                            Nhận xét của mentor về kỹ năng này sẽ hiển thị ở đây.
                           </div>
                         </div>
                       </div>
-                      <div className={styles.div112}>
-                        <div className={styles.div107}>
-                          <div className={styles.div114}>
-                            <b className={styles.b2}>92%</b>
-                          </div>
-                          <div className={styles.div104}>
-                            <div className={styles.imTngTh}>Thứ hạng lớp</div>
-                          </div>
-                          <div className={styles.div105}>
-                            <div className={styles.hiuSutXut}>Top 8% lớp học</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Competency List */}
-                    <div className={styles.div118}>
-                      <div className={styles.h3}>
-                        <div className={styles.nhGiChi2}>Đánh giá chi tiết</div>
-                      </div>
-                      <div className={styles.div119}>
-                        {chapters.map((chapter, index) => {
-                          const score = scores[index] || 0;
-                          const score10 = (score / 10).toFixed(1);
-                          const { label, color } = getSkillAttributes(score);
-
-                          return (
-                            <div className={styles.div120} key={index} style={{ borderLeft: `4px solid ${color}` }}>
-                              <div className={styles.div121}>
-                                <div className={styles.div122}>
-                                  <img className={styles.divIcon7} alt='' />
-                                  <div className={styles.div123}>
-                                    <div className={styles.ngnNgPython}>{chapter}</div>
-                                    <div className={styles.ccKhiNim}>Đánh giá năng lực</div>
-                                  </div>
-                                </div>
-                                <div className={styles.div124}>
-                                  <div className={styles.div125}>
-                                    <b className={styles.b3}>{score10}/10</b>
-                                  </div>
-                                  <div className={styles.div126}>
-                                    <div className={styles.xutSc} style={{ color: color }}>
-                                      {label}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className={styles.div127}>
-                                <div
-                                  className={styles.div128}
-                                  style={{ width: `${String(score)}%`, backgroundColor: color }}
-                                />
-                              </div>
-                              <div className={styles.div129}>
-                                <b className={styles.mentorNotes}>Mentor Notes:</b>
-                                <div className={styles.hiuBitSu}>
-                                  Nhận xét của mentor về kỹ năng này sẽ hiển thị ở đây.
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

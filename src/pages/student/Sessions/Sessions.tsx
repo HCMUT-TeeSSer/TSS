@@ -2,14 +2,17 @@ import React from "react";
 import { CalendarIcon, ClockIcon, PlayIcon, BellIcon, ArrowDownTrayIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 import SessionsData from "@/data/sessions.json";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import path from "@/constants/path";
 
-import { Save, Share2, FileDown, ChevronRight, Clock, Star, Video, Eye, FileText } from "lucide-react";
+import { Bookmark, CornerUpRight, Download, Eye, FileText, Star, Video } from "lucide-react";
 
 // dữ liệu chương trình
 import { programs } from "@/data/programs";
 import { toast } from "react-toastify";
+import ProgramBreadcrumb from "@/components/Program/ProgramBreadcrumb";
+import ProgramHeaderInfo from "@/components/Program/ProgramHeaderInfo";
+import ProgramTabs from "@/components/Program/ProgramTabs";
 
 const sessions = SessionsData as {
   id: number;
@@ -24,7 +27,6 @@ const sessions = SessionsData as {
 }[];
 
 export default function Sessions() {
-  const navigate = useNavigate();
   const { programId } = useParams<{ programId?: string }>();
 
   // lấy id từ URL /student/session/:programID, mặc định = 1
@@ -32,29 +34,9 @@ export default function Sessions() {
   const program = programs.find((p) => p.id === programID);
 
   const programTitle = program?.title ?? "Lập trình Python Nâng cao";
-  const programDepartment = program?.department ?? program?.category ?? "Khoa học máy tính";
-  const programDuration = program?.duration ?? "12 tuần";
-  const programRating = program?.rating ?? 4.9;
-  const programDifficulty = program?.difficulty ?? "Nâng cao";
 
   // chỉ khóa Python (id = 1) mới có dữ liệu buổi tư vấn mock
   const isPythonProgram = program?.id === 1;
-
-  // Tab hiện tại
-  const currentTab: "overview" | "sessions" | "meet" | "skills" = "sessions";
-
-  const tabs = [
-    {
-      id: "overview" as const,
-      label: "Nội dung",
-      onClick: () => navigate(path.studentMyProgramDetail.replace(":programId", String(programID))),
-    },
-    {
-      id: "sessions" as const,
-      label: "Buổi tư vấn",
-      onClick: () => navigate(path.studentSessions.replace(":programId", String(programID))),
-    },
-  ];
 
   const MEET_URL = "https://meet.google.com/tow-zzir-waj";
 
@@ -129,364 +111,302 @@ export default function Sessions() {
   };
 
   return (
-    <div className='min-h-screen bg-slate-50'>
-      {/* BREADCRUMB */}
-      <div className='border-b bg-white'>
-        <div className='mx-auto flex max-w-7xl items-center px-6 py-3 text-sm text-slate-500'>
-          <button
-            type='button'
-            onClick={() => {
-              void navigate(path.studentPrograms);
-            }}
-            className='hover:text-blue-600'
-          >
-            Chương trình học
-          </button>
-          <ChevronRight className='mx-2 h-4 w-4 text-slate-400' />
-          <span className='truncate font-medium text-slate-900'>{programTitle}</span>
-        </div>
-      </div>
+    <>
+      <div className='min-h-screen bg-gray-50 pb-12'>
+        <ProgramBreadcrumb backLink={path.studentPrograms} currentTitle={programTitle} />
 
-      <div className='mx-auto max-w-7xl px-6 pt-6 pb-10'>
-        {/* HEADER + TABS */}
-        <div className='rounded-2xl border border-slate-100 bg-white p-6 shadow-sm'>
-          <div className='flex flex-col justify-between gap-4 md:flex-row md:items-start'>
-            {/* LEFT: icon + title */}
-            <div className='flex items-start gap-4'>
-              <div className='flex h-14 w-14 items-center justify-center rounded-xl bg-blue-50 text-2xl font-semibold text-blue-600'>
-                <Video className='h-8 w-8' />
-              </div>
-              <div>
-                <h1 className='text-2xl font-bold text-slate-900'>{programTitle}</h1>
-                <div className='mt-1 flex flex-wrap items-center gap-2 text-sm text-slate-500'>
-                  <span>{programDepartment}</span>
-                  <span>•</span>
-                  <span>TS. Trần Minh Đức</span>
-                </div>
-              </div>
-            </div>
+        <div className='container mx-auto mt-6 px-4'>
+          {/* Container trắng bao quanh Header và Tabs */}
+          <div className='overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm'>
+            {/* Header Info */}
+            <ProgramHeaderInfo
+              title={programTitle}
+              subtitle={`với ${program?.mainTutor.name ?? "TS. Trần Minh Đức"}`}
+              statusLabel='Đang hoạt động'
+              metaText={`Tiến độ: ${String(program?.progress ?? 65)}%`}
+              progress={program?.progress ?? 65}
+              actions={
+                <>
+                  <button className='flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700'>
+                    <Bookmark className='h-4 w-4' /> Lưu chương trình
+                  </button>
+                  <button className='flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700'>
+                    <CornerUpRight className='h-4 w-4' /> Chia sẻ
+                  </button>
+                  <button className='flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50'>
+                    <Download className='h-4 w-4' /> Xuất file
+                  </button>
+                </>
+              }
+            />
 
-            {/* RIGHT: actions */}
-            <div className='flex flex-wrap items-center gap-2'>
-              <button className='flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700'>
-                <Save className='h-4 w-4' />
-                Lưu chương trình
-              </button>
-              <button className='flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600'>
-                <Share2 className='h-4 w-4' />
-                Chia sẻ
-              </button>
-              <button className='flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black hover:bg-gray-50'>
-                <FileDown className='h-4 w-4' />
-                Xuất file
-              </button>
-            </div>
+            {/* Tabs */}
+            <ProgramTabs activeTab='docs' programId={programID} />
           </div>
 
-          {/* META + PROGRESS FULL-WIDTH */}
-          <div className='mt-4'>
-            <div className='flex items-center justify-between text-xs text-slate-600'>
-              <div className='flex flex-wrap items-center gap-4'>
-                <span className='flex items-center gap-1'>
-                  <Clock className='h-4 w-4 text-slate-500' />
-                  {programDuration}
-                </span>
-                <span className='flex items-center gap-1'>
-                  <Star className='h-4 w-4 fill-yellow-400 text-yellow-400' />
-                  {programRating.toFixed(1)}
-                </span>
-                <span className='rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium'>
-                  {programDifficulty}
-                </span>
-              </div>
-
-              <span className='ml-4 font-semibold whitespace-nowrap text-slate-700'>
-                Tiến độ: <span className='text-slate-600'>65%</span>
-              </span>
-            </div>
-
-            <div className='mt-2 h-1.5 w-full rounded-full bg-slate-100'>
-              <div className='h-full rounded-full bg-blue-600' style={{ width: "65%" }} />
-            </div>
-          </div>
-
-          {/* TABS */}
-          <div className='mt-6 flex gap-8 border-b border-slate-100'>
-            {tabs.map((tab) => {
-              const active = currentTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type='button'
-                  onClick={() => {
-                    void tab.onClick();
-                  }}
-                  className={`relative pb-3 text-sm font-medium transition-colors ${
-                    active ? "text-blue-600" : "text-slate-500 hover:text-slate-700"
-                  }`}
-                >
-                  {tab.label}
-                  {active && <span className='absolute inset-x-0 bottom-0 h-0.5 rounded-t-full bg-blue-600' />}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* MAIN CONTENT */}
-        <div className='mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-3'>
-          {/* LEFT – session list */}
-          <div className='flex flex-col gap-6 lg:col-span-2'>
-            {/* FILTER BAR + BUTTON TRÊN CÙNG (đều nằm bên phải) */}
-            <div className='mb-2 flex items-center justify-end gap-3'>
-              <select
-                value={filter}
-                aria-label='Lọc buổi tư vấn'
-                onChange={(e) => {
-                  setFilter(e.target.value as FilterType);
-                }}
-                className='h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none'
-              >
-                <option value='upcoming'>Buổi sắp tới</option>
-                <option value='completed'>Buổi đã hoàn thành</option>
-                <option value='all'>Tất cả buổi tư vấn</option>
-              </select>
-
-              <button
-                type='button'
-                className='inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700'
-                onClick={handleOpenRequestModal}
-              >
-                <PlusIcon className='h-4 w-4' />
-                Yêu cầu buổi tư vấn mới
-              </button>
-            </div>
-
-            {isPythonProgram ? (
-              filteredSessions.length > 0 ? (
-                filteredSessions.map((s) => {
-                  const done = isSessionCompleted(s.status);
-                  const isRunning = s.status.toLowerCase().includes("đang diễn ra");
-
-                  return (
-                    <div
-                      key={s.id}
-                      className='rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md'
-                    >
-                      {/* TITLE + STATUS + ACTION ICONS */}
-                      <div className='flex items-start justify-between'>
-                        <div>
-                          <div className='flex items-center gap-3'>
-                            <h2 className='text-base font-semibold text-slate-900'>{s.topic}</h2>
-                            <span
-                              className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-                                done
-                                  ? "bg-emerald-50 text-emerald-700"
-                                  : isRunning
-                                    ? "bg-blue-50 text-blue-600"
-                                    : "bg-slate-100 text-slate-600"
-                              }`}
-                            >
-                              {s.status}
-                            </span>
-                          </div>
-                          <p className='mt-1 text-sm text-slate-600'>{s.description}</p>
-                        </div>
-
-                        <div className='mt-1 flex items-center gap-2 text-slate-400'>
-                          <button
-                            type='button'
-                            aria-label='Xem chi tiết'
-                            className='rounded-full p-1 hover:bg-slate-100 hover:text-slate-600'
-                          >
-                            <Eye className='h-4 w-4' />
-                          </button>
-                          <button
-                            type='button'
-                            aria-label='Xuất file'
-                            className='rounded-full p-1 hover:bg-slate-100 hover:text-slate-600'
-                          >
-                            <ArrowDownTrayIcon className='h-4 w-4' />
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* INFO ROW */}
-                      <div className='mt-3 flex flex-wrap items-center gap-6 text-sm text-slate-600'>
-                        <div className='flex items-center gap-1'>
-                          <CalendarIcon className='h-4 w-4 text-slate-500' />
-                          <span>{s.date}</span>
-                        </div>
-
-                        <div className='flex items-center gap-1'>
-                          <ClockIcon className='h-4 w-4 text-slate-500' />
-                          <span>{s.time}</span>
-                        </div>
-
-                        <div className='flex items-center gap-1'>
-                          <ClockIcon className='h-4 w-4 text-slate-500' />
-                          <span>{s.duration} phút</span>
-                        </div>
-                      </div>
-
-                      {/* DIVIDER */}
-                      <div className='mt-3 border-t border-slate-100' />
-
-                      {/* BOTTOM ROW */}
-                      {done ? (
-                        <div className='mt-3 flex items-center justify-between text-sm'>
-                          <div className='flex items-center gap-2'>
-                            <div className='flex h-7 w-7 items-center justify-center rounded-full bg-slate-200'>
-                              {s.avatar}
-                            </div>
-                            <span className='text-sm text-slate-700'>với {s.tutor}</span>
-                          </div>
-
-                          <div className='flex items-center gap-4 text-xs font-medium'>
-                            <button type='button' className='flex items-center gap-1 text-blue-600 hover:text-blue-700'>
-                              <Star className='h-4 w-4 fill-blue-600 text-blue-600' />
-                              <span>Đánh giá</span>
-                            </button>
-                            <button type='button' className='flex items-center gap-1 text-blue-600 hover:text-blue-700'>
-                              <FileText className='h-4 w-4' />
-                              <span>Ghi chú</span>
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className='mt-3 flex items-center justify-between text-sm'>
-                          <div className='flex items-center gap-2'>
-                            <div className='flex h-7 w-7 items-center justify-center rounded-full bg-slate-200'>
-                              {s.avatar}
-                            </div>
-                            <span className='text-sm text-slate-700'>với {s.tutor}</span>
-                          </div>
-
-                          <div className='flex items-center gap-4'>
-                            {isRunning ? (
-                              <button
-                                type='button'
-                                className='flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700'
-                                onClick={handleJoinMeet}
-                              >
-                                <PlayIcon className='h-4 w-4' />
-                                Tham gia ngay
-                              </button>
-                            ) : (
-                              <button
-                                type='button'
-                                className='flex items-center gap-2 rounded-lg border border-blue-500 px-4 py-1.5 text-blue-600 hover:bg-blue-50'
-                                onClick={() => toast.info(`Buổi tư vấn "${s.topic}" đã được thêm vào lịch.`)}
-                              >
-                                <CalendarIcon className='h-4 w-4' />
-                                Thêm vào lịch
-                              </button>
-                            )}
-
-                            <button
-                              type='button'
-                              className='flex items-center gap-2 px-3 py-1.5 text-slate-600 hover:text-slate-900'
-                              onClick={() => toast.info(`Đã đặt nhắc nhở cho buổi tư vấn "${s.topic}" (giả lập).`)}
-                            >
-                              <BellIcon className='h-4 w-4' />
-                              Đặt nhắc nhở
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })
-              ) : (
-                <div className='rounded-xl border border-dashed border-slate-200 bg-white p-8 text-center text-sm text-slate-500'>
-                  Không có buổi tư vấn nào phù hợp với bộ lọc hiện tại.
-                </div>
-              )
-            ) : (
-              <div className='rounded-xl border border-dashed border-slate-200 bg-white p-8 text-center text-sm text-slate-500'>
-                Hiện chưa có buổi tư vấn nào cho chương trình này. Thông tin sẽ được cập nhật sau.
-              </div>
-            )}
-          </div>
-
-          {/* RIGHT SIDEBAR */}
-          <div className='flex flex-col gap-6 lg:sticky lg:top-24'>
-            {/* Statistics */}
-            <div className='rounded-2xl border bg-white p-6 shadow-sm'>
-              <h3 className='mb-4 text-lg font-semibold'>Thông số</h3>
-
-              <div className='space-y-3 text-sm'>
-                <div className='flex justify-between'>
-                  <span className='text-slate-600'>Số buổi</span>
-                  <span className='font-bold text-slate-900'>{isPythonProgram ? 12 : "—"}</span>
-                </div>
-
-                <div className='flex justify-between'>
-                  <span className='text-slate-600'>Đã hoàn thành</span>
-                  <span className='font-bold text-green-600'>{isPythonProgram ? 4 : "—"}</span>
-                </div>
-
-                <div className='flex justify-between'>
-                  <span className='text-slate-600'>Sắp tới</span>
-                  <span className='font-bold text-blue-600'>{isPythonProgram ? 3 : "—"}</span>
-                </div>
-
-                <div className='flex justify-between'>
-                  <span className='text-slate-600'>Tổng thời gian</span>
-                  <span className='font-bold text-slate-900'>{isPythonProgram ? "18.5" : "—"}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Action */}
-            <div className='rounded-2xl border bg-white p-6 shadow-sm'>
-              <h3 className='mb-4 text-lg font-semibold'>Các hành động</h3>
-
-              <div className='flex flex-col gap-3 text-sm'>
-                <button
-                  className='mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700'
-                  type='button'
-                  onClick={handleOpenRequestModal}
-                >
-                  <PlusIcon className='h-4 w-4' />
-                  Yêu cầu buổi tư vấn mới
-                </button>
-
-                <button className='w-full rounded-xl border px-4 py-2 text-slate-700 hover:bg-slate-50'>
-                  Xem tất cả buổi tư vấn
-                </button>
-
-                <button className='flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-slate-700 hover:bg-slate-50'>
-                  <ArrowDownTrayIcon className='h-4 w-4' />
-                  Xuất file
-                </button>
-              </div>
-            </div>
-
-            {/* Next Session */}
-            <div className='rounded-2xl border bg-white p-6 shadow-sm'>
-              <h3 className='mb-4 text-lg font-semibold'>Next Session</h3>
-
-              {isPythonProgram ? (
-                <div className='rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm'>
-                  <p className='font-semibold text-slate-900'>Cấu trúc dữ liệu nâng cao</p>
-                  <p className='text-slate-600'>Hôm nay, 14:00 - 15:30</p>
-                  <p className='text-slate-600'>Với TS. Nguyễn Minh Hoàng</p>
+          {/* Nội dung Tab */}
+          <div className='mt-6'>
+            <div className='grid grid-cols-1 items-start gap-8 lg:grid-cols-3'>
+              {/* LEFT – session list */}
+              <div className='flex flex-col gap-6 lg:col-span-2'>
+                {/* FILTER BAR + BUTTON TRÊN CÙNG (đều nằm bên phải) */}
+                <div className='mb-2 flex items-center justify-end gap-3'>
+                  <select
+                    value={filter}
+                    aria-label='Lọc buổi tư vấn'
+                    onChange={(e) => {
+                      setFilter(e.target.value as FilterType);
+                    }}
+                    className='h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none'
+                  >
+                    <option value='upcoming'>Buổi sắp tới</option>
+                    <option value='completed'>Buổi đã hoàn thành</option>
+                    <option value='all'>Tất cả buổi tư vấn</option>
+                  </select>
 
                   <button
-                    className='mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700'
                     type='button'
-                    onClick={handleJoinMeet}
+                    className='inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700'
+                    onClick={handleOpenRequestModal}
                   >
-                    <Video className='h-6 w-6' />
-                    Tham gia buổi tư vấn
+                    <PlusIcon className='h-4 w-4' />
+                    Yêu cầu buổi tư vấn mới
                   </button>
                 </div>
-              ) : (
-                <div className='rounded-xl border border-dashed border-blue-200 bg-blue-50 p-4 text-sm text-slate-600'>
-                  Thông tin buổi tư vấn tiếp theo cho chương trình này sẽ được cập nhật sau.
+
+                {isPythonProgram ? (
+                  filteredSessions.length > 0 ? (
+                    filteredSessions.map((s) => {
+                      const done = isSessionCompleted(s.status);
+                      const isRunning = s.status.toLowerCase().includes("đang diễn ra");
+
+                      return (
+                        <div
+                          key={s.id}
+                          className='rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md'
+                        >
+                          {/* TITLE + STATUS + ACTION ICONS */}
+                          <div className='flex items-start justify-between'>
+                            <div>
+                              <div className='flex items-center gap-3'>
+                                <h2 className='text-base font-semibold text-slate-900'>{s.topic}</h2>
+                                <span
+                                  className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
+                                    done
+                                      ? "bg-emerald-50 text-emerald-700"
+                                      : isRunning
+                                        ? "bg-blue-50 text-blue-600"
+                                        : "bg-slate-100 text-slate-600"
+                                  }`}
+                                >
+                                  {s.status}
+                                </span>
+                              </div>
+                              <p className='mt-1 text-sm text-slate-600'>{s.description}</p>
+                            </div>
+
+                            <div className='mt-1 flex items-center gap-2 text-slate-400'>
+                              <button
+                                type='button'
+                                aria-label='Xem chi tiết'
+                                className='rounded-full p-1 hover:bg-slate-100 hover:text-slate-600'
+                              >
+                                <Eye className='h-4 w-4' />
+                              </button>
+                              <button
+                                type='button'
+                                aria-label='Xuất file'
+                                className='rounded-full p-1 hover:bg-slate-100 hover:text-slate-600'
+                              >
+                                <ArrowDownTrayIcon className='h-4 w-4' />
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* INFO ROW */}
+                          <div className='mt-3 flex flex-wrap items-center gap-6 text-sm text-slate-600'>
+                            <div className='flex items-center gap-1'>
+                              <CalendarIcon className='h-4 w-4 text-slate-500' />
+                              <span>{s.date}</span>
+                            </div>
+
+                            <div className='flex items-center gap-1'>
+                              <ClockIcon className='h-4 w-4 text-slate-500' />
+                              <span>{s.time}</span>
+                            </div>
+
+                            <div className='flex items-center gap-1'>
+                              <ClockIcon className='h-4 w-4 text-slate-500' />
+                              <span>{s.duration} phút</span>
+                            </div>
+                          </div>
+
+                          {/* DIVIDER */}
+                          <div className='mt-3 border-t border-slate-100' />
+
+                          {/* BOTTOM ROW */}
+                          {done ? (
+                            <div className='mt-3 flex items-center justify-between text-sm'>
+                              <div className='flex items-center gap-2'>
+                                <div className='flex h-7 w-7 items-center justify-center rounded-full bg-slate-200'>
+                                  {s.avatar}
+                                </div>
+                                <span className='text-sm text-slate-700'>với {s.tutor}</span>
+                              </div>
+
+                              <div className='flex items-center gap-4 text-xs font-medium'>
+                                <button
+                                  type='button'
+                                  className='flex items-center gap-1 text-blue-600 hover:text-blue-700'
+                                >
+                                  <Star className='h-4 w-4 fill-blue-600 text-blue-600' />
+                                  <span>Đánh giá</span>
+                                </button>
+                                <button
+                                  type='button'
+                                  className='flex items-center gap-1 text-blue-600 hover:text-blue-700'
+                                >
+                                  <FileText className='h-4 w-4' />
+                                  <span>Ghi chú</span>
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className='mt-3 flex items-center justify-between text-sm'>
+                              <div className='flex items-center gap-2'>
+                                <div className='flex h-7 w-7 items-center justify-center rounded-full bg-slate-200'>
+                                  {s.avatar}
+                                </div>
+                                <span className='text-sm text-slate-700'>với {s.tutor}</span>
+                              </div>
+
+                              <div className='flex items-center gap-4'>
+                                {isRunning ? (
+                                  <button
+                                    type='button'
+                                    className='flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700'
+                                    onClick={handleJoinMeet}
+                                  >
+                                    <PlayIcon className='h-4 w-4' />
+                                    Tham gia ngay
+                                  </button>
+                                ) : (
+                                  <button
+                                    type='button'
+                                    className='flex items-center gap-2 rounded-lg border border-blue-500 px-4 py-1.5 text-blue-600 hover:bg-blue-50'
+                                    onClick={() => toast.info(`Buổi tư vấn "${s.topic}" đã được thêm vào lịch.`)}
+                                  >
+                                    <CalendarIcon className='h-4 w-4' />
+                                    Thêm vào lịch
+                                  </button>
+                                )}
+
+                                <button
+                                  type='button'
+                                  className='flex items-center gap-2 px-3 py-1.5 text-slate-600 hover:text-slate-900'
+                                  onClick={() => toast.info(`Đã đặt nhắc nhở cho buổi tư vấn "${s.topic}" (giả lập).`)}
+                                >
+                                  <BellIcon className='h-4 w-4' />
+                                  Đặt nhắc nhở
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className='rounded-xl border border-dashed border-slate-200 bg-white p-8 text-center text-sm text-slate-500'>
+                      Không có buổi tư vấn nào phù hợp với bộ lọc hiện tại.
+                    </div>
+                  )
+                ) : (
+                  <div className='rounded-xl border border-dashed border-slate-200 bg-white p-8 text-center text-sm text-slate-500'>
+                    Hiện chưa có buổi tư vấn nào cho chương trình này. Thông tin sẽ được cập nhật sau.
+                  </div>
+                )}
+              </div>
+
+              {/* RIGHT SIDEBAR */}
+              <div className='flex flex-col gap-6 lg:sticky lg:top-24'>
+                {/* Statistics */}
+                <div className='rounded-2xl border bg-white p-6 shadow-sm'>
+                  <h3 className='mb-4 text-lg font-semibold'>Thông số</h3>
+
+                  <div className='space-y-3 text-sm'>
+                    <div className='flex justify-between'>
+                      <span className='text-slate-600'>Số buổi</span>
+                      <span className='font-bold text-slate-900'>{isPythonProgram ? 12 : "—"}</span>
+                    </div>
+
+                    <div className='flex justify-between'>
+                      <span className='text-slate-600'>Đã hoàn thành</span>
+                      <span className='font-bold text-green-600'>{isPythonProgram ? 4 : "—"}</span>
+                    </div>
+
+                    <div className='flex justify-between'>
+                      <span className='text-slate-600'>Sắp tới</span>
+                      <span className='font-bold text-blue-600'>{isPythonProgram ? 3 : "—"}</span>
+                    </div>
+
+                    <div className='flex justify-between'>
+                      <span className='text-slate-600'>Tổng thời gian</span>
+                      <span className='font-bold text-slate-900'>{isPythonProgram ? "18.5" : "—"}</span>
+                    </div>
+                  </div>
                 </div>
-              )}
+
+                {/* Action */}
+                <div className='rounded-2xl border bg-white p-6 shadow-sm'>
+                  <h3 className='mb-4 text-lg font-semibold'>Các hành động</h3>
+
+                  <div className='flex flex-col gap-3 text-sm'>
+                    <button
+                      className='mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700'
+                      type='button'
+                      onClick={handleOpenRequestModal}
+                    >
+                      <PlusIcon className='h-4 w-4' />
+                      Yêu cầu buổi tư vấn mới
+                    </button>
+
+                    <button className='w-full rounded-xl border px-4 py-2 text-slate-700 hover:bg-slate-50'>
+                      Xem tất cả buổi tư vấn
+                    </button>
+
+                    <button className='flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-slate-700 hover:bg-slate-50'>
+                      <ArrowDownTrayIcon className='h-4 w-4' />
+                      Xuất file
+                    </button>
+                  </div>
+                </div>
+
+                {/* Next Session */}
+                <div className='rounded-2xl border bg-white p-6 shadow-sm'>
+                  <h3 className='mb-4 text-lg font-semibold'>Next Session</h3>
+
+                  {isPythonProgram ? (
+                    <div className='rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm'>
+                      <p className='font-semibold text-slate-900'>Cấu trúc dữ liệu nâng cao</p>
+                      <p className='text-slate-600'>Hôm nay, 14:00 - 15:30</p>
+                      <p className='text-slate-600'>Với TS. Nguyễn Minh Hoàng</p>
+
+                      <button
+                        className='mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700'
+                        type='button'
+                        onClick={handleJoinMeet}
+                      >
+                        <Video className='h-6 w-6' />
+                        Tham gia buổi tư vấn
+                      </button>
+                    </div>
+                  ) : (
+                    <div className='rounded-xl border border-dashed border-blue-200 bg-blue-50 p-4 text-sm text-slate-600'>
+                      Thông tin buổi tư vấn tiếp theo cho chương trình này sẽ được cập nhật sau.
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -574,6 +494,6 @@ export default function Sessions() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

@@ -26,6 +26,9 @@ const path = {
   tutorSessions: "/tutor/sessions/:programId",
   tutorMeet: "/tutor/meet/:programId",
   tutorCompetence: "/tutor/competence/:programId",
+  tutorLibrary: "/tutor/library",
+  tutorProgramList: "/tutor/program-list",
+  tutorProgramDetailView: "/tutor/program-detail/:programId",
 
   admin: "/admin",
   adminProfile: "/admin/profile",

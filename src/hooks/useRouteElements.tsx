@@ -17,13 +17,16 @@ const AdminTutor = lazy(() => import("@/pages/admin/Tutor/Tutor"));
 const AdminMentee = lazy(() => import("@/pages/admin/Student/Mentee"));
 const HomePage = lazy(() => import("@/pages/Home/HomePage"));
 const MenteeMyProgramDetail = lazy(() => import("@/pages/student/MyProgram/MyProgramDetail"));
-const TutorMyProgramDetail = lazy(() => import("@/pages/tutor/MyProgram/MyProgramDetail"));
+const TutorMyProgramDetail = lazy(() => import("@/pages/tutor/ProgramMeet/ProgramMeet"));
 const Library = lazy(() => import("@/pages/student/Library/Library"));
-const ProgramList = lazy(() => import("@/pages/student/Program List/ProgramList"));
+const ProgramList = lazy(() => import("@/pages/student/ProgramList/ProgramList"));
 const StudentsCompetencies = lazy(() => import("@/pages/student/StudentsCompetencies"));
 const TutorCompetencies = lazy(() => import("@/pages/tutor/TutorCompetencies"));
 const Sessions = lazy(() => import("@/pages/student/Sessions"));
 const ProgramDetail = lazy(() => import("@/pages/student/ProgramDetail"));
+const TutorSessions = lazy(() => import("@/pages/tutor/Sessions/Sessions"));
+const TutorProgramList = lazy(() => import("@/pages/tutor/ProgramList/ProgramList"));
+const TutorProgramDetail = lazy(() => import("@/pages/tutor/ProgramDetail/ProgramDetail"));
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
@@ -153,6 +156,7 @@ export default function useRouteElements() {
           children: [
             {
               path: path.tutor,
+              element: <MainLayout />,
               children: [
                 {
                   path: path.tutorProgramCompetencies,
@@ -179,10 +183,34 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: path.tutorMyProgramDetail,
+                  path: path.tutorMeet,
                   element: (
                     <Suspense fallback={<Loading />}>
                       <TutorMyProgramDetail />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: path.tutorSessions,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorSessions />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: path.tutorProgramList,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorProgramList />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: path.tutorProgramDetailView,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorProgramDetail />
                     </Suspense>
                   ),
                 },

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Bookmark, CornerUpRight, Download, AlertCircle } from "lucide-react";
 import { programs } from "@/data/programs";
@@ -7,12 +6,10 @@ import MeetList from "./components/meetList";
 
 import ProgramBreadcrumb from "@/components/Program/ProgramBreadcrumb";
 import ProgramHeaderInfo from "@/components/Program/ProgramHeaderInfo";
-import ProgramTabs, { type TabKey } from "@/components/Program/ProgramTabs";
-import ProgramDescription from "@/components/Program/ProgramDescription";
+import ProgramTabs from "@/components/Program/ProgramTabs";
 
 export default function ProgramDetail() {
   const { programId } = useParams<{ programId: string }>();
-  const [activeTab, setActiveTab] = useState<TabKey>("meet");
   const program = programs.find((p) => p.id === Number(programId));
 
   if (!program) {
@@ -39,10 +36,10 @@ export default function ProgramDetail() {
           {/* Header Info */}
           <ProgramHeaderInfo
             title={program.title}
-            subtitle='với TS. Trần Minh Khoa'
+            subtitle={`với ${program.mainTutor.name}`}
             statusLabel='Đang hoạt động'
-            metaText='Tiến độ: 65%'
-            progress={65}
+            metaText={`Tiến độ: ${String(program.progress)}%`}
+            progress={program.progress}
             actions={
               <>
                 <button className='flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700'>
@@ -59,22 +56,12 @@ export default function ProgramDetail() {
           />
 
           {/* Tabs */}
-          <ProgramTabs activeTab={activeTab} onTabChange={setActiveTab} />
+          <ProgramTabs activeTab='meet' programId={currentProgramId} />
         </div>
 
         {/* Nội dung Tab */}
         <div className='mt-6'>
-          {activeTab === "meet" && <MeetList userRole='mentee' programId={currentProgramId} />}
-
-          {activeTab === "content" && (
-            <ProgramDescription description={program.description} department={program.department} />
-          )}
-
-          {(activeTab === "docs" || activeTab === "do") && (
-            <div className='rounded-xl border border-gray-100 bg-white p-12 text-center text-gray-500'>
-              Nội dung đang được cập nhật...
-            </div>
-          )}
+          <MeetList userRole='mentee' programId={currentProgramId} />
         </div>
       </div>
     </div>

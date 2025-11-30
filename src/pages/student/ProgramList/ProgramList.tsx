@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import programsData from "@/data/program.json";
 import { BookOpen, Play, CheckCircle, Plus, Download } from "lucide-react";
 import { jsPDF } from "jspdf";
+import path from "@/constants/path";
 
 interface Program {
   id: number;
@@ -70,6 +72,7 @@ const suggestedPrograms: Program[] = [
 ];
 
 const ProgramList: React.FC = () => {
+  const navigate = useNavigate();
   const [programList, setProgramList] = useState<Program[]>(programsData as Program[]);
 
   const [search, setSearch] = useState("");
@@ -209,9 +212,9 @@ const ProgramList: React.FC = () => {
     setShowSuggest(false);
   };
 
-  // Placeholder cho "Xem chi tiết"
+  // Chuyển đến trang chi tiết
   const handleViewDetail = (program: Program) => {
-    alert(`Trang chi tiết cho "${program.title}" đang được phát triển.`);
+    void navigate(path.studentProgramDetailView.replace(":programId", String(program.id)));
   };
 
   // Mở preview tài liệu / chứng chỉ

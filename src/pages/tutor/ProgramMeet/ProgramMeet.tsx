@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { CalendarPlus, Users, FileText, AlertCircle } from "lucide-react";
 import { programs } from "@/data/programs";
@@ -7,12 +6,10 @@ import MeetList from "@/pages/student/MyProgram/components/meetList";
 
 import ProgramBreadcrumb from "@/components/Program/ProgramBreadcrumb";
 import ProgramHeaderInfo from "@/components/Program/ProgramHeaderInfo";
-import ProgramTabs, { type TabKey } from "@/components/Program/ProgramTabs";
-import ProgramDescription from "@/components/Program/ProgramDescription";
+import ProgramTabs from "@/components/Program/ProgramTabs";
 
-export default function ProgramDetail() {
+export default function ProgramMeet() {
   const { programId } = useParams<{ programId: string }>();
-  const [activeTab, setActiveTab] = useState<TabKey>("meet");
   const program = programs.find((p) => p.id === Number(programId));
 
   if (!program) {
@@ -31,7 +28,7 @@ export default function ProgramDetail() {
 
   return (
     <div className='min-h-screen bg-gray-50 pb-12'>
-      <ProgramBreadcrumb backLink={path.tutorPrograms} currentTitle={program.title} />
+      <ProgramBreadcrumb backLink={path.tutorProgramList} currentTitle={program.title} />
 
       <div className='container mx-auto mt-6 px-4'>
         <div className='overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm'>
@@ -56,21 +53,11 @@ export default function ProgramDetail() {
             }
           />
 
-          <ProgramTabs activeTab={activeTab} onTabChange={setActiveTab} />
+          <ProgramTabs activeTab='meet' programId={currentProgramId} userRole='tutor' />
         </div>
 
         <div className='mt-6'>
-          {activeTab === "meet" && <MeetList userRole='tutor' programId={currentProgramId} />}
-
-          {activeTab === "content" && (
-            <ProgramDescription description={program.description} department={program.department} />
-          )}
-
-          {(activeTab === "docs" || activeTab === "do") && (
-            <div className='rounded-xl border border-gray-100 bg-white p-12 text-center text-gray-500'>
-              Nội dung đang được cập nhật...
-            </div>
-          )}
+          <MeetList userRole='tutor' programId={currentProgramId} />
         </div>
       </div>
     </div>

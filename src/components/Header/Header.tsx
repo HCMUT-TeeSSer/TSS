@@ -19,13 +19,17 @@ const Header = () => {
 
   const navigation = [
     { label: "Trang chủ", path: path.home },
-    {
-      label: "Chương trình",
-      path: authUser?.role === "tutor" ? path.tutorPrograms : path.studentPrograms,
-    },
+    ...(authUser?.role !== "tutor"
+      ? [
+          {
+            label: "Chương trình",
+            path: path.studentPrograms,
+          },
+        ]
+      : []),
     {
       label: "Chương trình của tôi",
-      path: authUser?.role === "tutor" ? path.tutorPrograms : path.studentProgramList,
+      path: authUser?.role === "tutor" ? path.tutorProgramList : path.studentProgramList,
     },
     { label: "Tài liệu", path: path.library },
   ];
@@ -98,7 +102,10 @@ const Header = () => {
         currentPath.startsWith(path.studentMyProgram) ||
         currentPath.startsWith(path.tutorMyProgram) ||
         currentPath.includes("/my-program/") ||
-        currentPath.includes("/program-list")
+        currentPath.includes("/program-list") ||
+        currentPath.includes("/sessions/") ||
+        currentPath.includes("/program-detail/") ||
+        /\/(student|tutor)\/programs\/\d+\/competencies/.test(currentPath)
       );
     }
 
