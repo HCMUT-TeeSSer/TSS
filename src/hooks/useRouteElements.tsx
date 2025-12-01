@@ -30,6 +30,8 @@ const TutorProgramList = lazy(() => import("@/pages/tutor/ProgramList/ProgramLis
 const TutorProgramDetail = lazy(() => import("@/pages/tutor/ProgramDetail/ProgramDetail"));
 const StudentProfile = lazy(() => import("@/pages/student/Profile"));
 const TutorProfile = lazy(() => import("@/pages/tutor/Profile"));
+const StudentProgress = lazy(() => import("@/pages/student/Progress"));
+const TutorProgress = lazy(() => import("@/pages/tutor/Progress"));
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
@@ -101,7 +103,20 @@ export default function useRouteElements() {
                     </Suspense>
                   ),
                 },
-                // You can add more student profile related routes here
+              ],
+            },
+            {
+              path: path.studentProgress,
+              element: <ProfileLayout />,
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <StudentProgress />
+                    </Suspense>
+                  ),
+                },
               ],
             },
             {
@@ -186,7 +201,20 @@ export default function useRouteElements() {
                     </Suspense>
                   ),
                 },
-                // You can add more tutor profile related routes here
+              ],
+            },
+            {
+              path: path.tutorProgress,
+              element: <ProfileLayout />,
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorProgress />
+                    </Suspense>
+                  ),
+                },
               ],
             },
             {
