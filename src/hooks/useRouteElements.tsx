@@ -8,6 +8,7 @@ import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 import AdminLayout from "@/pages/admin/Layout";
 import AdminWelcome from "@/pages/admin/Home/AdminWelcome";
+import MyProgramLayout from "@/layouts/student/MyProgramLayout";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Login = lazy(() => import("@/pages/Login"));
@@ -19,8 +20,9 @@ const AdminMentee = lazy(() => import("@/pages/admin/Student/Mentee"));
 const AdminData = lazy(() => import("@/pages/admin/Data/Data"));
 
 const HomePage = lazy(() => import("@/pages/Home/HomePage"));
-const MenteeMyProgramDetail = lazy(() => import("@/pages/student/MyProgram/MyProgramDetail"));
-const TutorMyProgramDetail = lazy(() => import("@/pages/tutor/ProgramMeet/ProgramMeet"));
+
+const StudentMeet = lazy(() => import("@/pages/student/ProgramMeet/ProgramMeet"));
+const TutorMeet = lazy(() => import("@/pages/tutor/ProgramMeet/ProgramMeet"));
 const Library = lazy(() => import("@/pages/student/Library/Library"));
 const ProgramList = lazy(() => import("@/pages/student/ProgramList/ProgramList"));
 const StudentsCompetencies = lazy(() => import("@/pages/student/StudentsCompetencies"));
@@ -142,6 +144,20 @@ export default function useRouteElements() {
                   ),
                 },
                 {
+                  path: path.studentProgramList,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <ProgramList />
+                    </Suspense>
+                  ),
+                },
+              ]
+            },
+            {
+              path: path.student,
+              element: <MyProgramLayout />,
+              children: [
+                {
                   path: path.studentProgramCompetencies,
                   element: (
                     <Suspense fallback={<Loading />}>
@@ -166,18 +182,11 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: path.studentMyProgramDetail,
+                  // path: path.studentMyProgramDetail,
+                  path: path.studentMeet,
                   element: (
                     <Suspense fallback={<Loading />}>
-                      <MenteeMyProgramDetail />
-                    </Suspense>
-                  ),
-                },
-                {
-                  path: path.studentProgramList,
-                  element: (
-                    <Suspense fallback={<Loading />}>
-                      <ProgramList />
+                      <StudentMeet />
                     </Suspense>
                   ),
                 },
@@ -224,14 +233,6 @@ export default function useRouteElements() {
               element: <MainLayout />,
               children: [
                 {
-                  path: path.tutorProgramCompetencies,
-                  element: (
-                    <Suspense fallback={<Loading />}>
-                      <TutorCompetencies />
-                    </Suspense>
-                  ),
-                },
-                {
                   path: path.tutorPrograms,
                   element: (
                     <Suspense fallback={<Loading />}>
@@ -248,10 +249,24 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: path.tutorMeet,
+                  path: path.tutorProgramList,
                   element: (
                     <Suspense fallback={<Loading />}>
-                      <TutorMyProgramDetail />
+                      <TutorProgramList />
+                    </Suspense>
+                  ),
+                },
+              ]
+            },
+            {
+              path: path.tutor,
+              element: <MyProgramLayout />,
+              children: [
+                {
+                  path: path.tutorProgramDetailView,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorProgramDetail />
                     </Suspense>
                   ),
                 },
@@ -264,18 +279,18 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: path.tutorProgramList,
+                  path: path.tutorMeet,
                   element: (
                     <Suspense fallback={<Loading />}>
-                      <TutorProgramList />
+                      <TutorMeet />
                     </Suspense>
                   ),
                 },
                 {
-                  path: path.tutorProgramDetailView,
+                  path: path.tutorProgramCompetencies,
                   element: (
                     <Suspense fallback={<Loading />}>
-                      <TutorProgramDetail />
+                      <TutorCompetencies />
                     </Suspense>
                   ),
                 },
