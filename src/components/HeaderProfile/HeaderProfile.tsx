@@ -10,12 +10,34 @@ import iconMail from "@/assets/images/vector12.png";
 import avatarUser from "@/assets/images/img-3.jpg";
 import iconDropdown from "@/assets/images/vector13.png";
 
+import { getMessages } from "@/utils/chat";
+import { NotificationBox, ChatBox } from "../ChatBox/Chat";
+
 const HeaderProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout, user: authUser } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [showChat, setShowChat] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [totalUnread, setTotalUnread] = useState(0);
+
+  useEffect(() => {
+    const updateUnread = () => {
+      if (!authUser) return;
+
+      const allMessages = getMessages();
+      const unreadCount = allMessages.filter((msg) => msg.to.id === authUser.id && !msg.read).length;
+
+      setTotalUnread(unreadCount);
+    };
+    updateUnread();
+    const interval = setInterval(updateUnread, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [authUser]);
 
   // Navigation based on role
   const navigation =
@@ -33,10 +55,7 @@ const HeaderProfile = () => {
           { label: "Tiến trình", path: path.studentProgress },
         ];
 
-  const notifications = [
-    { count: 3, color: "bg-red-500", icon: iconBell },
-    { count: 7, color: "bg-green-500", icon: iconMail },
-  ];
+  const notifications = [{ count: 0, color: "bg-red-500", icon: iconBell }];
 
   const displayUser = authUser
     ? {
@@ -117,18 +136,39 @@ const HeaderProfile = () => {
         <div className='flex items-center gap-6'>
           {/* Notifications */}
           <div className='flex items-center gap-4'>
-            {notifications.map((badge, index) => (
-              <button key={index} className='relative rounded-full p-1 transition-colors hover:bg-gray-100'>
-                <img src={badge.icon} alt='Notification' className='h-[18px] w-[18px]' />
-                {badge.count > 0 && (
-                  <span
-                    className={`absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full ${badge.color} text-[10px] text-white`}
-                  >
-                    {badge.count}
-                  </span>
-                )}
-              </button>
-            ))}
+            {/* Bell: Thông báo */}
+            <button
+              onClick={() => {
+                setShowNotifications((prev) => !prev);
+                setShowChat(false);
+              }}
+              className='relative rounded-full p-1 transition-colors hover:bg-gray-100'
+            >
+              <img src={iconBell} alt='Notification' className='h-[18px] w-[18px]' />
+              {notifications[0].count > 0 && (
+                <span
+                  className={`absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full ${notifications[0].color} text-[10px] text-white`}
+                >
+                  {notifications[0].count}
+                </span>
+              )}
+            </button>
+
+            {/* Mail: Chat */}
+            <button
+              onClick={() => {
+                setShowChat((prev) => !prev);
+                setShowNotifications(false);
+              }}
+              className='relative rounded-full p-1 transition-colors hover:bg-gray-100'
+            >
+              <img src={iconMail} alt='Chat' className='h-[18px] w-[18px]' />
+              {totalUnread > 0 && (
+                <span className='absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-green-500 text-[10px] text-white'>
+                  {totalUnread}
+                </span>
+              )}
+            </button>
           </div>
 
           {/* User Profile */}
@@ -183,6 +223,21 @@ const HeaderProfile = () => {
           </div>
         </div>
       </div>
+      {showNotifications && (
+        <NotificationBox
+          onClose={() => {
+            setShowNotifications(false);
+          }}
+        />
+      )}
+      {showChat && authUser && (
+        <ChatBox
+          currentUser={authUser}
+          onClose={() => {
+            setShowChat(false);
+          }}
+        />
+      )}
     </header>
   );
 };
