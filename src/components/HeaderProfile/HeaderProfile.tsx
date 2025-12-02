@@ -72,16 +72,13 @@ const HeaderProfile = () => {
 
   const profilePath = authUser?.role === "tutor" ? path.tutorProfile : path.studentProfile;
 
-  // Helper function to check if a path is active
   const isPathActive = (itemPath: string) => {
     const currentPath = location.pathname;
 
-    // Exact match for home page - only active when exactly at "/"
     if (itemPath === path.home) {
       return currentPath === path.home;
     }
 
-    // For other paths, check if current path starts with the item path
     return currentPath.startsWith(itemPath);
   };
 

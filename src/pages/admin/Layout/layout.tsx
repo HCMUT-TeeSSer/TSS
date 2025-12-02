@@ -2,14 +2,27 @@ import { useState, useRef, useEffect } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import path from "@/constants/path";
 import Logo from "./../logo.png";
-import { ChevronDown, BookOpen, Mail, Bell, Users, GraduationCap, LogOut, User } from "lucide-react";
+import { ChevronDown, BookOpen, Mail, Bell, Users, GraduationCap, LogOut, User, Database } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { NotificationBox, ChatBox } from "@/components/ChatBox/Chat";
 
-// Notifications component
-function HeaderNotifications({ bellCount = 3, mailCount = 5 }: { bellCount?: number; mailCount?: number }) {
+interface HeaderNotificationsProps {
+  bellCount?: number;
+  mailCount?: number;
+  onOpenChat: () => void;
+  onOpenNotification: () => void;
+}
+
+function HeaderNotifications({
+  bellCount = 0,
+  mailCount = 0,
+  onOpenChat,
+  onOpenNotification,
+}: HeaderNotificationsProps) {
   return (
     <div className='flex items-center gap-3'>
-      <div className='relative'>
+      {/* Notification */}
+      <div className='relative cursor-pointer' onClick={onOpenNotification}>
         <Bell className='h-5 w-5 text-gray-400' />
         {bellCount > 0 && (
           <span className='absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border border-white bg-red-500 text-xs text-white'>
@@ -17,7 +30,9 @@ function HeaderNotifications({ bellCount = 3, mailCount = 5 }: { bellCount?: num
           </span>
         )}
       </div>
-      <div className='relative'>
+
+      {/* Chat */}
+      <div className='relative cursor-pointer' onClick={onOpenChat}>
         <Mail className='h-5 w-5 text-gray-400' />
         {mailCount > 0 && (
           <span className='absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border border-white bg-blue-500 text-xs text-white'>
@@ -101,9 +116,14 @@ function AdminUserMenu() {
 }
 
 export default function AdminLayout() {
+  const { user } = useAuth();
+  const [chatOpen, setChatOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+
+  if (!user) return null;
+
   return (
     <div className='flex min-h-screen flex-col'>
-      {/* HEADER */}
       <header className='flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4'>
         <div className='flex items-center gap-3'>
           <NavLink to={path.admin} className='flex items-center gap-3'>
@@ -113,11 +133,37 @@ export default function AdminLayout() {
             <div className='text-lg font-semibold'>Tutor Support System</div>
           </NavLink>
         </div>
+
         <div className='ml-auto flex items-center gap-6'>
-          <HeaderNotifications bellCount={3} mailCount={5} />
+          <HeaderNotifications
+            bellCount={0}
+            mailCount={0}
+            onOpenChat={() => {
+              setChatOpen(true);
+            }}
+            onOpenNotification={() => {
+              setNotificationOpen(true);
+            }}
+          />
           <AdminUserMenu />
         </div>
       </header>
+      {/* Chat & Notification */}
+      {chatOpen && (
+        <ChatBox
+          currentUser={user}
+          onClose={() => {
+            setChatOpen(false);
+          }}
+        />
+      )}
+      {notificationOpen && (
+        <NotificationBox
+          onClose={() => {
+            setNotificationOpen(false);
+          }}
+        />
+      )}
 
       {/* BODY */}
       <div className='flex flex-1'>
@@ -152,6 +198,16 @@ export default function AdminLayout() {
             >
               <GraduationCap className='h-5 w-5 text-slate-500' />
               <span>Quản lí sinh viên</span>
+            </NavLink>
+
+            <NavLink
+              to={path.adminData}
+              className={({ isActive }) =>
+                `flex items-center gap-3 rounded-lg px-4 py-2 ${isActive ? "bg-sky-600 text-white" : "hover:bg-slate-100"}`
+              }
+            >
+              <Database className='h-5 w-5 text-slate-500' />
+              <span>Dữ liệu & Yêu cầu</span>
             </NavLink>
           </nav>
 

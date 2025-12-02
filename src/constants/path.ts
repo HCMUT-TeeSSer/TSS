@@ -41,6 +41,7 @@ const path = {
   adminTutors: "/admin/tutors",
   adminMentees: "/admin/mentees",
   adminStudents: "/admin/students",
+  adminData: "/admin/data",
 } as const;
 
 export default path;
