@@ -16,6 +16,8 @@ const ProgramOverview = lazy(() => import("@/pages/student/ProgramOverview/Progr
 const AdminProgram = lazy(() => import("@/pages/admin/Program/Program"));
 const AdminTutor = lazy(() => import("@/pages/admin/Tutor/Tutor"));
 const AdminMentee = lazy(() => import("@/pages/admin/Student/Mentee"));
+const AdminData = lazy(() => import("@/pages/admin/Data/Data"));
+
 const HomePage = lazy(() => import("@/pages/Home/HomePage"));
 const MenteeMyProgramDetail = lazy(() => import("@/pages/student/MyProgram/MyProgramDetail"));
 const TutorMyProgramDetail = lazy(() => import("@/pages/tutor/ProgramMeet/ProgramMeet"));
@@ -285,6 +287,14 @@ export default function useRouteElements() {
           element: (
             <Suspense fallback={<Loading />}>
               <AdminMentee />
+            </Suspense>
+          ),
+        },
+        {
+          path: path.adminData,
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminData />
             </Suspense>
           ),
         },

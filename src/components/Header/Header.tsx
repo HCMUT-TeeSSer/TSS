@@ -10,12 +10,33 @@ import iconMail from "@/assets/images/vector12.png";
 import avatarUser from "@/assets/images/img-3.jpg";
 import iconDropdown from "@/assets/images/vector13.png";
 
+import { getMessages } from "@/utils/chat";
+import { NotificationBox, ChatBox } from "../ChatBox/Chat";
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout, user: authUser } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [showChat, setShowChat] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [totalUnread, setTotalUnread] = useState(0);
+
+  useEffect(() => {
+    const updateUnread = () => {
+      if (!authUser) return;
+
+      const allMessages = getMessages();
+      const unreadCount = allMessages.filter((msg) => msg.to.id === authUser.id && !msg.read).length;
+
+      setTotalUnread(unreadCount);
+    };
+    updateUnread();
+    const interval = setInterval(updateUnread, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [authUser]);
 
   const navigation = [
     { label: "Trang chủ", path: path.home },
@@ -34,10 +55,7 @@ const Header = () => {
     { label: "Tài liệu", path: path.library },
   ];
 
-  const notifications = [
-    { count: 3, color: "bg-red-500", icon: iconBell },
-    { count: 7, color: "bg-green-500", icon: iconMail },
-  ];
+  const notifications = [{ count: 0, color: "bg-red-500", icon: iconBell }];
 
   const displayUser = authUser
     ? {
@@ -73,16 +91,11 @@ const Header = () => {
 
   const profilePath = displayUser.role === "tutor" ? path.tutorProfile : path.studentProfile;
 
-  // Helper function to check if a path is active
   const isPathActive = (itemPath: string, itemLabel: string) => {
     const currentPath = location.pathname;
-
-    // Exact match for home page - only active when exactly at "/"
     if (itemPath === path.home) {
       return currentPath === path.home;
     }
-
-    // Special handling for "Chương trình" tab - should be active for program list pages only
     if (itemLabel === "Chương trình") {
       return (
         currentPath === path.studentPrograms ||
@@ -91,7 +104,6 @@ const Header = () => {
       );
     }
 
-    // Special handling for "Chương trình của tôi" - should be active for program-list and my-program routes
     if (itemLabel === "Chương trình của tôi") {
       return (
         currentPath === path.studentProgramList ||
@@ -104,18 +116,14 @@ const Header = () => {
         /\/(student|tutor)\/programs\/\d+\/competencies/.test(currentPath)
       );
     }
-
-    // Special handling for "Tài liệu" (Library)
     if (itemLabel === "Tài liệu") {
       return currentPath === path.library || currentPath.startsWith(path.library);
     }
-
-    // For other paths, check if current path starts with the item path
     return currentPath.startsWith(itemPath);
   };
 
   return (
-    <header className='sticky top-0 z-50 w-full border-b border-gray-200 bg-white shadow-sm'>
+    <header className='sticky top-0 z-[100] w-full border-b border-gray-200 bg-white shadow-sm'>
       <div className='container mx-auto flex h-16 items-center justify-between px-4'>
         {/* Left Side: Logo & Nav */}
         <div className='flex items-center gap-10'>
@@ -149,18 +157,39 @@ const Header = () => {
         <div className='flex items-center gap-6'>
           {/* Notifications */}
           <div className='flex items-center gap-4'>
-            {notifications.map((badge, index) => (
-              <button key={index} className='relative rounded-full p-1 transition-colors hover:bg-gray-100'>
-                <img src={badge.icon} alt='Notification' className='h-[18px] w-[18px]' />
-                {badge.count > 0 && (
-                  <span
-                    className={`absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full ${badge.color} text-[10px] text-white`}
-                  >
-                    {badge.count}
-                  </span>
-                )}
-              </button>
-            ))}
+            {/* Bell: Thông báo */}
+            <button
+              onClick={() => {
+                setShowNotifications((prev) => !prev);
+                setShowChat(false);
+              }}
+              className='relative rounded-full p-1 transition-colors hover:bg-gray-100'
+            >
+              <img src={iconBell} alt='Notification' className='h-[18px] w-[18px]' />
+              {notifications[0].count > 0 && (
+                <span
+                  className={`absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full ${notifications[0].color} text-[10px] text-white`}
+                >
+                  {notifications[0].count}
+                </span>
+              )}
+            </button>
+
+            {/* Mail: Chat */}
+            <button
+              onClick={() => {
+                setShowChat((prev) => !prev);
+                setShowNotifications(false);
+              }}
+              className='relative rounded-full p-1 transition-colors hover:bg-gray-100'
+            >
+              <img src={iconMail} alt='Chat' className='h-[18px] w-[18px]' />
+              {totalUnread > 0 && (
+                <span className='absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-green-500 text-[10px] text-white'>
+                  {totalUnread}
+                </span>
+              )}
+            </button>
           </div>
 
           {/* User Profile */}
@@ -188,7 +217,7 @@ const Header = () => {
             {/* Dropdown Menu */}
             {isDropdownOpen && (
               <div className='ring-opacity-5 absolute top-full right-0 mt-2 w-48 origin-top-right rounded-md border border-gray-100 bg-white py-1 shadow-lg ring-1 ring-black focus:outline-none'>
-                {/* Item 1: Hồ sơ */}
+                {/* Item 1: Profile */}
                 <Link
                   to={profilePath}
                   onClick={() => {
@@ -202,7 +231,7 @@ const Header = () => {
 
                 <div className='my-1 h-px bg-gray-100' />
 
-                {/* Item 2: Đăng xuất */}
+                {/* Item 2: Logout */}
                 <button
                   onClick={logingout}
                   className='flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50'
@@ -215,6 +244,21 @@ const Header = () => {
           </div>
         </div>
       </div>
+      {showNotifications && (
+        <NotificationBox
+          onClose={() => {
+            setShowNotifications(false);
+          }}
+        />
+      )}
+      {showChat && authUser && (
+        <ChatBox
+          currentUser={authUser}
+          onClose={() => {
+            setShowChat(false);
+          }}
+        />
+      )}
     </header>
   );
 };
