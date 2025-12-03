@@ -1,4 +1,4 @@
-import { Clock, Video, Edit, MessageSquare } from "lucide-react";
+import { Clock, Video, MessageSquare, MapPin, Edit } from "lucide-react";
 import { type Meet } from "@/data/meets";
 import { tutors } from "@/data/tutors";
 
@@ -10,29 +10,47 @@ const getTutorAvatar = (tutorName: string) => {
 
 interface UpcomingScheduleProps {
   meetList: Meet[];
+  selectedDate: Date; // Nhận thêm prop ngày đã chọn
 }
 
-export default function UpcomingSchedule({ meetList }: UpcomingScheduleProps) {
-  // Lọc các meet sắp tới (pending hoặc approved chưa qua ngày)
-  // Trong demo này lấy 3 cái đầu tiên
-  const upcomingMeets = meetList
-    .filter(
-      (m) =>
-        m.status === "pending" ||
-        (m.status === "approved" && new Date(m.date) >= new Date("2024-01-01"))
-    )
-    .slice(0, 3);
+export default function UpcomingSchedule({ meetList, selectedDate }: UpcomingScheduleProps) {
+  // Format ngày để hiển thị tiêu đề (Ví dụ: 28 Tháng 10, 2025)
+  const dateOptions: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+  const dateDisplay = selectedDate.toLocaleDateString('vi-VN', dateOptions);
+  
+  // Format ngày để so sánh với dữ liệu (YYYY-MM-DD)
+  const year = selectedDate.getFullYear();
+  const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+  const day = String(selectedDate.getDate()).padStart(2, '0');
+  const selectedIso = `${year}-${month}-${day}`;
+
+  // Kiểm tra xem ngày được chọn có phải là hôm nay không để hiển thị text phù hợp
+  const today = new Date();
+  const isToday = selectedIso === `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  
+  const titlePrefix = isToday ? "Lịch hôm nay" : "Lịch hẹn";
+
+  // Lọc lịch hẹn: Chỉ lấy 'approved' VÀ trùng khớp với ngày được chọn
+  const filteredMeets = meetList.filter(
+    (m) => m.status === "approved" && m.date === selectedIso
+  );
+
+  const handleJoinMeet = () => {
+    window.open("https://meet.google.com/sah-uyrf-fqn", "_blank");
+  };
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6 h-full">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-bold text-gray-900">Lịch sắp tới</h3>
-        <span className="text-sm text-gray-500">{upcomingMeets.length} buổi hẹn</span>
+        <h3 className="text-lg font-bold text-gray-900">
+          {titlePrefix} - {dateDisplay}
+        </h3>
+        <span className="text-sm text-gray-500">{filteredMeets.length} buổi hẹn</span>
       </div>
 
       <div className="space-y-4">
-        {upcomingMeets.length > 0 ? (
-          upcomingMeets.map((item) => (
+        {filteredMeets.length > 0 ? (
+          filteredMeets.map((item) => (
             <div
               key={item.id}
               className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border border-gray-100 rounded-xl hover:shadow-md transition-all duration-200"
@@ -50,45 +68,37 @@ export default function UpcomingSchedule({ meetList }: UpcomingScheduleProps) {
                   </p>
                   <div className="flex flex-wrap items-center gap-3 mt-1 text-xs text-gray-500">
                     <span className="flex items-center gap-1 bg-gray-50 px-2 py-0.5 rounded">
-                      <Clock className="w-3 h-3" /> {item.beginTime} - {item.endTime} (
-                      {item.date})
+                      <Clock className="w-3 h-3" /> {item.beginTime} - {item.endTime}
                     </span>
-                    <span className="flex items-center gap-1 bg-gray-50 px-2 py-0.5 rounded">
-                      <Video className="w-3 h-3 text-blue-500" /> Online
+                    <span className="flex items-center gap-1 bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-100">
+                      <Video className="w-3 h-3" /> Online
                     </span>
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-2 w-full sm:w-auto">
-                <div
-                  className={`hidden sm:block mr-2 px-2 py-1 text-xs font-medium rounded-full border ${
-                    item.status === "approved"
-                      ? "bg-green-50 text-green-700 border-green-100"
-                      : "bg-yellow-50 text-yellow-700 border-yellow-100"
-                  }`}
+                <button 
+                  onClick={handleJoinMeet}
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors shadow-sm"
                 >
-                  {item.status === "approved" ? "Sắp tới" : "Chờ duyệt"}
-                </div>
+                  <Video className="w-4 h-4" /> Tham gia
+                </button>
 
-                {item.status === "approved" ? (
-                  <button className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors shadow-sm">
-                    <Video className="w-4 h-4" /> Tham gia
-                  </button>
-                ) : (
-                  <button className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm">
-                    <Edit className="w-4 h-4" /> Sửa
-                  </button>
-                )}
-
-                <button className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-900 transition-colors shadow-sm">
-                  <MessageSquare className="w-4 h-4" /> Nhắn
+                <button className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors shadow-sm border border-gray-200">
+                  <MessageSquare className="w-4 h-4" /> Nhắn tin
                 </button>
               </div>
             </div>
           ))
         ) : (
-          <p className="text-center text-gray-500 py-8">Không có lịch hẹn sắp tới.</p>
+          <div className="text-center py-10">
+            <div className="bg-gray-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                <Clock className="w-8 h-8 text-gray-400" />
+            </div>
+            <p className="text-gray-900 font-medium">Không có lịch hẹn vào ngày này</p>
+            <p className="text-sm text-gray-500 mt-1">Bạn có thể đặt lịch mới với mentor.</p>
+          </div>
         )}
       </div>
     </div>
