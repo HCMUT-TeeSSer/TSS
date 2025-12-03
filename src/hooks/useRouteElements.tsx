@@ -21,8 +21,8 @@ const AdminData = lazy(() => import("@/pages/admin/Data/Data"));
 
 const HomePage = lazy(() => import("@/pages/Home/HomePage"));
 
-const StudentMeet = lazy(() => import("@/pages/student/ProgramMeet/ProgramMeet"));
-const TutorMeet = lazy(() => import("@/pages/tutor/ProgramMeet/ProgramMeet"));
+const StudentProgramMeet = lazy(() => import("@/pages/student/ProgramMeet/ProgramMeet"));
+const TutorProgramMeet = lazy(() => import("@/pages/tutor/ProgramMeet/ProgramMeet"));
 const Library = lazy(() => import("@/pages/student/Library/Library"));
 const ProgramList = lazy(() => import("@/pages/student/ProgramList/ProgramList"));
 const StudentsCompetencies = lazy(() => import("@/pages/student/StudentsCompetencies"));
@@ -36,6 +36,8 @@ const StudentProfile = lazy(() => import("@/pages/student/Profile"));
 const TutorProfile = lazy(() => import("@/pages/tutor/Profile"));
 const StudentProgress = lazy(() => import("@/pages/student/Progress"));
 const TutorProgress = lazy(() => import("@/pages/tutor/Progress"));
+const StudentMeet = lazy(() => import("@/pages/student/Meet/Meet"));
+// const TutorMeet = lazy(() => import("@/pages/tutor/Meet/Meet"));
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
@@ -104,6 +106,20 @@ export default function useRouteElements() {
                   element: (
                     <Suspense fallback={<Loading />}>
                       <StudentProfile />
+                    </Suspense>
+                  ),
+                },
+              ],
+            },
+            {
+              path: path.studentMeetings,
+              element: <ProfileLayout />,
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <StudentMeet />
                     </Suspense>
                   ),
                 },
@@ -183,10 +199,10 @@ export default function useRouteElements() {
                 },
                 {
                   // path: path.studentMyProgramDetail,
-                  path: path.studentMeet,
+                  path: path.studentProgramMeet,
                   element: (
                     <Suspense fallback={<Loading />}>
-                      <StudentMeet />
+                      <StudentProgramMeet />
                     </Suspense>
                   ),
                 },
@@ -279,10 +295,10 @@ export default function useRouteElements() {
                   ),
                 },
                 {
-                  path: path.tutorMeet,
+                  path: path.tutorProgramMeet,
                   element: (
                     <Suspense fallback={<Loading />}>
-                      <TutorMeet />
+                      <TutorProgramMeet />
                     </Suspense>
                   ),
                 },
