@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { CalendarPlus, Users, FileText, AlertCircle } from "lucide-react";
 import { programs } from "@/data/programs";
 import path from "@/constants/path";
-import MeetList from "@/pages/student/MyProgram/components/meetList";
+import MeetList from "@/pages/student/ProgramMeet/components/meetList";
 
 import ProgramBreadcrumb from "@/components/Program/ProgramBreadcrumb";
 import ProgramHeaderInfo from "@/components/Program/ProgramHeaderInfo";
@@ -37,7 +37,7 @@ export default function ProgramMeet() {
             subtitle='Bảng điều khiển cho Tutor'
             statusLabel='Đang hoạt động'
             metaText='15 học viên đã đăng ký'
-            progress={undefined} // KHÔNG truyền progress -> Ẩn thanh bar
+            progress={undefined}
             actions={
               <>
                 <button className='flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700'>
