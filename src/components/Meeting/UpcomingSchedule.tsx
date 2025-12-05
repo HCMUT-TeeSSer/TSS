@@ -1,4 +1,5 @@
-import { Clock, Video, MessageSquare} from  "lucide-react";
+import { Clock, Video, Edit, MessageSquare} from  "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { type Meet } from "@/data/meets";
 import { useAuth } from "@/hooks/useAuth";
 import { tutors } from "@/data/tutors";
@@ -18,10 +19,12 @@ const getStudentAvatar = (studentName: string) => {
 interface UpcomingScheduleProps {
   meetList: Meet[];
   selectedDate: Date; // Nhận thêm prop ngày đã chọn
+  userRole: "student" | "tutor";
 }
 
-export default function UpcomingSchedule({ meetList, selectedDate }: UpcomingScheduleProps) {
+export default function UpcomingSchedule({ meetList, selectedDate, userRole }: UpcomingScheduleProps) {
   const { user } = useAuth();
+  const navigate = useNavigate();
   // Format ngày để hiển thị tiêu đề (Ví dụ: 28 Tháng 10, 2025)
   const dateOptions: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
   const dateDisplay = selectedDate.toLocaleDateString('vi-VN', dateOptions);
@@ -40,11 +43,15 @@ export default function UpcomingSchedule({ meetList, selectedDate }: UpcomingSch
 
   // Lọc lịch hẹn: Chỉ lấy 'approved' VÀ trùng khớp với ngày được chọn
   const filteredMeets = meetList.filter(
-    (m) => m.status === "approved" && m.date === selectedIso
+    // (m) => m.status === "approved" && m.date === selectedIso
+    (m) => (m.status === "approved" || m.status === "pending") && m.date === selectedIso
   );
 
   const handleJoinMeet = () => {
     window.open("https://meet.google.com/sah-uyrf-fqn", "_blank");
+  };
+  const handleProgramSelect = (programId: number) => {
+    navigate(`/student/meet/${programId}`);
   };
 
   return (
@@ -98,18 +105,32 @@ export default function UpcomingSchedule({ meetList, selectedDate }: UpcomingSch
                   </div>
                 </div>
               </div>
-
-              <div className="flex items-center gap-2 w-full sm:w-auto">
-                <button 
-                  onClick={handleJoinMeet}
-                  className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-800 transition-colors shadow-sm"
-                >
-                  <Video className="w-4 h-4" /> Tham gia
-                </button>
-
-                <button className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors shadow-sm border border-gray-200">
-                  <MessageSquare className="w-4 h-4 fill-black-200" /> Nhắn tin
-                </button>
+              
+              <div className="flex flex-col items-end gap-3">
+                <span className="px-3 py-1 rounded-full text-[10px] tracking-wide font-semibold bg-yellow-100 text-yellow-700">
+                  Sắp tới
+                </span>
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  {item.status === "approved" &&(
+                    <button 
+                      onClick={handleJoinMeet}
+                      className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-800 transition-colors shadow-sm"
+                    >
+                      <Video className="w-4 h-4" /> Tham gia
+                    </button>
+                  )}
+                  {item.status === "pending" && userRole === "student" &&(
+                    <button 
+                      onClick={() => handleProgramSelect(item.programId)}
+                      className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-800 transition-colors shadow-sm"
+                    >
+                      <Edit className="w-4 h-4" /> Điều chỉnh
+                    </button>
+                  )}
+                  <button className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors shadow-sm border border-gray-200">
+                    <MessageSquare className="w-4 h-4 fill-black-200" /> Nhắn tin
+                  </button>
+                </div>
               </div>
             </div>
           ))
@@ -118,8 +139,8 @@ export default function UpcomingSchedule({ meetList, selectedDate }: UpcomingSch
             <div className="bg-gray-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
                 <Clock className="w-8 h-8 text-gray-400" />
             </div>
-            <p className="text-gray-900 font-medium">Không có lịch hẹn vào ngày này</p>
-            <p className="text-sm text-gray-500 mt-1">Bạn có thể đặt lịch mới với mentor.</p>
+            {/* <p className="text-gray-900 font-medium">Không có lịch hẹn vào ngày này</p> */}
+            <p className="text-sm text-gray-500 mt-1">Không có lịch hẹn vào ngày này.</p>
           </div>
         )}
       </div>

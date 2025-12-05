@@ -8,9 +8,10 @@ import { freeSchedules } from "@/data/FreeSched"; // Import dữ liệu lịch r
 interface StatsSectionProps {
   meetList: Meet[];
   userRole: "student" | "tutor"; // Thêm prop để xác định role
+  userName: string;
 }
 
-export default function StatsSection({ meetList, userRole }: StatsSectionProps) {
+export default function StatsSection({ meetList, userRole, userName }: StatsSectionProps) {
   // --- LOGIC CHUNG: Tìm buổi tiếp theo gần nhất ---
   const nextMeet = meetList
     .filter((m) => m.status === "approved" && new Date(m.date + "T" + m.beginTime) >= new Date())
@@ -38,10 +39,11 @@ export default function StatsSection({ meetList, userRole }: StatsSectionProps) 
   // --- LOGIC CHO TUTOR ---
   // 1. Giờ rảnh (Tuần này) - Tính từ FreeSched
   // Giả sử tutor hiện tại là ID 20210001 (Nguyễn Văn A) - Trong thực tế lấy từ AuthContext
-  const currentTutorId = 20210001; 
-  const freeSlots = freeSchedules.filter(s => s.tutorId === currentTutorId && s.status === "available");
-  // Giả sử mỗi slot là 2 tiếng (đơn giản hóa) hoặc tính toán hours
-  const tutorFreeHours = freeSlots.length * 2; 
+  //const currentTutorId = 20210001; 
+  const CURRENT_TUTOR_NAME = userName;
+  const freeSlots = freeSchedules.filter(s => s.tutorName === CURRENT_TUTOR_NAME && s.status === "available");
+  // mỗi slot là 1 tiếng
+  const tutorFreeHours = freeSlots.length; 
 
   // 2. Buổi đã đặt (Tuần này) - Approved meets
   const tutorBookedThisWeek = meetList.filter(m => m.status === "approved").length; // Cần lọc theo tuần thực tế nếu muốn chính xác

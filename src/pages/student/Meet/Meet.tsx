@@ -4,18 +4,32 @@ import { meets } from "@/data/meets";
 // Import các component con
 import StatsSection from "@/components/Meeting/StatsSection";
 import CalendarWidget from "@/components/Meeting/CalendarWidget";
-import UpcomingSchedule from "@/components/Meeting/UpcomingSchedule"; // Đổi tên component này cho phù hợp ngữ cảnh nếu cần
+import UpcomingSchedule from "@/components/Meeting/UpcomingSchedule";
 import MeetingHistory from "@/components/Meeting/MeetingHistory";
 import AvailableMentors from "@/components/Meeting/AvailableMentors";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function StudentMeet() {
   // State quản lý ngày đang được chọn (Mặc định là hôm nay)
   const [selectedDate, setSelectedDate] = useState(new Date());
-
-  // Lấy dữ liệu meets và lọc cho user hiện tại (ví dụ "Nguyễn Văn A")
-  const myMeets = useMemo(() => {
-    return meets.filter((m) => m.menteeName === "Nguyễn Văn A");
+	const { user } = useAuth();
+  // Lấy dữ liệu meets và lọc cho user hiện tại
+  
+	const myMeets = useMemo(() => {
+		if (user?.fullName) {
+    	return meets.filter((m) => m.menteeName === user.fullName);
+		}
+		return [];
   }, []);
+	const myName = useMemo(() => {
+		if (user?.fullName) {
+    	return user.fullName
+		}
+		return ""
+  }, []);
+
+	const Meets = myMeets;
+	const Name = myName;
 
   return (
 		<div className="min-h-screen bg-white">
@@ -29,15 +43,22 @@ export default function StudentMeet() {
 				</div>
 
 				{/* Section: Stats */}
-				<StatsSection meetList={myMeets} userRole="student" />
+				<StatsSection 
+					meetList={Meets} 
+					userRole="student" 
+					userName={Name}
+				/>
 
 				{/* Section: Calendar & Schedule */}
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+				<div className="items-start grid grid-cols-1 lg:grid-cols-3 gap-8">
 					<div className="lg:col-span-1">
 						{/* Truyền state và hàm update xuống Calendar */}
 						<CalendarWidget 
 							selectedDate={selectedDate} 
 							onDateSelect={setSelectedDate} 
+							meetList={Meets}
+							userRole="student"
+							userName={Name}
 						/>
 					</div>
 					<div className="lg:col-span-2">
@@ -45,6 +66,7 @@ export default function StudentMeet() {
 						<UpcomingSchedule 
 							meetList={myMeets} 
 							selectedDate={selectedDate} 
+							userRole="student"
 						/>
 					</div>
 				</div>

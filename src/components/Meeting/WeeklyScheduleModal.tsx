@@ -10,6 +10,7 @@ interface WeeklyScheduleModalProps {
   selectedDate: Date;
   existingSchedules: FreeSchedule[];
   onSave: (newSchedules: FreeSchedule[]) => void;
+  userName: string;
 }
 
 const START_HOUR = 0;
@@ -22,6 +23,7 @@ export default function WeeklyScheduleModal({
   selectedDate,
   existingSchedules,
   onSave,
+  userName,
 }: WeeklyScheduleModalProps) {
   // Set lưu trữ dạng "YYYY-MM-DD|HH:mm"
   const [selectedSlots, setSelectedSlots] = useState<Set<string>>(new Set());
@@ -137,7 +139,8 @@ export default function WeeklyScheduleModal({
 
       result.push({
         id: Math.random(), 
-        tutorId: 20210001,
+        tutorId: 20210002,
+        tutorName: userName,
         date: date,
         startTime: time,
         endTime: endTime,

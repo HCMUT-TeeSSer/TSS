@@ -17,9 +17,10 @@ interface FreeTimeSlotsProps {
   selectedDate: Date;
   schedules: FreeSchedule[]; // Nhận dữ liệu từ cha
   onUpdateSchedules: (newSchedules: FreeSchedule[]) => void; // Hàm cập nhật dữ liệu lên cha
+  userName: string;
 }
 
-export default function FreeTimeSlots({ selectedDate, schedules, onUpdateSchedules }: FreeTimeSlotsProps) {
+export default function FreeTimeSlots({ selectedDate, schedules, onUpdateSchedules, userName }: FreeTimeSlotsProps) {
   // const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   
@@ -36,7 +37,7 @@ export default function FreeTimeSlots({ selectedDate, schedules, onUpdateSchedul
 
   // Lọc lịch hiển thị (dùng props 'schedules')
   const daySlots = useMemo(() => {
-    return schedules.filter(s => s.date === dateIso && s.tutorId === 20210001);
+    return schedules.filter(s => s.date === dateIso);
   }, [schedules, dateIso]);
 
   const groupedSlots = {
@@ -64,16 +65,11 @@ export default function FreeTimeSlots({ selectedDate, schedules, onUpdateSchedul
     }
 
     // Lọc danh sách gốc
-    const prevSchedulesKeep = schedules.filter(s => {
-      // Giữ lịch của tutor khác
-      if (s.tutorId !== 20210001) return true;
-      
+    const prevSchedulesKeep = schedules.filter(s => {      
       // Giữ lịch Booked 
       if (s.status === 'booked') return true;
-      
       // Giữ lịch của các tuần khác
       if (!weekDatesToCheck.has(s.date)) return true;
-      
       // Còn lại: Là lịch available cũ trong tuần này -> XÓA (return false)
       // Lý do: sẽ thay thế hoàn toàn bằng danh sách newSchedules
       return false;
@@ -92,13 +88,13 @@ export default function FreeTimeSlots({ selectedDate, schedules, onUpdateSchedul
         key={slot.id}
         className={`flex items-center justify-between p-3 rounded-lg border mb-2 transition-all ${
           slot.status === "available"
-            ? "bg-green-50 border-green-200 text-green-800"
-            : "bg-red-50 border-red-200 text-red-800"
+            ? "bg-green-100 border-green-300 text-green-800"
+            : "bg-red-100 border-red-300 text-red-800"
         }`}
       >
         <div>
           <p className="font-bold text-sm">{slot.startTime} - {slot.endTime}</p>
-          <p className="text-[10px] uppercase font-semibold mt-0.5 opacity-80">
+          <p className="text-[10px] font-semibold mt-0.5 opacity-80">
             {slot.status === "available" ? "Có thể đặt" : "Đã đặt"}
           </p>
         </div>
@@ -122,7 +118,7 @@ export default function FreeTimeSlots({ selectedDate, schedules, onUpdateSchedul
           onClick={() => setIsModalOpen(true)}
           className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-md active:scale-95"
         >
-          <Plus className="w-4 h-4" /> Thiết lập tuần
+          <Plus className="w-4 h-4" /> Thêm lịch rảnh
         </button>
       </div>
 
@@ -140,24 +136,24 @@ export default function FreeTimeSlots({ selectedDate, schedules, onUpdateSchedul
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-y-auto pr-2 custom-scrollbar max-h-[500px]">
           {/* Cột Sáng */}
           <div className="bg-gray-50/50 rounded-xl p-3 border border-gray-100">
-            <h4 className="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-yellow-400"></span> Sáng
+            <h4 className="text-xs text-gray-500 mb-3 tracking-wider flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-yellow-400"></span> Buổi sáng
             </h4>
             <div>{renderSlotList(groupedSlots.morning)}</div>
           </div>
 
           {/* Cột Chiều */}
           <div className="bg-gray-50/50 rounded-xl p-3 border border-gray-100">
-            <h4 className="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-orange-400"></span> Chiều
+            <h4 className="text-xs text-gray-500 mb-3  tracking-wider flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-orange-400"></span> Buổi chiều
             </h4>
             <div>{renderSlotList(groupedSlots.afternoon)}</div>
           </div>
 
           {/* Cột Tối */}
           <div className="bg-gray-50/50 rounded-xl p-3 border border-gray-100">
-            <h4 className="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-indigo-400"></span> Tối
+            <h4 className="text-xs text-gray-500 mb-3 tracking-wider flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-indigo-400"></span> Buổi tối
             </h4>
             <div>{renderSlotList(groupedSlots.evening)}</div>
           </div>
@@ -169,8 +165,9 @@ export default function FreeTimeSlots({ selectedDate, schedules, onUpdateSchedul
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         selectedDate={selectedDate}
-        existingSchedules={schedules.filter(s => s.tutorId === 20210001)} 
+        existingSchedules={schedules} 
         onSave={handleSaveSchedules}
+        userName={userName}
       />
     </div>
   );

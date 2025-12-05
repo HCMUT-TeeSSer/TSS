@@ -21,13 +21,13 @@ export default function ProgramTabs({ activeTab, programId, userRole }: ProgramT
     ? [
         { id: "content", label: "Nội dung", icon: BookOpen, path: path.tutorProgramDetailView },
         { id: "docs", label: "Buổi tư vấn", icon: MessageCircle, path: path.tutorSessions },
-        { id: "meet", label: "Lịch hẹn", icon: Calendar, path: path.tutorMeet },
+        { id: "meet", label: "Lịch hẹn", icon: Calendar, path: path.tutorProgramMeet },
         { id: "do", label: "Năng lực", icon: BarChart2, path: path.tutorProgramCompetencies },
       ]
     : [
         { id: "content", label: "Nội dung", icon: BookOpen, path: path.studentProgramDetailView },
         { id: "docs", label: "Buổi tư vấn", icon: MessageCircle, path: path.studentSessions },
-        { id: "meet", label: "Lịch hẹn", icon: Calendar, path: path.studentMeet },
+        { id: "meet", label: "Lịch hẹn", icon: Calendar, path: path.studentProgramMeet },
         { id: "do", label: "Năng lực", icon: BarChart2, path: path.studentProgramCompetencies },
       ];
 

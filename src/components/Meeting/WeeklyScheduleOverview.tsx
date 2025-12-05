@@ -32,7 +32,7 @@ export default function WeeklyScheduleOverview({ schedules }: WeeklyScheduleOver
     });
 
     const activeSchedules = schedules.filter(s => 
-      s.tutorId === 20210001 && 
+      // s.tutorId === 20210001 && 
       weekDateStrings.includes(s.date) &&
       (s.status === 'available' || s.status === 'booked')
     );
@@ -49,7 +49,7 @@ export default function WeeklyScheduleOverview({ schedules }: WeeklyScheduleOver
     const dateStr = `${year}-${month}-${day}`;
 
     const schedule = schedules.find(s => {
-      return s.date === dateStr && s.tutorId === 20210001 && s.startTime === time;
+      return s.date === dateStr && s.startTime === time; //s.tutorId === 2
     });
 
     if (!schedule) return "blocked"; 

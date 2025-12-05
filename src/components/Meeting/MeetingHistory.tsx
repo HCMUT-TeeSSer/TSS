@@ -29,7 +29,7 @@ export default function MeetingHistory({ meetList }: MeetingHistoryProps) {
   const historyList = meetList.filter(
     (m) =>
       m.status === "rejected" ||
-      (m.status === "approved" && new Date(m.date) < new Date("2026-01-01"))
+      (m.status === "approved" && new Date(m.date) < new Date())
   );
 
   // Mở modal đánh giá
@@ -95,7 +95,7 @@ export default function MeetingHistory({ meetList }: MeetingHistoryProps) {
                   <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
                     {/* Trạng thái */}
 										<span
-											className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${
+											className={`px-3 py-1 rounded-full text-[10px] tracking-wide ${
 												item.status === "approved"
 													? "bg-green-100 text-green-700"
 													: "bg-red-100 text-red-700"

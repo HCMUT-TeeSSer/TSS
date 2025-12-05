@@ -113,7 +113,7 @@ export default function Sessions() {
   return (
     <>
       <div className='min-h-screen bg-gray-50 pb-12'>
-        <ProgramBreadcrumb backLink={path.studentPrograms} currentTitle={programTitle} />
+        <ProgramBreadcrumb backLink={path.studentProgramList} currentTitle={programTitle} />
 
         <div className='container mx-auto mt-6 px-4'>
           {/* Container trắng bao quanh Header và Tabs */}
