@@ -53,6 +53,22 @@ export const meets: Meet[] = [
     reason: "Đã đồng ý",
   },
   {
+    id: 1,
+    programId: 1,
+    type: "mentee",
+    status: "rejected", // Đã duyệt
+    tutorName: "Trần Thị B",
+    menteeName: "Nguyễn Văn A",
+    topic: "Review code Python tuần 3",
+    describe: "Nhờ cô xem giúp phần xử lý bất đồng bộ.",
+    createAt: "2025-11-20T08:00:00Z",
+    date: "2025-12-31",
+    beginTime: "14:00",
+    endTime: "15:00",
+    subject: "Khoa học máy tính",
+    reason: "Đã đồng ý",
+  },
+  {
     id: 2,
     programId: 1,
     type: "mentee",

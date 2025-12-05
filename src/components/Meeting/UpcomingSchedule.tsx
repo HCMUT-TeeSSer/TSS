@@ -1,11 +1,18 @@
-import { Clock, Video, MessageSquare, MapPin, Edit } from "lucide-react";
+import { Clock, Video, MessageSquare} from  "lucide-react";
 import { type Meet } from "@/data/meets";
+import { useAuth } from "@/hooks/useAuth";
 import { tutors } from "@/data/tutors";
+import { mentees } from "@/data/mentees";
 
 // Helper lấy avatar
 const getTutorAvatar = (tutorName: string) => {
   const tutor = tutors.find((t) => t.name === tutorName);
   return tutor ? tutor.avatarUrl : "https://i.pravatar.cc/150?u=default";
+};
+
+const getStudentAvatar = (studentName: string) => {
+  const student = mentees.find((t) => t.name === studentName);
+  return student ? student.avatarUrl : "https://i.pravatar.cc/150?u=default";
 };
 
 interface UpcomingScheduleProps {
@@ -14,6 +21,7 @@ interface UpcomingScheduleProps {
 }
 
 export default function UpcomingSchedule({ meetList, selectedDate }: UpcomingScheduleProps) {
+  const { user } = useAuth();
   // Format ngày để hiển thị tiêu đề (Ví dụ: 28 Tháng 10, 2025)
   const dateOptions: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
   const dateDisplay = selectedDate.toLocaleDateString('vi-VN', dateOptions);
@@ -56,13 +64,27 @@ export default function UpcomingSchedule({ meetList, selectedDate }: UpcomingSch
               className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border border-gray-100 rounded-xl hover:shadow-md transition-all duration-200"
             >
               <div className="flex items-center gap-4 mb-4 sm:mb-0">
-                <img
-                  src={getTutorAvatar(item.tutorName)}
-                  alt={item.tutorName}
-                  className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100"
-                />
+                {user?.role === 'student' && (
+                  <img
+                    src={getTutorAvatar(item.tutorName)}
+                    alt={item.tutorName}
+                    className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100"
+                  />
+                )}
+                {user?.role === 'tutor' && (
+                  <img
+                    src={getStudentAvatar(item.menteeName)}
+                    alt={item.menteeName}
+                    className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100"
+                  />
+                )}
                 <div>
+                {user?.role === 'student' && (
                   <h4 className="font-bold text-gray-900">{item.tutorName}</h4>
+                )}
+                {user?.role === 'tutor' && (
+                  <h4 className="font-bold text-gray-900">{item.menteeName}</h4>
+                )}
                   <p className="text-sm text-gray-500">
                     {item.subject} - {item.topic}
                   </p>
@@ -80,13 +102,13 @@ export default function UpcomingSchedule({ meetList, selectedDate }: UpcomingSch
               <div className="flex items-center gap-2 w-full sm:w-auto">
                 <button 
                   onClick={handleJoinMeet}
-                  className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors shadow-sm"
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-800 transition-colors shadow-sm"
                 >
                   <Video className="w-4 h-4" /> Tham gia
                 </button>
 
-                <button className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors shadow-sm border border-gray-200">
-                  <MessageSquare className="w-4 h-4" /> Nhắn tin
+                <button className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors shadow-sm border border-gray-200">
+                  <MessageSquare className="w-4 h-4 fill-black-200" /> Nhắn tin
                 </button>
               </div>
             </div>

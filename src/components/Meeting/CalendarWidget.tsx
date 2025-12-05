@@ -1,5 +1,5 @@
 // src/components/Meeting/CalendarWidget.tsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -101,14 +101,14 @@ export default function CalendarWidget({ selectedDate = new Date(), onDateSelect
                 {/* Số ngày */}
                 <span className={meetCount > 0 ? "mb-1" : ""}>{i}</span>
 
-                {/* Số lượng lịch hẹn */}
-                {meetCount > 0 && (
-                  <div className={`absolute bottom-1.5 flex items-center justify-center`}>
-                     <span className={`text-[10px] leading-none font-bold ${isSelected ? 'text-blue-200' : 'text-gray-400'}`}>
-                        ({meetCount})
-                     </span>
-                  </div>
-                )}
+                  {/* Số lượng lịch hẹn */}
+                  {user?.role === 'student' && meetCount > 0 && (
+                    <div className={`absolute bottom-1.5 flex items-center justify-center`}>
+                      <span className={`text-[10px] leading-none font-bold ${isSelected ? 'text-blue-200' : 'text-gray-400'}`}>
+                          ({meetCount})
+                      </span>
+                    </div>
+                  )}
             </div>
         );
     }
