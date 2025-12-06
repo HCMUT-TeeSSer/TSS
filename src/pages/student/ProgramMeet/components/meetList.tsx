@@ -12,6 +12,8 @@ import { meets } from "@/data/meets"; // Dữ liệu tĩnh
 import { updateMeetStatus, getBoxClass, getSentTimeAgo, parseDateTime, isThisWeek } from "./util";
 import NewMeetModal from "./NewMeetModal";
 import RejectModal from "./RejectModal";
+import { freeSchedules, type FreeSchedule } from "@/data/FreeSched";
+import TutorWeeklySlotsWidget from "@/components/Meeting/TutorWeeklySlotsWidget";
 
 const filterOptions = [
   { value: "all", label: "Tất cả lịch hẹn" },
@@ -23,6 +25,7 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
   const { user } = useAuth();
   const [Meets, setMeets] = useState<Meet[]>([]);
   const [allMeets, setAllMeets] = useState<Meet[]>([]);
+  const [schedules, setSchedules] = useState<FreeSchedule[]>(freeSchedules);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "approved" | "pending">("all");
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
@@ -464,7 +467,7 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
             </div>
           )}
 
-          <div className='rounded-lg bg-white p-4 shadow-md'>
+          {/* <div className='rounded-lg bg-white p-4 shadow-md'>
             <h4 className='font-semibold text-gray-900'>{userRole === "mentee" ? "Lịch rảnh của Tutor" : "Lịch rảnh tuần này"}</h4>
             <div className='mt-3 space-y-2 text-sm'>
               <p className='mb-2 text-gray-500'>{userRole === "mentee" ? "Tutor rảnh vào:" : "Lịch rảnh của tôi trong tuần này:"}</p>
@@ -480,7 +483,14 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
                 </button>
               )}
             </div>
-          </div>
+          </div> */}
+
+          <TutorWeeklySlotsWidget 
+            schedules={schedules}
+            userRole={userRole}
+            onUpdateSchedules={setSchedules}
+            userName={user?.fullName}
+          />
 
           <div className='rounded-lg bg-white p-4 shadow-md'>
             <h4 className='font-semibold text-gray-900'>Lịch hẹn tiếp theo </h4>

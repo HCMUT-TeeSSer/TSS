@@ -39,8 +39,8 @@ export const programs: Program[] = [
     duration: "12 tuần",
     learningFormat: "Trực tuyến",
     isAvailable: true,
-    mainTutor: tutors[0],
-    listTutor: [tutors[0]],
+    mainTutor: tutors[1],
+    listTutor: [tutors[1]],
     progress: 100,
     chapters: [
       "Giới thiệu về Python",

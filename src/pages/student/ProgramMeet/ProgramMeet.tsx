@@ -17,7 +17,7 @@ export default function ProgramDetail() {
       <div className='flex min-h-screen flex-col items-center justify-center space-y-4 bg-gray-50'>
         <AlertCircle className='h-16 w-16 text-red-500' />
         <h2 className='text-2xl font-bold text-gray-900'>Không tìm thấy chương trình</h2>
-        <Link to={path.studentPrograms} className='font-medium text-blue-600 hover:underline'>
+        <Link to={path.studentProgramList} className='font-medium text-blue-600 hover:underline'>
           Quay lại danh sách
         </Link>
       </div>
@@ -28,7 +28,7 @@ export default function ProgramDetail() {
 
   return (
     <div className='min-h-screen bg-gray-50 pb-12'>
-      <ProgramBreadcrumb backLink={path.studentPrograms} currentTitle={program.title} />
+      <ProgramBreadcrumb backLink={path.studentProgramList} currentTitle={program.title} />
 
       <div className='container mx-auto mt-6 px-4'>
         {/* Container trắng bao quanh Header và Tabs */}

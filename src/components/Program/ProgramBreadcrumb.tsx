@@ -10,7 +10,7 @@ interface ProgramBreadcrumbProps {
 
 export default function ProgramBreadcrumb({
   backLink,
-  backLabel = "Chương trình",
+  backLabel = "Chương trình của tôi",
   currentTitle,
 }: ProgramBreadcrumbProps) {
   return (
