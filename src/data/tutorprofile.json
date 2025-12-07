@@ -1,0 +1,29 @@
+{
+  "fullName": "Dr. Michael Chen",
+  "tutorId": "TUT-2023-045",
+  "email": "michael.chen@tutorhu.com",
+  "phone": "+84 987 654 321",
+  "yearsExperience": 8,
+  "hourlyRate": 500000,
+  "bio": "Tiến sĩ Toán học với hơn 8 năm kinh nghiệm giảng dạy tại các trường đại học hàng đầu. Chuyên môn về Giải tích, Đại số tuyến tính và Thống kê. Đam mê giúp học sinh hiểu sâu về bản chất thông qua phương pháp giảng dạy sáng tạo và dễ hiểu.",
+  "avatar": "/images/img-2.jpg",
+  "status": "Đang hoạt động",
+  "joinDate": "Tháng 3/2023",
+  "rating": 4.9,
+  "reviewCount": 127,
+  "stats": {
+    "sessions": 245,
+    "students": 67,
+    "subjects": 8
+  },
+  "skills": ["Giải tích", "Đại số tuyến tính", "Thống kê", "Python", "MATLAB"],
+  "teachingSubjects": [
+    { "name": "Toán học", "level": "Đại học", "icon": "📘" },
+    { "name": "Vật lý", "level": "Trung học phổ thông", "icon": "📗" },
+    { "name": "Thống kê", "level": "Đại học", "icon": "📙" }
+  ],
+  "certifications": [
+    { "title": "Tiến sĩ Toán học", "issuer": "Đại học Stanford", "year": "2015 - 2019" },
+    { "title": "Thạc sĩ Toán ứng dụng", "issuer": "MIT", "year": "2013 - 2015" }
+  ]
+}
