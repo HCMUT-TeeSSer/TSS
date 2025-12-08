@@ -41,19 +41,25 @@ const HeaderProfile = () => {
 
   // Navigation based on role
   const navigation =
-    authUser?.role === "tutor"
+    authUser?.role === "admin"
       ? [
           { label: "Trang chủ", path: path.home },
-          { label: "Hồ sơ", path: path.tutorProfile },
-          { label: "Lịch rảnh", path: path.tutorCalendar },
-          { label: "Tiến trình", path: path.tutorProgress },
+          { label: "Hồ sơ", path: path.adminProfile },
+          { label: "Bảng điều khiển", path: path.admin },
         ]
-      : [
-          { label: "Trang chủ", path: path.home },
-          { label: "Hồ sơ", path: path.studentProfile },
-          { label: "Lịch hẹn", path: path.studentMeetings },
-          { label: "Tiến trình", path: path.studentProgress },
-        ];
+      : authUser?.role === "tutor"
+        ? [
+            { label: "Trang chủ", path: path.home },
+            { label: "Hồ sơ", path: path.tutorProfile },
+            { label: "Lịch rảnh", path: path.tutorCalendar },
+            { label: "Tiến trình", path: path.tutorProgress },
+          ]
+        : [
+            { label: "Trang chủ", path: path.home },
+            { label: "Hồ sơ", path: path.studentProfile },
+            { label: "Lịch hẹn", path: path.studentMeetings },
+            { label: "Tiến trình", path: path.studentProgress },
+          ];
 
   const notifications = [{ count: 0, color: "bg-red-500", icon: iconBell }];
 
@@ -89,13 +95,23 @@ const HeaderProfile = () => {
     };
   }, []);
 
-  const profilePath = authUser?.role === "tutor" ? path.tutorProfile : path.studentProfile;
+  const profilePath =
+    authUser?.role === "admin"
+      ? path.adminProfile
+      : authUser?.role === "tutor"
+        ? path.tutorProfile
+        : path.studentProfile;
 
   const isPathActive = (itemPath: string) => {
     const currentPath = location.pathname;
 
     if (itemPath === path.home) {
       return currentPath === path.home;
+    }
+
+    // Đặc biệt cho admin: tránh /admin match với /admin/profile
+    if (itemPath === path.admin) {
+      return currentPath === path.admin;
     }
 
     return currentPath.startsWith(itemPath);
@@ -208,9 +224,23 @@ const HeaderProfile = () => {
                   Hồ sơ
                 </Link>
 
+                {/* Item 2: Bảng điều khiển (chỉ cho admin) */}
+                {authUser?.role === "admin" && (
+                  <Link
+                    to={path.admin}
+                    onClick={() => {
+                      setIsDropdownOpen(false);
+                    }}
+                    className='flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                  >
+                    <User className='mr-2 h-4 w-4 text-gray-500' />
+                    Bảng điều khiển
+                  </Link>
+                )}
+
                 <div className='my-1 h-px bg-gray-100' />
 
-                {/* Item 2: Đăng xuất */}
+                {/* Item 3: Đăng xuất */}
                 <button
                   onClick={logingout}
                   className='flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50'

@@ -38,6 +38,7 @@ const StudentProgress = lazy(() => import("@/pages/student/Progress"));
 const TutorProgress = lazy(() => import("@/pages/tutor/Progress"));
 const StudentMeet = lazy(() => import("@/pages/student/Meet/Meet"));
 const TutorCalendar = lazy(() => import("@/pages/tutor/Calendar/Calendar"));
+const AdminProfile = lazy(() => import("@/pages/admin/Profile"));
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
@@ -331,6 +332,27 @@ export default function useRouteElements() {
       ],
     },
     // Admin routes - only accessible by admins
+    {
+      path: "",
+      element: <ProtectedRoute allowedRoles={["admin"]} />,
+      children: [
+        // Admin Profile with ProfileLayout
+        {
+          path: path.adminProfile,
+          element: <ProfileLayout />,
+          children: [
+            {
+              index: true,
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <AdminProfile />
+                </Suspense>
+              ),
+            },
+          ],
+        },
+      ],
+    },
     {
       path: path.admin,
       element: <AdminLayout />,

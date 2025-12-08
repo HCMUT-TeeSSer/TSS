@@ -1,0 +1,80 @@
+{
+  "fullName": "Ms. Sarah Johnson",
+  "adminId": "ADM-2023-001",
+  "email": "sarah.johnson@university.edu.vn",
+  "phone": "+84 901 234 567",
+  "department": "Khoa Công nghệ thông tin",
+  "division": "Phòng Quản lý hệ thống",
+  "position": "Quản trị viên hệ thống",
+  "bio": "Quản trị viên chính của hệ thống với quyền truy cập đầy đủ. Chịu trách nhiệm quản lý người dùng, phân quyền và bảo trì hệ thống.",
+  "avatar": "/src/assets/images/img-3.jpg",
+  "status": "Đang hoạt động",
+  "role": "Super Admin",
+  "joinDate": "1/2020",
+  "stats": {
+    "users": 1245,
+    "departments": 25,
+    "divisions": 150
+  },
+  "permissions": [
+    {
+      "id": "user_management",
+      "name": "Quản lý người dùng",
+      "description": "Thêm, sửa, xóa người dùng",
+      "icon": "users",
+      "color": "green",
+      "hasAccess": true
+    },
+    {
+      "id": "system_settings",
+      "name": "Cài đặt hệ thống",
+      "description": "Cấu hình hệ thống",
+      "icon": "settings",
+      "color": "blue",
+      "hasAccess": true
+    },
+    {
+      "id": "view_reports",
+      "name": "Xem báo cáo",
+      "description": "Truy cập tất cả báo cáo",
+      "icon": "file",
+      "color": "purple",
+      "hasAccess": true
+    },
+    {
+      "id": "backup_data",
+      "name": "Sao lưu dữ liệu",
+      "description": "Quản lý backup hệ thống",
+      "icon": "database",
+      "color": "yellow",
+      "hasAccess": true
+    }
+  ],
+  "recentActivities": [
+    {
+      "id": 1,
+      "action": "Thêm người dùng mới",
+      "time": "2 giờ trước",
+      "icon": "user-plus",
+      "color": "blue"
+    },
+    {
+      "id": 2,
+      "action": "Cập nhật cài đặt hệ thống",
+      "time": "5 giờ trước",
+      "icon": "settings",
+      "color": "green"
+    },
+    {
+      "id": 3,
+      "action": "Tạo báo cáo hệ thống",
+      "time": "1 ngày trước",
+      "icon": "file",
+      "color": "purple"
+    }
+  ],
+  "security": {
+    "twoFactorAuth": true,
+    "loginNotifications": true
+  }
+}
