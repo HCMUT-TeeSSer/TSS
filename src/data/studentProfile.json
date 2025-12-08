@@ -1,0 +1,16 @@
+{
+  "fullName": "Sarah Johnson",
+  "studentId": "237532+",
+  "email": "s.myjohnson@emintrud.edu.vn",
+  "phone": "+84 123 456 789",
+  "birthDate": "2005-03-15",
+  "bio": "Viết vài câu về bản thân, sở thích và mục tiêu học tập của bạn...",
+  "university": "HCMUT - Trường Đại học Bách Khoa Thành phố Hồ Chí Minh",
+  "major": "Khoa học Máy tính",
+  "avatar": "/images/img-3.jpg",
+  "status": "Đang hoạt động",
+  "joinDate": "Tháng 1/2024",
+  "skills": ["Python", "Machine Learning", "JavaScript", "Phân tích Số liệu"],
+  "hobbies": ["Tự học kiến thức", "Âm nhạc", "Cờ vua", "Đọc sách"]
+
+}
