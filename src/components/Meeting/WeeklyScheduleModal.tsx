@@ -130,7 +130,7 @@ export default function WeeklyScheduleModal({
 
   const handleSave = () => {
     const result: FreeSchedule[] = [];
-    
+
     // Chỉ đơn giản là chuyển đổi các ô đang được bôi xanh (selectedSlots) thành dữ liệu
     selectedSlots.forEach((key) => {
       const [date, time] = key.split("|");
@@ -138,7 +138,7 @@ export default function WeeklyScheduleModal({
       const endTime = `${(h + 1).toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
 
       result.push({
-        id: Math.random(), 
+        id: Math.random(),
         tutorId: 20210002,
         tutorName: userName,
         date: date,
@@ -157,45 +157,44 @@ export default function WeeklyScheduleModal({
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4 animate-in fade-in duration-200"
+      className='animate-in fade-in fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4 duration-200'
       onMouseUp={handleMouseUp}
     >
-      <div className="w-full max-w-[1200px] h-[90vh] bg-white rounded-lg shadow-xl flex flex-col overflow-hidden">
+      <div className='flex h-[90vh] w-full max-w-[1200px] flex-col overflow-hidden rounded-lg bg-white shadow-xl'>
         {/* HEADER */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white shrink-0">
+        <div className='flex shrink-0 items-center justify-between border-b border-gray-200 bg-white px-6 py-4'>
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Thiết lập lịch rảnh</h2>
-            <p className="text-sm text-gray-500 mt-1">Kéo chuột để chọn/bỏ chọn các khung giờ.</p>
+            <h2 className='text-xl font-bold text-gray-900'>Thiết lập lịch rảnh</h2>
+            <p className='mt-1 text-sm text-gray-500'>Kéo chuột để chọn/bỏ chọn các khung giờ.</p>
           </div>
-          <div className="flex gap-3">
+          <div className='flex gap-3'>
             <button
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 font-medium text-sm"
+              className='rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50'
             >
               Hủy
             </button>
             <button
               onClick={handleSave}
-              className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium flex items-center gap-2 text-sm shadow-sm"
+              className='flex items-center gap-2 rounded-md bg-blue-600 px-5 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700'
             >
-              <Check className="w-4 h-4" /> Lưu thay đổi
+              <Check className='h-4 w-4' /> Lưu thay đổi
             </button>
           </div>
         </div>
 
         {/* BODY */}
-        <div className="flex-1 overflow-auto bg-white relative custom-scrollbar">
-          <div className="min-w-[800px] flex">
-            
+        <div className='custom-scrollbar relative flex-1 overflow-auto bg-white'>
+          <div className='flex min-w-[800px]'>
             {/* CỘT THỜI GIAN (Sticky Left) */}
-            <div className="sticky left-0 z-20 bg-white border-r border-gray-200">
+            <div className='sticky left-0 z-20 border-r border-gray-200 bg-white'>
               {/* Header placeholder (để căn chỉnh với dòng ngày) */}
-              <div className="h-[73px] border-b border-gray-200 bg-gray-50 sticky top-0 z-30"></div>
-              
+              <div className='sticky top-0 z-30 h-[73px] border-b border-gray-200 bg-gray-50'></div>
+
               {/* Các dòng giờ */}
               {timeRows.map((time) => (
-                <div key={time} className="h-8 w-16 relative border-b border-gray-100 box-border">
-                  <span className="absolute -top-2.5 right-2 text-xs text-gray-400 font-medium">
+                <div key={time} className='relative box-border h-8 w-16 border-b border-gray-100'>
+                  <span className='absolute -top-2.5 right-2 text-xs font-medium text-gray-400'>
                     {time !== "00:00" ? time : ""}
                   </span>
                 </div>
@@ -203,7 +202,7 @@ export default function WeeklyScheduleModal({
             </div>
 
             {/* CÁC CỘT NGÀY */}
-            <div className="flex flex-1">
+            <div className='flex flex-1'>
               {weekDays.map((d, i) => {
                 const year = d.getFullYear();
                 const month = String(d.getMonth() + 1).padStart(2, "0");
@@ -212,11 +211,14 @@ export default function WeeklyScheduleModal({
                 const isToday = new Date().toDateString() === d.toDateString();
 
                 return (
-                  <div key={i} className="flex-1 min-w-[100px] border-r border-gray-200 last:border-r-0 flex flex-col">
-                    
+                  <div key={i} className='flex min-w-[100px] flex-1 flex-col border-r border-gray-200 last:border-r-0'>
                     {/* Header Ngày (Sticky Top) */}
-                    <div className={`sticky top-0 z-10 border-b border-gray-200 py-3 text-center h-[73px] flex flex-col justify-center ${isToday ? "bg-blue-50/80 backdrop-blur" : "bg-gray-50"}`}>
-                      <div className={`text-xs font-semibold uppercase mb-1 ${isToday ? "text-blue-600" : "text-gray-500"}`}>
+                    <div
+                      className={`sticky top-0 z-10 flex h-[73px] flex-col justify-center border-b border-gray-200 py-3 text-center ${isToday ? "bg-blue-50/80 backdrop-blur" : "bg-gray-50"}`}
+                    >
+                      <div
+                        className={`mb-1 text-xs font-semibold uppercase ${isToday ? "text-blue-600" : "text-gray-500"}`}
+                      >
                         {d.toLocaleDateString("vi-VN", { weekday: "short" })}
                       </div>
                       <div className={`text-xl font-bold ${isToday ? "text-blue-600" : "text-gray-800"}`}>
@@ -233,7 +235,8 @@ export default function WeeklyScheduleModal({
                       const isSelected = selectedSlots.has(key);
 
                       // Style
-                      let cellClass = "h-8 border-b border-gray-100 relative cursor-pointer select-none transition-colors duration-100 ";
+                      let cellClass =
+                        "h-8 border-b border-gray-100 relative cursor-pointer select-none transition-colors duration-100 ";
 
                       if (isBooked) {
                         cellClass += "rounded bg-red-200 border-red-300 cursor-not-allowed ";
@@ -254,14 +257,14 @@ export default function WeeklyScheduleModal({
                         >
                           {/* Hiển thị giờ khi chọn */}
                           {isSelected && !isBooked && !disabled && (
-                            <div className="absolute inset-0 flex items-center justify-center text-[10px] font-medium text-white">
+                            <div className='absolute inset-0 flex items-center justify-center text-[10px] font-medium text-white'>
                               {time} - {getEndTimeLabel(time)}
                             </div>
                           )}
-                          
+
                           {/* Hiển thị Booked */}
                           {isBooked && (
-                            <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-red-400">
+                            <div className='absolute inset-0 flex items-center justify-center text-[10px] font-bold text-red-400'>
                               Đã đặt
                             </div>
                           )}

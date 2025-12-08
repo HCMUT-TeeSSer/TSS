@@ -12,63 +12,62 @@ import UpcomingSchedule from "@/components/Meeting/UpcomingSchedule";
 
 export default function TutorCalendar() {
   const { user } = useAuth();
-  
-  const [allSchedules, ] = useState<FreeSchedule[]>(freeSchedules);
+
+  const [allSchedules] = useState<FreeSchedule[]>(freeSchedules);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const myMeets = useMemo(() => {
-		if (user?.fullName) {
-    	return meets.filter((m) => m.status === "approved" && m.tutorName === user.fullName);
-		}
-		return [];
+    if (user?.fullName) {
+      return meets.filter((m) => m.status === "approved" && m.tutorName === user.fullName);
+    }
+    return [];
   }, []);
 
   const myScheds = useMemo(() => {
-		if (user?.fullName) {
-    	return allSchedules.filter((s) => s.tutorName === user.fullName);
-		}
-		return [];
+    if (user?.fullName) {
+      return allSchedules.filter((s) => s.tutorName === user.fullName);
+    }
+    return [];
   }, []);
 
   const myName = useMemo(() => {
-		if (user?.fullName) {
-    	return user.fullName
-		}
-		return ""
+    if (user?.fullName) {
+      return user.fullName;
+    }
+    return "";
   }, []);
 
-	const Meets = myMeets;
-	const Name = myName;
+  const Meets = myMeets;
+  const Name = myName;
   // const Scheds = myScheds;
   const [Scheds, setSchedules] = useState<FreeSchedule[]>(myScheds);
   // const dateOptions: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
   // const dateDisplay = selectedDate.toLocaleDateString('vi-VN', dateOptions);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Quản lý lịch giảng dạy</h1>
-          <StatsSection meetList={myMeets} userRole="tutor" userName={Name}/>
+    <div className='min-h-screen bg-white'>
+      <div className='container mx-auto px-4 py-8'>
+        <div className='mb-8'>
+          <h1 className='mb-6 text-2xl font-bold text-gray-900'>Quản lý lịch giảng dạy</h1>
+          <StatsSection meetList={myMeets} userRole='tutor' userName={Name} />
         </div>
 
-        <div className="items-start grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-          <div className="lg:col-span-1">
-            <CalendarWidget 
-              selectedDate={selectedDate} 
+        <div className='mb-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-3'>
+          <div className='lg:col-span-1'>
+            <CalendarWidget
+              selectedDate={selectedDate}
               onDateSelect={setSelectedDate}
               meetList={Meets}
-							userRole="tutor"
-							userName={Name} 
+              userRole='tutor'
+              userName={Name}
             />
           </div>
 
-          <div className="lg:col-span-2">
+          <div className='lg:col-span-2'>
             {/* Truyền state và hàm set xuống */}
-            <FreeTimeSlots 
-              selectedDate={selectedDate} 
+            <FreeTimeSlots
+              selectedDate={selectedDate}
               schedules={Scheds}
               onUpdateSchedules={setSchedules}
               userName={Name}
@@ -76,19 +75,15 @@ export default function TutorCalendar() {
           </div>
         </div>
 
-        <div className="mb-8">
+        <div className='mb-8'>
           {/* <h2 className="text-lg font-bold text-gray-900 mb-4">Buổi tiếp theo</h2> */}
-          <UpcomingSchedule 
-            meetList={myMeets} 
-            selectedDate={selectedDate} 
-            userRole="tutor"/>
+          <UpcomingSchedule meetList={myMeets} selectedDate={selectedDate} userRole='tutor' />
         </div>
 
-        <div className="mb-8">
+        <div className='mb-8'>
           {/* Truyền state xuống */}
           <WeeklyScheduleOverview schedules={Scheds} />
         </div>
-
       </div>
     </div>
   );

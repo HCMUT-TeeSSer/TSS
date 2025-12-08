@@ -41,7 +41,7 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
 
         let filteredData = data.filter((app) => app.status !== "rejected");
         filteredData = filteredData.filter((app) => app.programId === programId);
-        
+
         if (user?.fullName) {
           if (userRole === "mentee") {
             filteredData = filteredData.filter((app) => app.menteeName === user.fullName);
@@ -235,7 +235,9 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
         <div className='flex items-center space-x-3'>
           <span className={`h-2.5 w-2.5 rounded-full ${app.status === "approved" ? "bg-green-500" : "bg-red-500"}`} />
           <h4 className='text-md font-semibold text-gray-900'>{app.menteeName}</h4>
-          <span className={`inline-flex items-center rounded-full px-3 py-0.5 text-xs font-medium ${getStatusClass(app.status)}`}>
+          <span
+            className={`inline-flex items-center rounded-full px-3 py-0.5 text-xs font-medium ${getStatusClass(app.status)}`}
+          >
             {getMeetLabel(app)}
           </span>
         </div>
@@ -274,7 +276,9 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
       </div>
 
       <div className='mt-3 flex items-center justify-between text-sm'>
-        <p className='flex-1'><span className='text-sm font-medium'></span> {app.topic}</p>
+        <p className='flex-1'>
+          <span className='text-sm font-medium'></span> {app.topic}
+        </p>
       </div>
 
       <div className='mt-2 flex items-center justify-between text-sm text-gray-600'>
@@ -282,18 +286,28 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
       </div>
 
       <div className='mt-2 flex items-center space-x-10 text-sm text-gray-600'>
-        <div className='flex items-center space-x-1'><Calendar className='h-4 w-4 text-gray-500' />
+        <div className='flex items-center space-x-1'>
+          <Calendar className='h-4 w-4 text-gray-500' />
           {/* <p>{app.date}</p> */}
           <p>{app.date.split("-").reverse().join("/")}</p>
         </div>
-        <div className='flex items-center space-x-1'><Clock className='h-4 w-4 text-gray-500' /><p>{app.beginTime} - {app.endTime}</p></div>
-        <div className='flex items-center space-x-1'><GraduationCap className='h-4 w-4 text-gray-500' /><p>{app.subject}</p></div>
+        <div className='flex items-center space-x-1'>
+          <Clock className='h-4 w-4 text-gray-500' />
+          <p>
+            {app.beginTime} - {app.endTime}
+          </p>
+        </div>
+        <div className='flex items-center space-x-1'>
+          <GraduationCap className='h-4 w-4 text-gray-500' />
+          <p>{app.subject}</p>
+        </div>
       </div>
 
       {userRole === "mentee" && app.status === "pending" && (
         <div className='mt-4 flex items-center justify-between border-t border-gray-200 pt-3'>
           <div className='flex items-center space-x-1 text-sm font-medium text-gray-600'>
-            <Clock className='h-5 w-5' /><span>Đang chờ {app.tutorName} duyệt</span>
+            <Clock className='h-5 w-5' />
+            <span>Đang chờ {app.tutorName} duyệt</span>
           </div>
         </div>
       )}
@@ -301,7 +315,8 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
       {userRole === "tutor" && app.status === "pending" && (
         <div className='mt-4 flex items-center justify-between border-t border-gray-200 pt-3'>
           <div className='flex items-center space-x-1 text-sm font-medium text-gray-600'>
-            <Clock className='h-5 w-5' /><span>Yêu cầu {getSentTimeAgo(app.createAt)}</span>
+            <Clock className='h-5 w-5' />
+            <span>Yêu cầu {getSentTimeAgo(app.createAt)}</span>
           </div>
           <div className='flex items-center space-x-5'>
             <button
@@ -324,12 +339,14 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
         <div className='mt-4 flex items-center justify-between border-t border-gray-200 pt-3'>
           {userRole === "mentee" && (
             <div className='flex items-center space-x-1 text-sm font-medium text-green-600'>
-              <Check className='h-5 w-5' /><span>Đã được {app.tutorName} đồng ý</span>
+              <Check className='h-5 w-5' />
+              <span>Đã được {app.tutorName} đồng ý</span>
             </div>
           )}
           {userRole === "tutor" && (
             <div className='flex items-center space-x-1 text-sm font-medium text-green-600'>
-              <Check className='h-5 w-5' /><span>Liên kết cuộc họp đã được tạo</span>
+              <Check className='h-5 w-5' />
+              <span>Liên kết cuộc họp đã được tạo</span>
             </div>
           )}
           <button
@@ -351,7 +368,9 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
             <h3 className='mb-4 text-xl font-bold text-gray-900'>Lịch hẹn</h3>
             <div className='mb-4 flex items-center justify-between'>
               <div className='flex items-center space-x-3'>
-                <label htmlFor='filter' className='sr-only'>Lọc</label>
+                <label htmlFor='filter' className='sr-only'>
+                  Lọc
+                </label>
                 <select
                   id='filter'
                   value={filter}
@@ -359,7 +378,9 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
                   className='rounded-lg border border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500'
                 >
                   {filterOptions.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
                   ))}
                 </select>
 
@@ -390,7 +411,8 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
                 {pendingMeets.length > 0 && (
                   <div className='space-y-4 rounded-lg border border-gray-300 bg-white p-4 shadow-md'>
                     <div className='flex items-center space-x-2 text-red-600'>
-                      <AlertCircle className='h-6 w-6' /><h4 className='text font-bold text-gray-800'>Lịch hẹn chưa duyệt</h4>
+                      <AlertCircle className='h-6 w-6' />
+                      <h4 className='text font-bold text-gray-800'>Lịch hẹn chưa duyệt</h4>
                     </div>
                     <div className='space-y-4'>{pendingMeets.map(renderMeetItem)}</div>
                   </div>
@@ -398,13 +420,16 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
                 {approvedMeets.length > 0 && (
                   <div className='space-y-4 rounded-lg border border-gray-300 bg-white p-4 shadow-md'>
                     <div className='flex items-center space-x-2 text-green-600'>
-                      <CheckCircle className='h-6 w-6' /><h4 className='text font-bold text-gray-800'>Lịch hẹn hiện tại</h4>
+                      <CheckCircle className='h-6 w-6' />
+                      <h4 className='text font-bold text-gray-800'>Lịch hẹn hiện tại</h4>
                     </div>
                     <div className='space-y-4'>{approvedMeets.map(renderMeetItem)}</div>
                   </div>
                 )}
                 {pendingMeets.length === 0 && approvedMeets.length === 0 && (
-                  <div className='rounded-lg bg-white py-10 text-center text-gray-500 shadow-sm'>Không có lịch hẹn nào phù hợp.</div>
+                  <div className='rounded-lg bg-white py-10 text-center text-gray-500 shadow-sm'>
+                    Không có lịch hẹn nào phù hợp.
+                  </div>
                 )}
               </>
             ) : (
@@ -426,16 +451,31 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
             <div className='rounded-lg bg-white p-4 shadow-md'>
               <h4 className='font-semibold text-gray-900'>Thống kê lịch hẹn</h4>
               <ul className='mt-3 space-y-2 text-sm'>
-                <li className='flex justify-between text-gray-600'><span>Tổng số lịch hẹn</span><span className='font-medium text-gray-900'>{Meets.length}</span></li>
-                <li className='flex justify-between text-gray-600'><span>Đã được đồng ý</span><span className='font-medium text-green-600'>{Meets.filter((a) => a.status === "approved").length}</span></li>
-                <li className='flex justify-between text-gray-600'><span>Chờ phê duyệt</span><span className='font-medium text-yellow-600'>{Meets.filter((a) => a.status === "pending").length}</span></li>
+                <li className='flex justify-between text-gray-600'>
+                  <span>Tổng số lịch hẹn</span>
+                  <span className='font-medium text-gray-900'>{Meets.length}</span>
+                </li>
+                <li className='flex justify-between text-gray-600'>
+                  <span>Đã được đồng ý</span>
+                  <span className='font-medium text-green-600'>
+                    {Meets.filter((a) => a.status === "approved").length}
+                  </span>
+                </li>
+                <li className='flex justify-between text-gray-600'>
+                  <span>Chờ phê duyệt</span>
+                  <span className='font-medium text-yellow-600'>
+                    {Meets.filter((a) => a.status === "pending").length}
+                  </span>
+                </li>
                 <li className='flex justify-between text-gray-600'>
                   <span>Hoàn thành</span>
                   <span className='font-medium text-blue-600'>
-                    {allMeets.filter((a) => {
+                    {
+                      allMeets.filter((a) => {
                         const endDateTime = parseDateTime(a.date, a.endTime);
                         return a.status === "approved" && endDateTime <= new Date();
-                      }).length}
+                      }).length
+                    }
                   </span>
                 </li>
               </ul>
@@ -445,16 +485,31 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
             <div className='rounded-lg bg-white p-4 shadow-md'>
               <h4 className='font-semibold text-gray-900'>Tổng quan lịch hẹn</h4>
               <ul className='mt-3 space-y-2 text-sm'>
-                <li className='flex justify-between text-gray-600'><span>Tổng yêu cầu</span><span className='font-medium text-gray-900'>{allMeets.length}</span></li>
-                <li className='flex justify-between text-gray-600'><span>Chờ phê duyệt</span><span className='font-medium text-yellow-600'>{Meets.filter((a) => a.status === "pending").length}</span></li>
-                <li className='flex justify-between text-gray-600'><span>Đã đồng ý</span><span className='font-medium text-green-600'>{allMeets.filter((a) => a.status === "approved").length}</span></li>
+                <li className='flex justify-between text-gray-600'>
+                  <span>Tổng yêu cầu</span>
+                  <span className='font-medium text-gray-900'>{allMeets.length}</span>
+                </li>
+                <li className='flex justify-between text-gray-600'>
+                  <span>Chờ phê duyệt</span>
+                  <span className='font-medium text-yellow-600'>
+                    {Meets.filter((a) => a.status === "pending").length}
+                  </span>
+                </li>
+                <li className='flex justify-between text-gray-600'>
+                  <span>Đã đồng ý</span>
+                  <span className='font-medium text-green-600'>
+                    {allMeets.filter((a) => a.status === "approved").length}
+                  </span>
+                </li>
                 <li className='flex justify-between text-gray-600'>
                   <span>Đã hoàn thành</span>
                   <span className='font-medium text-blue-600'>
-                    {allMeets.filter((a) => {
+                    {
+                      allMeets.filter((a) => {
                         const endDateTime = parseDateTime(a.date, a.endTime);
                         return a.status === "approved" && endDateTime <= new Date();
-                      }).length}
+                      }).length
+                    }
                   </span>
                 </li>
                 <li className='flex justify-between text-gray-600'>
@@ -485,7 +540,7 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
             </div>
           </div> */}
 
-          <TutorWeeklySlotsWidget 
+          <TutorWeeklySlotsWidget
             schedules={schedules}
             userRole={userRole}
             onUpdateSchedules={setSchedules}
@@ -497,14 +552,14 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
             {nextMeet ? (
               <div className='space-y-2 pt-4 text-sm'>
                 <div className={`rounded-lg p-3 ${userRole === "mentee" ? "bg-green-50" : "bg-blue-50"}`}>
-                  <p className={`font-bold ${userRole === "mentee" ? "text-green-800" : "text-blue-800"}`}>{nextMeet.topic}</p>
-                  <p className={`pt-1 text-sm flex flex-wrap items-center gap-1 ${userRole === "mentee" ? "text-green-700" : "text-blue-700"}`}>
-                    <span className="font-medium">
-                      Thứ {new Date(nextMeet.date).getDay() + 1}, 
-                    </span>
-                    <span>
-                      {nextMeet.date.split("-").reverse().join("/")},
-                    </span>
+                  <p className={`font-bold ${userRole === "mentee" ? "text-green-800" : "text-blue-800"}`}>
+                    {nextMeet.topic}
+                  </p>
+                  <p
+                    className={`flex flex-wrap items-center gap-1 pt-1 text-sm ${userRole === "mentee" ? "text-green-700" : "text-blue-700"}`}
+                  >
+                    <span className='font-medium'>Thứ {new Date(nextMeet.date).getDay() + 1},</span>
+                    <span>{nextMeet.date.split("-").reverse().join("/")},</span>
                     <span>
                       {nextMeet.beginTime} - {nextMeet.endTime}
                     </span>
@@ -512,7 +567,9 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
                   <p className={`mt-1 text-sm ${userRole === "mentee" ? "text-green-600" : "text-blue-600"}`}>
                     với {userRole === "mentee" ? nextMeet.tutorName : nextMeet.menteeName}
                   </p>
-                  <div className={`mt-2 inline-block rounded px-2 py-1 text-xs font-medium ${userRole === "mentee" ? "bg-green-100 text-green-500" : "bg-blue-100 text-blue-500"}`}>
+                  <div
+                    className={`mt-2 inline-block rounded px-2 py-1 text-xs font-medium ${userRole === "mentee" ? "bg-green-100 text-green-500" : "bg-blue-100 text-blue-500"}`}
+                  >
                     {getDaysUntilLabel(nextMeet.startDateTime!)}
                   </div>
                 </div>
@@ -530,7 +587,11 @@ const MeetList: React.FC<MeetListProps> = ({ userRole, programId }) => {
           </div>
         </div>
       </div>
-      <RejectModal isOpen={isRejectModalOpen} onClose={() => setIsRejectModalOpen(false)} onConfirm={handleRejectConfirm} />
+      <RejectModal
+        isOpen={isRejectModalOpen}
+        onClose={() => setIsRejectModalOpen(false)}
+        onConfirm={handleRejectConfirm}
+      />
       {userRole === "mentee" && isNewMeetModalOpen && (
         <NewMeetModal
           key={editingMeet ? `edit-${String(editingMeet.id)}` : "create-new"}

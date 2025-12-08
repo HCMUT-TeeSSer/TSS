@@ -31,7 +31,11 @@ const StudentsCompetencies = () => {
 
   return (
     <div className='min-h-screen bg-gray-50 pb-12'>
-      <ProgramBreadcrumb backLink={path.studentProgramList} backLabel='Chương trình của tôi' currentTitle={program.title} />
+      <ProgramBreadcrumb
+        backLink={path.studentProgramList}
+        backLabel='Chương trình của tôi'
+        currentTitle={program.title}
+      />
 
       <div className='container mx-auto mt-6 px-4'>
         {/* Container trắng bao quanh Header và Tabs */}

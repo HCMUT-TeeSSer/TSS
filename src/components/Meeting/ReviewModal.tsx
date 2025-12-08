@@ -23,80 +23,78 @@ export default function ReviewModal({ isOpen, onClose, onSubmit }: ReviewModalPr
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden">
+    <div className='animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 duration-200'>
+      <div className='w-full max-w-md overflow-hidden rounded-xl bg-white shadow-xl'>
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
-          <h3 className="text-lg font-bold text-gray-900">Đánh giá buổi học</h3>
+        <div className='flex items-center justify-between border-b border-gray-100 p-4'>
+          <h3 className='text-lg font-bold text-gray-900'>Đánh giá buổi học</h3>
           <button
             onClick={onClose}
-            className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+            className='rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600'
           >
-            <X className="w-5 h-5" />
+            <X className='h-5 w-5' />
           </button>
         </div>
 
         {/* Body */}
-        <form onSubmit={handleSubmit} className="p-6">
-          <div className="flex flex-col items-center mb-6">
-            <p className="text-sm text-gray-500 mb-3">Bạn cảm thấy buổi hướng dẫn thế nào?</p>
-            
+        <form onSubmit={handleSubmit} className='p-6'>
+          <div className='mb-6 flex flex-col items-center'>
+            <p className='mb-3 text-sm text-gray-500'>Bạn cảm thấy buổi hướng dẫn thế nào?</p>
+
             {/* Star Rating */}
-            <div className="flex gap-2">
+            <div className='flex gap-2'>
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
-                  type="button"
-                  className="transition-transform hover:scale-110 focus:outline-none"
+                  type='button'
+                  className='transition-transform hover:scale-110 focus:outline-none'
                   onMouseEnter={() => setHoverRating(star)}
                   onMouseLeave={() => setHoverRating(0)}
                   onClick={() => setRating(star)}
                 >
                   <Star
-                    className={`w-8 h-8 ${
-                      star <= (hoverRating || rating)
-                        ? "fill-yellow-400 text-yellow-400"
-                        : "text-gray-300"
+                    className={`h-8 w-8 ${
+                      star <= (hoverRating || rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
                     }`}
                   />
                 </button>
               ))}
             </div>
-            <p className="text-sm font-medium text-yellow-600 mt-2 h-5">
-              {hoverRating || rating ? 
-                ["Rất tệ", "Tệ", "Bình thường", "Tốt", "Tuyệt vời"][(hoverRating || rating) - 1] 
+            <p className='mt-2 h-5 text-sm font-medium text-yellow-600'>
+              {hoverRating || rating
+                ? ["Rất tệ", "Tệ", "Bình thường", "Tốt", "Tuyệt vời"][(hoverRating || rating) - 1]
                 : ""}
             </p>
           </div>
 
           {/* Comment */}
-          <div className="mb-6">
-            <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className='mb-6'>
+            <label htmlFor='comment' className='mb-1 block text-sm font-medium text-gray-700'>
               Nhận xét (Tùy chọn)
             </label>
             <textarea
-              id="comment"
+              id='comment'
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm resize-none"
-              placeholder="Chia sẻ thêm về trải nghiệm của bạn..."
+              className='w-full resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500'
+              placeholder='Chia sẻ thêm về trải nghiệm của bạn...'
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3">
+          <div className='flex gap-3'>
             <button
-              type="button"
+              type='button'
               onClick={onClose}
-              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className='flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50'
             >
               Hủy
             </button>
             <button
-              type="submit"
+              type='submit'
               disabled={rating === 0}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+              className='flex-1 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50'
             >
               Gửi đánh giá
             </button>

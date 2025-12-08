@@ -16,7 +16,7 @@ export interface Meet {
   subject: string;
   reason: string;
   type: "mentee" | "tutor";
-  startDateTime?: Date; 
+  startDateTime?: Date;
 }
 
 export interface MeetData {
@@ -120,7 +120,7 @@ export const meets: Meet[] = [
     subject: "Khoa học máy tính",
     reason: "Đã đồng ý",
   },
-  
+
   {
     id: 6,
     programId: 3,
@@ -169,4 +169,4 @@ export const meets: Meet[] = [
     subject: "Khoa học máy tính",
     reason: "Đã đồng ý",
   },
-]
+];

@@ -12,11 +12,11 @@ interface TutorWeeklySlotsWidgetProps {
   userName?: string;
 }
 
-export default function TutorWeeklySlotsWidget({ 
-  schedules, 
-  userRole, 
+export default function TutorWeeklySlotsWidget({
+  schedules,
+  userRole,
   onUpdateSchedules,
-  userName = "Tutor"
+  userName = "Tutor",
 }: TutorWeeklySlotsWidgetProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const today = new Date();
@@ -27,7 +27,7 @@ export default function TutorWeeklySlotsWidget({
     const day = current.getDay();
     const diff = current.getDate() - day + (day === 0 ? -6 : 1); // Thứ 2 đầu tuần
     const monday = new Date(current.setDate(diff));
-    monday.setHours(0,0,0,0);
+    monday.setHours(0, 0, 0, 0);
 
     return Array.from({ length: 7 }).map((_, i) => {
       const d = new Date(monday);
@@ -40,12 +40,12 @@ export default function TutorWeeklySlotsWidget({
   const displaySlots = useMemo(() => {
     const result: { dateDisplay: string; timeRange: string }[] = [];
 
-    currentWeekDays.forEach(dayDate => {
-      const dateIso = `${dayDate.getFullYear()}-${String(dayDate.getMonth() + 1).padStart(2, '0')}-${String(dayDate.getDate()).padStart(2, '0')}`;
-      
+    currentWeekDays.forEach((dayDate) => {
+      const dateIso = `${dayDate.getFullYear()}-${String(dayDate.getMonth() + 1).padStart(2, "0")}-${String(dayDate.getDate()).padStart(2, "0")}`;
+
       // Lấy slot available, sắp xếp theo giờ
       const daySlots = schedules
-        .filter(s => s.date === dateIso && s.status === "available")
+        .filter((s) => s.date === dateIso && s.status === "available")
         .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
       if (daySlots.length === 0) return;
@@ -60,8 +60,8 @@ export default function TutorWeeklySlotsWidget({
         } else {
           // Ngắt quãng -> Đẩy vào mảng
           result.push({
-            dateDisplay: dayDate.toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'numeric' }),
-            timeRange: `${currentStart} - ${currentEnd}`
+            dateDisplay: dayDate.toLocaleDateString("vi-VN", { weekday: "long", day: "numeric", month: "numeric" }),
+            timeRange: `${currentStart} - ${currentEnd}`,
           });
           currentStart = daySlots[i].startTime;
           currentEnd = daySlots[i].endTime;
@@ -69,8 +69,8 @@ export default function TutorWeeklySlotsWidget({
       }
       // Đẩy item cuối
       result.push({
-        dateDisplay: dayDate.toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'numeric' }),
-        timeRange: `${currentStart} - ${currentEnd}`
+        dateDisplay: dayDate.toLocaleDateString("vi-VN", { weekday: "long", day: "numeric", month: "numeric" }),
+        timeRange: `${currentStart} - ${currentEnd}`,
       });
     });
 
@@ -90,15 +90,15 @@ export default function TutorWeeklySlotsWidget({
       const d = new Date(monday);
       d.setDate(monday.getDate() + i);
       const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const dayStr = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const dayStr = String(d.getDate()).padStart(2, "0");
       weekDatesToCheck.add(`${year}-${month}-${dayStr}`);
     }
 
-    const prevSchedulesKeep = schedules.filter(s => {
-      if (s.status === 'booked') return true;
+    const prevSchedulesKeep = schedules.filter((s) => {
+      if (s.status === "booked") return true;
       if (!weekDatesToCheck.has(s.date)) return true;
-      return false; 
+      return false;
     });
 
     onUpdateSchedules([...prevSchedulesKeep, ...newSchedules]);
@@ -120,12 +120,12 @@ export default function TutorWeeklySlotsWidget({
           displaySlots.map((slot, idx) => (
             <div key={idx} className='flex justify-between rounded-lg bg-gray-50 p-3'>
               <span className='font-medium capitalize'>{slot.dateDisplay}</span>
-              <span className='text-green-700 font-semibold'>{slot.timeRange}</span>
+              <span className='font-semibold text-green-700'>{slot.timeRange}</span>
             </div>
           ))
         ) : (
-          <div className="text-center py-4 border border-dashed border-gray-200 rounded-lg bg-gray-50">
-            <p className="text-gray-400 italic text-xs">Chưa có lịch rảnh nào.</p>
+          <div className='rounded-lg border border-dashed border-gray-200 bg-gray-50 py-4 text-center'>
+            <p className='text-xs text-gray-400 italic'>Chưa có lịch rảnh nào.</p>
           </div>
         )}
 
@@ -134,11 +134,11 @@ export default function TutorWeeklySlotsWidget({
           <>
             <button
               onClick={() => setIsModalOpen(true)}
-              className='mt-4 inline-flex w-full justify-center rounded-lg border border-blue-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-blue-50 transition-colors'
+              className='mt-4 inline-flex w-full justify-center rounded-lg border border-blue-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-blue-50'
             >
               <Calendar className='mr-2 h-4 w-4' /> Chỉnh sửa lịch rảnh
             </button>
-            
+
             {/* Modal chỉnh sửa */}
             <WeeklyScheduleModal
               isOpen={isModalOpen}

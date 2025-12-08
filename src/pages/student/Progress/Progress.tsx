@@ -182,7 +182,7 @@ const Progress: React.FC = () => {
   };
 
   return (
-    <div className='min-h-screen bg-gray-50 pb-20 font-sans'>
+    <div className='min-h-screen bg-white pb-20 font-sans'>
       <div className='container mx-auto px-4 py-8'>
         {/* Header */}
         <div className='mb-8'>

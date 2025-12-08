@@ -17,7 +17,7 @@ interface MeetingHistoryProps {
 
 export default function MeetingHistory({ meetList }: MeetingHistoryProps) {
   const navigate = useNavigate();
-  
+
   // State quản lý Modal
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [selectedMeetId, setSelectedMeetId] = useState<number | null>(null);
@@ -27,9 +27,7 @@ export default function MeetingHistory({ meetList }: MeetingHistoryProps) {
 
   // Lọc lịch sử
   const historyList = meetList.filter(
-    (m) =>
-      m.status === "rejected" ||
-      (m.status === "approved" && new Date(m.date) < new Date())
+    (m) => m.status === "rejected" || (m.status === "approved" && new Date(m.date) < new Date())
   );
 
   // Mở modal đánh giá
@@ -42,7 +40,7 @@ export default function MeetingHistory({ meetList }: MeetingHistoryProps) {
   const handleReviewSubmit = (rating: number, comment: string) => {
     // Logic gọi API lưu đánh giá sẽ ở đây
     console.log(`Submitting review for meet #${selectedMeetId}:`, { rating, comment });
-    
+
     // Cập nhật trạng thái "Đã đánh giá" cho buổi hẹn này
     if (selectedMeetId !== null) {
       setRatedMeetIds((prev) => [...prev, selectedMeetId]);
@@ -58,10 +56,10 @@ export default function MeetingHistory({ meetList }: MeetingHistoryProps) {
   };
 
   return (
-    <div className="mt-8">
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-6">Lịch sử buổi hẹn</h3>
-        <div className="space-y-3">
+    <div className='mt-8'>
+      <div className='rounded-xl border border-gray-200 bg-white p-6'>
+        <h3 className='mb-6 text-lg font-bold text-gray-900'>Lịch sử buổi hẹn</h3>
+        <div className='space-y-3'>
           {historyList.length > 0 ? (
             historyList.map((item) => {
               // Kiểm tra xem buổi hẹn này đã được đánh giá chưa
@@ -70,62 +68,60 @@ export default function MeetingHistory({ meetList }: MeetingHistoryProps) {
               return (
                 <div
                   key={item.id}
-                  className="flex flex-col sm:flex-row items-center justify-between p-4 border border-gray-100 rounded-xl bg-gray-50/30 hover:bg-white hover:shadow-sm transition-all"
+                  className='flex flex-col items-center justify-between rounded-xl border border-gray-100 bg-gray-50/30 p-4 transition-all hover:bg-white hover:shadow-sm sm:flex-row'
                 >
-                  <div className="flex items-center gap-4 w-full sm:w-auto mb-3 sm:mb-0">
+                  <div className='mb-3 flex w-full items-center gap-4 sm:mb-0 sm:w-auto'>
                     <img
                       src={getTutorAvatar(item.tutorName)}
                       alt={item.tutorName}
-                      className="w-10 h-10 rounded-full object-cover"
+                      className='h-10 w-10 rounded-full object-cover'
                     />
                     <div>
-                      <div className="flex items-center gap-2">
-                        <h4 className="font-bold text-gray-900 text-sm">{item.tutorName}</h4>
+                      <div className='flex items-center gap-2'>
+                        <h4 className='text-sm font-bold text-gray-900'>{item.tutorName}</h4>
                       </div>
-                      <p className="text-sm text-gray-600 mt-0.5">
-                          {item.subject} - {item.topic}
+                      <p className='mt-0.5 text-sm text-gray-600'>
+                        {item.subject} - {item.topic}
                       </p>
-                      <p className="text-xs text-gray-400 mt-0.5 flex items-center gap-1">
-                        <Clock className="w-3 h-3" /> {item.date.split("-").reverse().join("/")} • {item.beginTime} -{" "}
+                      <p className='mt-0.5 flex items-center gap-1 text-xs text-gray-400'>
+                        <Clock className='h-3 w-3' /> {item.date.split("-").reverse().join("/")} • {item.beginTime} -{" "}
                         {item.endTime}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                  <div className='flex w-full items-center justify-end gap-3 sm:w-auto'>
                     {/* Trạng thái */}
-										<span
-											className={`px-3 py-1 rounded-full text-[10px] tracking-wide ${
-												item.status === "approved"
-													? "bg-green-100 text-green-700"
-													: "bg-red-100 text-red-700"
-											}`}
-										>
-											{item.status === "approved" ? "Hoàn thành" : "Đã hủy"}
-										</span>
-										{/* Rating  */}
-										{item.status === "approved" ? (
+                    <span
+                      className={`rounded-full px-3 py-1 text-[10px] tracking-wide ${
+                        item.status === "approved" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {item.status === "approved" ? "Hoàn thành" : "Đã hủy"}
+                    </span>
+                    {/* Rating  */}
+                    {item.status === "approved" ? (
                       isRated ? (
                         // Trạng thái ĐÃ ĐÁNH GIÁ (ngôi sao vàng)
-                        <div className="flex items-center gap-1 text-yellow-500 text-sm font-medium cursor-default">
-                          <Star className="w-4 h-4 fill-yellow-500" /> Đã đánh giá
+                        <div className='flex cursor-default items-center gap-1 text-sm font-medium text-yellow-500'>
+                          <Star className='h-4 w-4 fill-yellow-500' /> Đã đánh giá
                         </div>
                       ) : (
                         // Đánh giá
-                        <button 
-                            onClick={() => handleRateClick(item.id)}
-                            className="flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors"
+                        <button
+                          onClick={() => handleRateClick(item.id)}
+                          className='flex items-center gap-1 text-sm font-medium text-blue-600 transition-colors hover:text-blue-700'
                         >
-                          <Star className="w-4 h-4 fill-blue-500" /> Đánh giá
+                          <Star className='h-4 w-4 fill-blue-500' /> Đánh giá
                         </button>
                       )
                     ) : (
                       // Nút ĐẶT LẠI (cho trạng thái rejected)
-                      <button 
-                          onClick={() => handleRebook(item.programId)}
-                          className="flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors"
+                      <button
+                        onClick={() => handleRebook(item.programId)}
+                        className='flex items-center gap-1 text-sm font-medium text-blue-600 transition-colors hover:text-blue-700'
                       >
-                        <RotateCcw className="w-4 h-4" /> Đặt lại
+                        <RotateCcw className='h-4 w-4' /> Đặt lại
                       </button>
                     )}
                   </div>
@@ -133,13 +129,13 @@ export default function MeetingHistory({ meetList }: MeetingHistoryProps) {
               );
             })
           ) : (
-            <p className="text-center text-gray-500">Chưa có lịch sử.</p>
+            <p className='text-center text-gray-500'>Chưa có lịch sử.</p>
           )}
         </div>
       </div>
 
       {/* Review Modal Component */}
-      <ReviewModal 
+      <ReviewModal
         isOpen={isReviewModalOpen}
         onClose={() => setIsReviewModalOpen(false)}
         onSubmit={handleReviewSubmit}

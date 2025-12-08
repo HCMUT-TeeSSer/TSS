@@ -167,7 +167,7 @@ export default function useRouteElements() {
                     </Suspense>
                   ),
                 },
-              ]
+              ],
             },
             {
               path: path.student,
@@ -286,7 +286,7 @@ export default function useRouteElements() {
                     </Suspense>
                   ),
                 },
-              ]
+              ],
             },
             {
               path: path.tutor,

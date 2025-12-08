@@ -27,30 +27,29 @@ export default function StatsSection({ meetList, userRole, userName }: StatsSect
   const studentThisWeek = pendingCount + approvedCount; // (Giả sử meetList đã được lọc theo tuần ở parent hoặc đây là tổng số sắp tới)
 
   // 2. Hoàn thành
-  const studentCompleted = meetList.filter((m) => {
-    const meetDate = new Date(m.date);
-    return m.status === "approved" && meetDate < new Date();
-  }).length + 12; // Cộng số giả định lịch sử
+  const studentCompleted =
+    meetList.filter((m) => {
+      const meetDate = new Date(m.date);
+      return m.status === "approved" && meetDate < new Date();
+    }).length + 12; // Cộng số giả định lịch sử
 
   // 3. Mentor (Số lượng mentor hệ thống hoặc mentor đã học)
   const studentMentors = tutors.length;
 
-
   // --- LOGIC CHO TUTOR ---
   // 1. Giờ rảnh (Tuần này) - Tính từ FreeSched
   // Giả sử tutor hiện tại là ID 20210001 (Nguyễn Văn A) - Trong thực tế lấy từ AuthContext
-  //const currentTutorId = 20210001; 
+  //const currentTutorId = 20210001;
   const CURRENT_TUTOR_NAME = userName;
-  const freeSlots = freeSchedules.filter(s => s.tutorName === CURRENT_TUTOR_NAME && s.status === "available");
+  const freeSlots = freeSchedules.filter((s) => s.tutorName === CURRENT_TUTOR_NAME && s.status === "available");
   // mỗi slot là 1 tiếng
-  const tutorFreeHours = freeSlots.length; 
+  const tutorFreeHours = freeSlots.length;
 
   // 2. Buổi đã đặt (Tuần này) - Approved meets
-  const tutorBookedThisWeek = meetList.filter(m => m.status === "approved").length; // Cần lọc theo tuần thực tế nếu muốn chính xác
+  const tutorBookedThisWeek = meetList.filter((m) => m.status === "approved").length; // Cần lọc theo tuần thực tế nếu muốn chính xác
 
   // 3. Số sinh viên (Unique students)
-  const uniqueStudents = new Set(meetList.map(m => m.menteeName)).size;
-
+  const uniqueStudents = new Set(meetList.map((m) => m.menteeName)).size;
 
   // --- DỮ LIỆU HIỂN THỊ ---
   let stats = [];
@@ -121,18 +120,21 @@ export default function StatsSection({ meetList, userRole, userName }: StatsSect
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div className='mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4'>
       {stats.map((stat, index) => {
         const Icon = stat.icon;
         return (
-          <div key={index} className="bg-white border border-gray-200 rounded-xl p-5 flex items-center justify-between shadow-sm">
+          <div
+            key={index}
+            className='flex items-center justify-between rounded-xl border border-gray-200 bg-white p-5 shadow-sm'
+          >
             <div>
-              <p className="text-sm text-gray-500 font-medium">{stat.label}</p>
-              <h3 className="text-3xl font-bold text-gray-900 mt-1">{stat.value}</h3>
-              <p className="text-xs text-gray-400 mt-1">{stat.sub}</p>
+              <p className='text-sm font-medium text-gray-500'>{stat.label}</p>
+              <h3 className='mt-1 text-3xl font-bold text-gray-900'>{stat.value}</h3>
+              <p className='mt-1 text-xs text-gray-400'>{stat.sub}</p>
             </div>
-            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${stat.color}`}>
-              <Icon className="w-6 h-6" />
+            <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${stat.color}`}>
+              <Icon className='h-6 w-6' />
             </div>
           </div>
         );

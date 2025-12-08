@@ -16,7 +16,7 @@ export default function NewMeetModal({ isOpen, onClose, onConfirm, initialMeet }
   const [date, setDate] = useState(initialMeet?.date ?? "");
   const [beginTime, setTime1] = useState(initialMeet?.beginTime ?? "");
   const [endTime, setTime2] = useState(initialMeet?.endTime ?? "");
-  
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setErrors] = useState({ time: "", future: "" });
 
@@ -100,7 +100,7 @@ export default function NewMeetModal({ isOpen, onClose, onConfirm, initialMeet }
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
   const minDate = `${String(year)}-${month}-${day}`;
-  
+
   const currentMinute = now.getMinutes() + 1;
   const currentHour = now.getHours() + (currentMinute === 60 ? 1 : 0);
   const nextMinute = currentMinute === 60 ? 0 : currentMinute;
@@ -121,7 +121,9 @@ export default function NewMeetModal({ isOpen, onClose, onConfirm, initialMeet }
 
         <div className='mt-4 space-y-4'>
           <div>
-            <label htmlFor='topic' className='mb-1 block text-sm font-medium text-gray-700'>Chủ đề</label>
+            <label htmlFor='topic' className='mb-1 block text-sm font-medium text-gray-700'>
+              Chủ đề
+            </label>
             <input
               id='topic'
               type='text'
@@ -133,7 +135,9 @@ export default function NewMeetModal({ isOpen, onClose, onConfirm, initialMeet }
           </div>
 
           <div>
-            <label htmlFor='describe' className='mb-1 block text-sm font-medium text-gray-700'>Mô tả</label>
+            <label htmlFor='describe' className='mb-1 block text-sm font-medium text-gray-700'>
+              Mô tả
+            </label>
             <input
               id='describe'
               type='text'
@@ -146,7 +150,9 @@ export default function NewMeetModal({ isOpen, onClose, onConfirm, initialMeet }
 
           <div className='flex space-x-4'>
             <div className='flex-1'>
-              <label htmlFor='date' className='mb-1 block text-sm font-medium text-gray-700'>Ngày</label>
+              <label htmlFor='date' className='mb-1 block text-sm font-medium text-gray-700'>
+                Ngày
+              </label>
               <input
                 id='date'
                 type='date'
@@ -157,7 +163,9 @@ export default function NewMeetModal({ isOpen, onClose, onConfirm, initialMeet }
               />
             </div>
             <div className='flex-1'>
-              <label htmlFor='beginTime' className='mb-1 block text-sm font-medium text-gray-700'>Bắt đầu</label>
+              <label htmlFor='beginTime' className='mb-1 block text-sm font-medium text-gray-700'>
+                Bắt đầu
+              </label>
               <input
                 id='beginTime'
                 type='time'
@@ -168,7 +176,9 @@ export default function NewMeetModal({ isOpen, onClose, onConfirm, initialMeet }
               />
             </div>
             <div className='flex-1'>
-              <label htmlFor='endTime' className='mb-1 block text-sm font-medium text-gray-700'>Kết thúc</label>
+              <label htmlFor='endTime' className='mb-1 block text-sm font-medium text-gray-700'>
+                Kết thúc
+              </label>
               <input
                 id='endTime'
                 type='time'
