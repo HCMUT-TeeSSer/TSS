@@ -200,7 +200,7 @@ export default function Login() {
 
               <div className='text-center'>
                 <Link
-                  to='/contact'
+                  to='/'
                   className='text-base font-medium text-blue-600 transition-colors hover:text-blue-700'
                 >
                   Liên hệ hỗ trợ kỹ thuật
